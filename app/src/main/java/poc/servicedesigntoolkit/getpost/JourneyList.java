@@ -27,20 +27,14 @@ public class JourneyList extends AppCompatActivity {
     ListView listView;
     private static final String JOURNEYLIST_URL = "http://54.169.59.1:9090/service_design_toolkit-web/api/get_journey_list";
     private static final String REGISTER_URL="http://54.169.59.1:9090/service_design_toolkit-web/api/register_field_researcher_with_journey";
-    private String jsonResponse;
-    private String TAG = "Error";
 
     private static final String TAG_JOURNEYLIST = "journeyDTOList";
     private static final String TAG_JOURNEYNAME = "journeyName";
-    private static final String TAG_NOOFRESEARCHER = "noOfFieldResearcher";
-    private static final String TAG_ISACTIVE = "isActive";
+
     String Username;
-    JourneyListModel jlModel;
     ArrayList<String> journeyList;
 
     ArrayAdapter journeyAdapter;
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,9 +49,9 @@ public class JourneyList extends AppCompatActivity {
         journeyList = new ArrayList<String>();
 
         JSONObject request = new JSONObject();
-        //journeyList = new ArrayList<JourneyListModel>();
+
         try {
-            //request.put("journeyName", "JN10");
+
             request.put("isActive", "Y");
         } catch (Exception e) {
             e.printStackTrace();
@@ -82,16 +76,8 @@ public class JourneyList extends AppCompatActivity {
                         for (int i = 0; i < list.length(); i++) {
                             JSONObject c = list.getJSONObject(i);
 
-                            //jlModel = new JourneyListModel();
-
-                            //jlModel.setJourneyName(c.getString(TAG_JOURNEYNAME));
-                            //jlModel.setNumberOfResearcher(Integer.parseInt(c.getString(TAG_NOOFRESEARCHER)));
-                            //jlModel.setActive(c.getString(TAG_ISACTIVE));
-
                             journeyList.add(c.getString(TAG_JOURNEYNAME));
-                            //textView.setText(response.toString());
 
-                            // Log.d("Journey List Before" ,journeyList.toString());
                         }
                         Log.d("JourneyListBefore" ,journeyList.toString());
 
@@ -116,7 +102,6 @@ public class JourneyList extends AppCompatActivity {
             }
         });
 
-
         // Adding request to request queue
         AppController.getInstance().addToRequestQueue(jsonObjReq);
 
@@ -128,9 +113,8 @@ public class JourneyList extends AppCompatActivity {
                 Log.d("PRESSED",journey);
                 Toast.makeText(getApplicationContext(), "Journey Selected : "+journey, Toast.LENGTH_SHORT).show();
 
-                Intent i = new Intent(JourneyList.this,MapsActivity.class);
-                i.putExtra("journey",journey);
-                i.putExtra("Username",Username);
+                Intent i = new Intent(JourneyList.this,TouchpointList.class);
+                i.putExtra("JourneyName",journey);
                 registeruser(journey);
                 startActivity(i);
             }
