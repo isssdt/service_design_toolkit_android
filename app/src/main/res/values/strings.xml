@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">Service Design Toolkit</string>
     <string name="title_activity_maps">Map</string>
+    <string name="title_journey_list">Journey List</string>
+    <string name="title_touchpoint_list">Touchpoint List</string>
+
 </resources>
