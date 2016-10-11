@@ -43,6 +43,9 @@
         <activity
             android:name=".TouchpointList"
             android:label="@string/title_touchpoint_list"></activity>
+        <activity
+            android:name=".TouchpointDetails"
+            android:label="@string/title_touchpoint_details"></activity>
 
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
