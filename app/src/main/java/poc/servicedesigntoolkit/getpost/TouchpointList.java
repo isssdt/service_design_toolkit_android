@@ -98,7 +98,19 @@ public class TouchpointList extends AppCompatActivity {
 
         // Adding request to request queue
         AppController.getInstance().addToRequestQueue(jsonObjReq);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View view,
+                                    int position, long id) {
 
+                String touchpoint = (String) listView.getItemAtPosition(position);
+                Log.d("PRESSED",touchpoint);
+                Toast.makeText(getApplicationContext(), "Touchpoint Selected : "+touchpoint, Toast.LENGTH_SHORT).show();
+
+                Intent i = new Intent(TouchpointList.this,TouchpointDetails.class);
+                i.putExtra("Touchpoint",touchpoint);
+                startActivity(i);
+            }
+        });
     }
 
 }
