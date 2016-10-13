@@ -1,19 +1,22 @@
 package poc.servicedesigntoolkit.getpost;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 /**
  * Created by Gunjan Pathak on 06-Oct-16.
  */
 
-public class TouchpointDetails extends AppCompatActivity {
+public class TouchpointDetails extends AppCompatActivity implements View.OnClickListener {
 
     EditText touchpointName,touchpointDescription,channel,action,comment,reaction;
     RatingBar ratingBar;
@@ -46,20 +49,42 @@ public class TouchpointDetails extends AppCompatActivity {
         photo = (Button) findViewById(R.id.photo);
         map = (Button) findViewById(R.id.map);
 
-        touchpointName.setText(Touchpoint);
+        submit.setOnClickListener(this);
+        reset.setOnClickListener(this);
+        photo.setOnClickListener(this);
+        map.setOnClickListener(this);
 
-        touchpointName.setKeyListener(null);
-        touchpointName.setFocusable(false);
+        setText();
 
-        action.setKeyListener(null);
-        action.setFocusable(false);
-
-        channel.setKeyListener(null);
-        channel.setFocusable(false);
-
-        touchpointDescription.setKeyListener(null);
-        touchpointDescription.setFocusable(false);
 
     }
+
+    public void setText (){
+
+        touchpointName.setText(Touchpoint);
+
+    }
+
+    @Override
+    public void onClick(View v) {
+
+        if (v == submit) {
+            onBackPressed();
+            /*
+            Intent i = new Intent(TouchpointDetails.this,MapsActivity.class);
+            startActivity(i);*/
+        } else if ( v == reset){
+
+        }else if ( v == photo){
+            Intent i = new Intent(TouchpointDetails.this,SelectPhoto.class);
+            startActivity(i);
+
+        }else if ( v == map){
+            Intent i = new Intent(TouchpointDetails.this,MapsActivity.class);
+
+            startActivity(i);
+        }
+    }
+
 
 }

@@ -12,252 +12,266 @@
         android:orientation="vertical"
         android:weightSum="1">
 
-        <ScrollView
-            android:id="@+id/scrollView2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.21">
-        <RelativeLayout
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="500dp"
-            android:layout_weight="0.50">
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:inputType="textMultiLine"
-        android:text="Description"
-        android:ems="10"
-        android:id="@+id/description"
-        android:layout_below="@+id/textView5"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:editable="false"
-        android:singleLine="false"
-        android:layout_height="wrap_content" />
-
-            <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="textPostalAddress"
-        android:ems="10"
-        android:id="@+id/touchpoint_name"
-        android:text="Touchpoint"
-        android:editable="false"
-        android:layout_below="@+id/touchpoint"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="textPostalAddress"
-        android:ems="10"
-        android:id="@+id/channel"
-        android:text="Channel"
-        android:editable="false"
-        android:layout_below="@+id/textView4"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
-
-            <RatingBar
-        android:id="@+id/ratingBar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:numStars="5"
-        android:stepSize="1.0"
-        android:rating="2.0"
-        android:layout_below="@+id/rating_text"
-        android:layout_centerHorizontal="true" />
-
-            <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/touchpoint"
-        android:text="Touchpoint Name"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="textMultiLine"
-        android:ems="10"
-        android:id="@+id/comment"
-        android:layout_below="@+id/comment_text"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
-
-            <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="textMultiLine"
-        android:ems="10"
-        android:id="@+id/reaction"
-        android:layout_below="@+id/reaction_text"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
-
-            <TextView
-                android:text="Reaction"
-                android:layout_width="wrap_content"
+            <ScrollView
+                android:id="@+id/scrollView2"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/reaction_text"
-                android:layout_below="@+id/ratingBar"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentEnd="true" />
+                android:layout_weight="0.21">
 
-            <TextView
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
-                android:id="@+id/image"
-                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                android:text="Image"
-                android:layout_alignBaseline="@+id/photo"
-                android:layout_alignBottom="@+id/photo"
-                android:layout_centerHorizontal="true"
-                android:textAlignment="center" />
+                <RelativeLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="500dp"
+                    android:layout_weight="0.50">
 
-            <TextView
-                android:text="Action"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/action_text"
-                android:layout_below="@+id/description"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentEnd="true" />
+                    <EditText
+                        android:layout_width="wrap_content"
+                        android:inputType="textMultiLine"
+                        android:text="Description"
+                        android:ems="10"
+                        android:id="@+id/description"
+                        android:layout_below="@+id/textView5"
+                        android:focusable="false"
+                        android:editable="false"
+                        android:singleLine="false"
+                        android:layout_height="wrap_content"
+                        android:layout_alignLeft="@+id/action_text"
+                        android:layout_alignStart="@+id/action_text"
+                        android:layout_alignRight="@+id/channel"
+                        android:layout_alignEnd="@+id/channel" />
 
-            <TextView
-                android:text="Channel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/textView4"
-                android:layout_below="@+id/touchpoint_name"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentEnd="true" />
+                    <EditText
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:inputType="textPostalAddress"
+                        android:ems="10"
+                        android:id="@+id/touchpoint_name"
+                        android:text="Touchpoint"
+                        android:editable="false"
+                        android:focusable="false"
+                        android:layout_below="@+id/touchpoint"
+                        android:layout_alignRight="@+id/map"
+                        android:layout_alignEnd="@+id/map"
+                        android:layout_alignLeft="@+id/textView4"
+                        android:layout_alignStart="@+id/textView4" />
 
-            <TextView
-                android:text="Description"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/textView5"
-                android:layout_below="@+id/channel"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentEnd="true" />
+                    <EditText
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:inputType="textPostalAddress"
+                        android:ems="10"
+                        android:id="@+id/channel"
+                        android:text="Channel"
+                        android:editable="false"
+                        android:layout_below="@+id/textView4"
+                        android:focusable="false"
+                        android:layout_alignLeft="@+id/textView4"
+                        android:layout_alignStart="@+id/textView4"
+                        android:layout_alignRight="@+id/touchpoint_name"
+                        android:layout_alignEnd="@+id/touchpoint_name" />
 
-            <EditText
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:inputType="textMultiLine"
-                android:ems="10"
-                android:id="@+id/action"
-                android:layout_below="@+id/action_text"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentEnd="true" />
+                    <RatingBar
+                        android:id="@+id/ratingBar"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:numStars="5"
+                        android:stepSize="1.0"
+                        android:rating="0.0"
+                        android:layout_below="@+id/rating_text"
+                        android:layout_centerHorizontal="true" />
 
-            <TextView
-                android:text="Ratings for Touchpoint"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/rating_text"
-                android:layout_below="@+id/action"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentEnd="true" />
+                    <EditText
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:inputType="textMultiLine"
+                        android:ems="10"
+                        android:id="@+id/comment"
+                        android:layout_below="@+id/comment_text"
+                        android:layout_alignParentRight="true"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignLeft="@+id/photo"
+                        android:layout_alignStart="@+id/photo" />
 
-            <TextView
-                android:text="Comments"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/comment_text"
-                android:layout_below="@+id/reaction"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentEnd="true" />
 
-            <Button
-                android:text="Photo"
-                android:layout_height="wrap_content"
-                android:id="@+id/photo"
-                android:layout_width="100dp"
-                android:layout_marginLeft="19dp"
-                android:layout_marginStart="19dp"
-                android:layout_below="@+id/comment"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true" />
+                    <EditText
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:inputType="textMultiLine"
+                        android:ems="10"
+                        android:id="@+id/reaction"
+                        android:layout_below="@+id/reaction_text"
+                        android:layout_alignLeft="@+id/reaction_text"
+                        android:layout_alignStart="@+id/reaction_text"
+                        android:layout_alignRight="@+id/map"
+                        android:layout_alignEnd="@+id/map" />
 
-            <Button
-                android:text="Map"
-                android:layout_width="100dp"
+                    <TextView
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/image"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                        android:text="Image"
+                        android:layout_alignBaseline="@+id/photo"
+                        android:layout_alignBottom="@+id/photo"
+                        android:layout_centerHorizontal="true"
+                        android:textAlignment="center" />
+
+                    <TextView
+                        android:text="Action"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/action_text"
+                        android:layout_below="@+id/description"
+                        android:focusable="false"
+                        android:layout_alignLeft="@+id/textView5"
+                        android:layout_alignStart="@+id/textView5"
+                        android:layout_alignRight="@+id/textView5"
+                        android:layout_alignEnd="@+id/textView5"
+                        android:textAlignment="center" />
+
+                    <TextView
+                        android:text="Channel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/textView4"
+                        android:layout_below="@+id/touchpoint_name"
+                        android:layout_alignLeft="@+id/touchpoint"
+                        android:layout_alignStart="@+id/touchpoint"
+                        android:layout_alignRight="@+id/touchpoint"
+                        android:layout_alignEnd="@+id/touchpoint"
+                        android:textAlignment="center" />
+
+                    <TextView
+                        android:text="Description"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/textView5"
+                        android:layout_below="@+id/channel"
+                        android:layout_alignLeft="@+id/textView4"
+                        android:layout_alignStart="@+id/textView4"
+                        android:layout_alignRight="@+id/channel"
+                        android:layout_alignEnd="@+id/channel"
+                        android:textAlignment="center" />
+
+                    <EditText
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:inputType="textMultiLine"
+                        android:ems="10"
+                        android:id="@+id/action"
+                        android:focusable="false"
+                        android:layout_below="@+id/action_text"
+                        android:layout_alignLeft="@+id/action_text"
+                        android:layout_alignStart="@+id/action_text"
+                        android:layout_alignRight="@+id/description"
+                        android:layout_alignEnd="@+id/description" />
+
+                    <TextView
+                        android:text="Ratings for Touchpoint"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/rating_text"
+                        android:layout_below="@+id/action"
+                        android:layout_alignLeft="@+id/action_text"
+                        android:layout_alignStart="@+id/action_text"
+                        android:layout_alignRight="@+id/action"
+                        android:layout_alignEnd="@+id/action"
+                        android:textAlignment="center" />
+
+                    <Button
+                        android:text="Photo"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/photo"
+                        android:layout_width="100dp"
+                        android:layout_marginLeft="19dp"
+                        android:layout_marginStart="19dp"
+                        android:layout_below="@+id/comment"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true" />
+
+                    <Button
+                        android:text="Map"
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/map"
+                        android:layout_below="@+id/comment"
+                        android:layout_alignParentRight="true"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginRight="16dp"
+                        android:layout_marginEnd="16dp" />
+
+                    <TextView
+                        android:text="Comments"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/comment_text"
+                        android:layout_below="@+id/reaction"
+                        android:layout_alignLeft="@+id/reaction_text"
+                        android:layout_alignStart="@+id/reaction_text"
+                        android:layout_alignRight="@+id/reaction"
+                        android:layout_alignEnd="@+id/reaction"
+                        android:textAlignment="center" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/touchpoint"
+                        android:text="Touchpoint Name"
+                        android:layout_marginTop="19dp"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignLeft="@+id/comment"
+                        android:layout_alignStart="@+id/comment"
+                        android:layout_alignRight="@+id/map"
+                        android:layout_alignEnd="@+id/map"
+                        android:textAlignment="center" />
+
+                    <TextView
+                        android:text="Reaction"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/reaction_text"
+                        android:layout_below="@+id/ratingBar"
+                        android:layout_alignLeft="@+id/rating_text"
+                        android:layout_alignStart="@+id/rating_text"
+                        android:textAlignment="center"
+                        android:layout_alignRight="@+id/rating_text"
+                        android:layout_alignEnd="@+id/rating_text" />
+                 </RelativeLayout>
+            </ScrollView>
+
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/map"
-                android:layout_below="@+id/comment"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:weightSum="1"
+                android:layout_marginTop="28dp"
+                android:layout_alignParentTop="true"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentEnd="true"
-                android:layout_marginRight="16dp"
-                android:layout_marginEnd="16dp" />
+                android:layout_weight="0.38">
 
+                    <Button
+                        android:text="Submit"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/submit"
+                        android:layout_width="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:layout_alignLeft="@+id/ratingBar"
+                        android:layout_alignStart="@+id/ratingBar"
+                        android:layout_alignParentTop="true"
+                        android:layout_weight="0.25" />
 
-        </RelativeLayout>
-</ScrollView>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center"
-            android:weightSum="1"
-            android:layout_marginTop="28dp"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
-            android:layout_weight="0.38">
-
-            <Button
-                android:text="Submit"
-                android:layout_height="wrap_content"
-                android:id="@+id/submit"
-                android:layout_width="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_alignLeft="@+id/ratingBar"
-                android:layout_alignStart="@+id/ratingBar"
-                android:layout_alignParentTop="true"
-                android:layout_weight="0.20" />
-
-            <Button
-                android:text="Reset"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/reset"
-                android:layout_alignParentBottom="true"
-                android:layout_alignRight="@+id/ratingBar"
-                android:layout_alignEnd="@+id/ratingBar"
-                android:layout_weight="0.25" />
-        </LinearLayout>
+                    <Button
+                        android:text="Reset"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/reset"
+                        android:layout_alignParentBottom="true"
+                        android:layout_alignRight="@+id/ratingBar"
+                        android:layout_alignEnd="@+id/ratingBar"
+                        android:layout_weight="0.25" />
+            </LinearLayout>
 
     </LinearLayout>
 
