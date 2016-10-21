@@ -7,7 +7,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.ExpandableListView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -42,7 +41,6 @@ public class JourneyList extends AppCompatActivity {
         setContentView(R.layout.activity_journey_list);
         Bundle extras = getIntent().getExtras();
         Username = (String) extras.get("Username");
-        Log.d("String INtent ", Username);
 
         listView=(ListView)findViewById(R.id.listView);
 
@@ -115,6 +113,7 @@ public class JourneyList extends AppCompatActivity {
 
                 Intent i = new Intent(JourneyList.this,TouchpointList.class);
                 i.putExtra("JourneyName",journey);
+                i.putExtra("Username",Username);
                 registeruser(journey);
                 startActivity(i);
             }

@@ -182,6 +182,9 @@
                         android:text="Photo"
                         android:layout_height="wrap_content"
                         android:id="@+id/photo"
+                        android:background="@drawable/buttonshape"
+                        android:shadowColor="@color/colorPrimary"
+                        android:textColor="@color/colorPrimary"
                         android:layout_width="100dp"
                         android:layout_marginLeft="19dp"
                         android:layout_marginStart="19dp"
@@ -194,6 +197,9 @@
                         android:layout_width="100dp"
                         android:layout_height="wrap_content"
                         android:id="@+id/map"
+                        android:background="@drawable/buttonshape"
+                        android:shadowColor="@color/colorPrimary"
+                        android:textColor="@color/colorPrimary"
                         android:layout_below="@+id/comment"
                         android:layout_alignParentRight="true"
                         android:layout_alignParentEnd="true"
@@ -239,39 +245,45 @@
                  </RelativeLayout>
             </ScrollView>
 
-            <LinearLayout
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:gravity="center"
                 android:weightSum="1"
-                android:layout_marginTop="28dp"
+                android:layout_marginTop="10dp"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentEnd="true"
                 android:layout_weight="0.38">
 
-                    <Button
-                        android:text="Submit"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/submit"
-                        android:layout_width="wrap_content"
-                        android:layout_alignParentBottom="true"
-                        android:layout_alignLeft="@+id/ratingBar"
-                        android:layout_alignStart="@+id/ratingBar"
-                        android:layout_alignParentTop="true"
-                        android:layout_weight="0.25" />
+                <Button
+                    android:text="Submit"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/submit"
+                    android:background="@drawable/buttonshape"
+                    android:shadowColor="@color/colorPrimary"
+                    android:textColor="@color/colorPrimary"
+                    android:layout_width="132dp"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginStart="30dp" />
 
-                    <Button
-                        android:text="Reset"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/reset"
-                        android:layout_alignParentBottom="true"
-                        android:layout_alignRight="@+id/ratingBar"
-                        android:layout_alignEnd="@+id/ratingBar"
-                        android:layout_weight="0.25" />
-            </LinearLayout>
+                <Button
+                    android:text="Reset"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/reset"
+                    android:background="@drawable/buttonshape"
+                    android:shadowColor="@color/colorPrimary"
+                    android:textColor="@color/colorPrimary"
+                    android:layout_marginRight="30dp"
+                    android:layout_marginEnd="30dp"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true" />
+            </RelativeLayout>
 
     </LinearLayout>
 

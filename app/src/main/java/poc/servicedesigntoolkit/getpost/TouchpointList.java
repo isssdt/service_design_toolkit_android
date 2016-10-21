@@ -29,7 +29,7 @@ public class TouchpointList extends AppCompatActivity {
     ArrayList<String> touchpointList;
     ListView listView;
     ArrayAdapter<String> touchpointAdapter;
-    String JourneyName;
+    String JourneyName,Username;
 
     private static final String TOUCHPOINT_URL = "http://54.169.59.1:9090/service_design_toolkit-web/api/get_touch_point_list_of_journey";
     private static final String TAG_TOUCHPOINT = "touchPointDTOList";
@@ -41,7 +41,7 @@ public class TouchpointList extends AppCompatActivity {
 
         Bundle extras = getIntent().getExtras();
         JourneyName = (String) extras.get("JourneyName");
-        Log.d("String INtent ", JourneyName);
+        Username = (String) extras.get("Username");
 
         listView=(ListView)findViewById(R.id.touchpointlistview);
         touchpointList = new ArrayList<String>();
@@ -59,7 +59,7 @@ public class TouchpointList extends AppCompatActivity {
             @Override
             public void onResponse(JSONObject response) {
                 JSONObject jsonObj;
-
+                Log.d("JOURNEYresponse" ,response.toString());
                 if (response != null) {
                     try {
                         jsonObj = new JSONObject(response.toString());
@@ -71,7 +71,6 @@ public class TouchpointList extends AppCompatActivity {
                             JSONObject c = list.getJSONObject(i);
 
                             touchpointList.add(c.getString(TAG_TOUCHPOINTDESCRIPTION));
-                            Log.d("TOUCHPOINT",c.getString(TAG_TOUCHPOINTDESCRIPTION));
                         }
                         Log.d("JourneyListBefore" ,touchpointList.toString());
 
@@ -108,6 +107,7 @@ public class TouchpointList extends AppCompatActivity {
 
                 Intent i = new Intent(TouchpointList.this,TouchpointDetails.class);
                 i.putExtra("Touchpoint",touchpoint);
+                i.putExtra("Username",Username);
                 startActivity(i);
             }
         });

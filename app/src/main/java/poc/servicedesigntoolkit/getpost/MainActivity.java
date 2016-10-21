@@ -83,7 +83,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
 
 
-        post = (Button) findViewById(R.id.button2);
+        post = (Button) findViewById(R.id.researchList);
         textView = (TextView) findViewById(R.id.textView);
         username = (EditText) findViewById(R.id.username);
         journeyList = new ArrayList<JourneyListModel>();
@@ -103,7 +103,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             post();
             buildGoogleApiClient();
             checkLocationPermission();
-            //currentLocation();
+            currentLocation();
         } else {
             Toast.makeText(getApplicationContext(),
                     "Please enter your name ", Toast.LENGTH_SHORT).show();
@@ -286,7 +286,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Log.d("onConnected","onConnected");
 
 
-        currentLocation();
+        //currentLocation();
     }
 
     @Override

@@ -5,5 +5,6 @@
     <string name="title_touchpoint_list">Touchpoint List</string>
     <string name="title_touchpoint_details">Touchpoint Details</string>
     <string name="title_select_photo">Select Photo</string>
+    <string name="title_activity_touchpoint_new">touchpoint_new</string>
 
 </resources>
