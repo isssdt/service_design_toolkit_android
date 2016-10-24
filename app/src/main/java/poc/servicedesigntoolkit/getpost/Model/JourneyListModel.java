@@ -1,4 +1,4 @@
-package poc.servicedesigntoolkit.getpost;
+package poc.servicedesigntoolkit.getpost.Model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
