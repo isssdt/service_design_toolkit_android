@@ -28,7 +28,7 @@ public class TouchpointDetails extends AppCompatActivity implements View.OnClick
     EditText touchpointName,touchpointDescription,channel,action,comment_edit,reaction_edit;
     RatingBar ratingBar;
     TextView image;
-    Button submit, reset,photo,map;
+    Button submit, reset,photo;
 
     String touchpoint ,username, reaction, comment;
     int rating;
@@ -69,12 +69,10 @@ public class TouchpointDetails extends AppCompatActivity implements View.OnClick
         submit = (Button) findViewById(R.id.submit);
         reset = (Button) findViewById(R.id.reset);
         photo = (Button) findViewById(R.id.photo);
-        map = (Button) findViewById(R.id.map);
 
         submit.setOnClickListener(this);
         reset.setOnClickListener(this);
         photo.setOnClickListener(this);
-        map.setOnClickListener(this);
 
         setText();
 
@@ -91,24 +89,31 @@ public class TouchpointDetails extends AppCompatActivity implements View.OnClick
     public void onClick(View v) {
 
         if (v == submit) {
-
-            /*
-            Intent i = new Intent(TouchpointDetails.this,MapsActivity.class);
-            startActivity(i);*/
-            getdetails();
-            touchpointDetails();
-            onBackPressed();
+            if(validate()){
+                getdetails();
+                touchpointDetails();
+                onBackPressed();
+            }
         } else if ( v == reset){
 
         }else if ( v == photo){
             Intent i = new Intent(TouchpointDetails.this,SelectPhoto.class);
             startActivity(i);
-
-        }else if ( v == map){
-            Intent i = new Intent(TouchpointDetails.this,MapsActivity.class);
-
-            startActivity(i);
         }
+    }
+
+    private boolean validate() {
+        if(reaction_edit.getText().length() == 0 && ((int)ratingBar.getRating()) == 0.0){
+            Toast.makeText(TouchpointDetails.this,"Please enter the Rating and Reaction",Toast.LENGTH_SHORT).show();
+            return false;
+        }else if(((int)ratingBar.getRating()) == 0.0){
+            Toast.makeText(TouchpointDetails.this,"Please enter the Rating",Toast.LENGTH_SHORT).show();
+            return false;
+        }else if(reaction_edit.getText().length() == 0){
+            Toast.makeText(TouchpointDetails.this,"Please enter the Reaction",Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        return true;
     }
 
     private void getdetails() {
@@ -128,7 +133,7 @@ public class TouchpointDetails extends AppCompatActivity implements View.OnClick
             JSONObject sdtUserDTO = new JSONObject();
             fieldResearcherDTO.put(TAG_SDTUSERDTO,sdtUserDTO);
 
-            sdtUserDTO.put("username",username);
+            sdtUserDTO.put(TAG_USERNAME,username);
 
             JSONObject touchpointDTO = new JSONObject();
             request.put(TAG_TOUCHPOINTDTO,touchpointDTO);

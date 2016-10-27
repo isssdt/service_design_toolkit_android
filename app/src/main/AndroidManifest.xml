@@ -47,6 +47,7 @@
         <activity android:name=".JourneyList" />
         <activity
             android:name=".TouchpointList"
+            android:icon="@drawable/map"
             android:label="@string/title_touchpoint_list" />
         <activity
             android:name=".TouchpointDetails"

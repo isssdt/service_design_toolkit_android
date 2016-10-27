@@ -48,12 +48,13 @@
                         android:id="@+id/touchpoint_name"
                         android:text="Touchpoint"
                         android:editable="false"
+                        android:layout_marginRight="19dp"
                         android:focusable="false"
                         android:layout_below="@+id/touchpoint"
-                        android:layout_alignRight="@+id/map"
-                        android:layout_alignEnd="@+id/map"
                         android:layout_alignLeft="@+id/textView4"
-                        android:layout_alignStart="@+id/textView4" />
+                        android:layout_alignStart="@+id/textView4"
+                        android:layout_alignParentRight="true"
+                        android:layout_alignParentEnd="true" />
 
                     <EditText
                         android:layout_width="wrap_content"
@@ -87,10 +88,11 @@
                         android:ems="10"
                         android:id="@+id/comment"
                         android:layout_below="@+id/comment_text"
-                        android:layout_alignParentRight="true"
-                        android:layout_alignParentEnd="true"
+                        android:layout_marginRight="19dp"
                         android:layout_alignLeft="@+id/photo"
-                        android:layout_alignStart="@+id/photo" />
+                        android:layout_alignStart="@+id/photo"
+                        android:layout_alignParentRight="true"
+                        android:layout_alignParentEnd="true" />
 
 
                     <EditText
@@ -102,15 +104,14 @@
                         android:layout_below="@+id/reaction_text"
                         android:layout_alignLeft="@+id/reaction_text"
                         android:layout_alignStart="@+id/reaction_text"
-                        android:layout_alignRight="@+id/map"
-                        android:layout_alignEnd="@+id/map" />
+                        android:layout_alignRight="@+id/reaction_text"
+                        android:layout_alignEnd="@+id/reaction_text" />
 
                     <TextView
                         android:layout_width="100dp"
                         android:layout_height="wrap_content"
                         android:id="@+id/image"
                         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                        android:text="Image"
                         android:layout_alignBaseline="@+id/photo"
                         android:layout_alignBottom="@+id/photo"
                         android:layout_centerHorizontal="true"
@@ -191,20 +192,6 @@
                         android:layout_below="@+id/comment"
                         android:layout_alignParentLeft="true"
                         android:layout_alignParentStart="true" />
-
-                    <Button
-                        android:text="Map"
-                        android:layout_width="100dp"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/map"
-                        android:background="@drawable/buttonshape"
-                        android:shadowColor="@color/colorPrimary"
-                        android:textColor="@color/colorPrimary"
-                        android:layout_below="@+id/comment"
-                        android:layout_alignParentRight="true"
-                        android:layout_alignParentEnd="true"
-                        android:layout_marginRight="16dp"
-                        android:layout_marginEnd="16dp" />
 
                     <TextView
                         android:text="Comments"
