@@ -10,6 +10,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -20,11 +21,16 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
+import poc.servicedesigntoolkit.getpost.SessionManagement.SessionManager;
+import poc.servicedesigntoolkit.getpost.Touchpoint.TouchpointMain;
 
 public class JourneyList extends AppCompatActivity {
 
     ListView listView;
-    private static final String JOURNEYLIST_URL = "http://54.169.59.1:9090/service_design_toolkit-web/api/get_journey_list";
+    private static final String JOURNEYLIST_URL = "http://54.169.59.1:9090/service_design_toolkit-web/api/get_journey_list_for_register";
     private static final String REGISTER_URL="http://54.169.59.1:9090/service_design_toolkit-web/api/register_field_researcher_with_journey";
 
     private static final String TAG_JOURNEYLIST = "journeyDTOList";
@@ -34,6 +40,7 @@ public class JourneyList extends AppCompatActivity {
     ArrayList<String> journeyList;
 
     ArrayAdapter journeyAdapter;
+    String seljourney;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +53,7 @@ public class JourneyList extends AppCompatActivity {
 
         journeyList = new ArrayList<String>();
 
+/*
         JSONObject request = new JSONObject();
 
         try {
@@ -53,10 +61,10 @@ public class JourneyList extends AppCompatActivity {
             request.put("isActive", "Y");
         } catch (Exception e) {
             e.printStackTrace();
-        }
+        }*/
 
-        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.PUT,
-                JOURNEYLIST_URL, request, new Response.Listener<JSONObject>() {
+        JsonObjectRequest journeyListJSON = new JsonObjectRequest(Request.Method.GET,
+                JOURNEYLIST_URL, new Response.Listener<JSONObject>() {
 
             @Override
             public void onResponse(JSONObject response) {
@@ -100,8 +108,9 @@ public class JourneyList extends AppCompatActivity {
             }
         });
 
+        Log.d("REQUEST",journeyListJSON.toString());
         // Adding request to request queue
-        AppController.getInstance().addToRequestQueue(jsonObjReq);
+        AppController.getInstance().addToRequestQueue(journeyListJSON);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view,
@@ -111,21 +120,16 @@ public class JourneyList extends AppCompatActivity {
                 Log.d("PRESSED",journey);
                 Toast.makeText(getApplicationContext(), "Journey Selected : "+journey, Toast.LENGTH_SHORT).show();
 
-                Intent i = new Intent(JourneyList.this,TouchpointList.class);
-                i.putExtra("JourneyName",journey);
-                i.putExtra("Username",Username);
                 registeruser(journey);
-                startActivity(i);
+
             }
         });
     }
 
     public void registeruser(String journey){
-        String seljourney = journey;
+        seljourney = journey;
         final JSONObject request = new JSONObject();
         try {
-
-
             final JSONObject journeyDTO = new JSONObject();
 
             request.put("journeyDTO",journeyDTO);
@@ -143,12 +147,16 @@ public class JourneyList extends AppCompatActivity {
             e.printStackTrace();
         }
         Log.d("Request",request.toString());
-        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.PUT,
+        JsonObjectRequest registerJourney = new JsonObjectRequest(Request.Method.PUT,
                 REGISTER_URL,request,new Response.Listener<JSONObject>()
         {
             @Override
             public void onResponse(JSONObject response) {
                 Log.d("Response"," > "+response.toString());
+                Intent i = new Intent(JourneyList.this,TouchpointMain.class);
+                i.putExtra("JourneyName",seljourney);
+                i.putExtra("Username",Username);
+                startActivity(i);
             }
         },
                 new Response.ErrorListener()
@@ -159,7 +167,15 @@ public class JourneyList extends AppCompatActivity {
                         Log.d("Error.Response", error.toString());
                     }
                 }
-        );
-        AppController.getInstance().addToRequestQueue(jsonObjReq);
+        ){
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<String, String>();
+                headers.put("Content-Type", "application/json");
+                headers.put("Accept", "application/json");
+                return headers;
+            }
+        };
+        AppController.getInstance().addToRequestQueue(registerJourney);
     }
 }

@@ -1,6 +1,5 @@
 package poc.servicedesigntoolkit.getpost;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -25,12 +24,13 @@ import org.json.JSONObject;
 
 public class TouchpointDetails extends AppCompatActivity implements View.OnClickListener {
 
-    EditText touchpointName,touchpointDescription,channel,action,comment_edit,reaction_edit;
+    EditText touchpointName_edit,channelDescription_edit,channel_edit,action_edit,comment_edit,reaction_edit;
     RatingBar ratingBar;
     TextView image;
     Button submit, reset,photo;
 
     String touchpoint ,username, reaction, comment;
+    String name ,action, channel_desc, channel;
     int rating;
 
     private static final String TOUCHPOINT_DETAILS_URL = "http://54.169.59.1:9090/service_design_toolkit-web/api/update_research_work";
@@ -52,14 +52,20 @@ public class TouchpointDetails extends AppCompatActivity implements View.OnClick
         setContentView(R.layout.activity_touchpoint_details);
 
         Bundle extras = getIntent().getExtras();
+
         touchpoint = (String) extras.get("Touchpoint");
         username = (String) extras.get("Username");
+        action = (String) extras.get("Action");
+        channel = (String) extras.get("Channel");
+        channel_desc = (String) extras.get("Channel_Desc");
+        name = (String) extras.get("Name");
+
         setTitle(touchpoint);
 
-        touchpointName = (EditText) findViewById(R.id.touchpoint_name);
-        channel = (EditText) findViewById(R.id.channel);
-        touchpointDescription = (EditText) findViewById(R.id.description);
-        action = (EditText) findViewById(R.id.action);
+        touchpointName_edit = (EditText) findViewById(R.id.touchpoint_name);
+        channel_edit = (EditText) findViewById(R.id.channel);
+        channelDescription_edit = (EditText) findViewById(R.id.Name);
+        action_edit = (EditText) findViewById(R.id.action);
         reaction_edit = (EditText) findViewById(R.id.reaction);
         comment_edit = (EditText) findViewById(R.id.comment);
 
@@ -81,7 +87,10 @@ public class TouchpointDetails extends AppCompatActivity implements View.OnClick
 
     public void setText (){
 
-        touchpointName.setText(touchpoint);
+        touchpointName_edit.setText(name);
+        channel_edit.setText(channel);
+        action_edit.setText(action);
+        channelDescription_edit.setText(channel_desc);
 
     }
 
@@ -133,23 +142,23 @@ public class TouchpointDetails extends AppCompatActivity implements View.OnClick
             JSONObject sdtUserDTO = new JSONObject();
             fieldResearcherDTO.put(TAG_SDTUSERDTO,sdtUserDTO);
 
-            sdtUserDTO.put(TAG_USERNAME,username);
+            sdtUserDTO.put(TAG_USERNAME,"Gunjan");//username
 
             JSONObject touchpointDTO = new JSONObject();
             request.put(TAG_TOUCHPOINTDTO,touchpointDTO);
 
-            touchpointDTO.put(TAG_TOUCHPOINTDESC,touchpoint);
+            touchpointDTO.put(TAG_TOUCHPOINTDESC,"p1");//touchpoint
 
-            touchpointDTO.put(TAG_ID,"1");
+            touchpointDTO.put(TAG_ID,"49");
 
-            request.put(TAG_COMMENTS,comment);
+            request.put(TAG_COMMENTS,"FROM APP COMMENT");//comment
 
-            request.put(TAG_REACTION,reaction);
+            request.put(TAG_REACTION,"FROM APP REACTION");//reaction
 
             JSONObject ratingDTO = new JSONObject();
             request.put(TAG_RATINGDTO,ratingDTO);
 
-            ratingDTO.put(TAG_VALUE,rating);
+            ratingDTO.put(TAG_VALUE,4);
 
 
         } catch (Exception e) {

@@ -53,6 +53,9 @@
             android:name=".TouchpointDetails"
             android:label="@string/title_touchpoint_details" />
         <activity
+            android:name=".Touchpoint.TouchpointMain"
+            android:label="@string/title_touchpoint_list" />
+        <activity
             android:name=".SelectPhoto"
             android:label="@string/title_select_photo" />
 

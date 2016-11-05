@@ -28,7 +28,7 @@ public class SessionManager {
 	private static final String IS_LOGIN = "IsLoggedIn";
 
 	// User name (make variable public to access from outside)
-	public static final String KEY_NAME = "name";
+	public static String KEY_NAME = "name";
 
 	// in future store phone number of the user
 	public static final String KEY_JOURNEY = "journey";
@@ -42,7 +42,7 @@ public class SessionManager {
 	/**
 	 * Create login session
 	 * */
-	public void loginSession(String name ){
+	public void loginSession(String name){
 		// Storing login value as TRUE
 		editor.putBoolean(IS_LOGIN, true);
 		// Storing name
@@ -104,5 +104,9 @@ public class SessionManager {
 
 	public boolean isLoggedIn(){
 		return pref.getBoolean(IS_LOGIN, false);
+	}
+
+	public void setName(String name) {
+		KEY_NAME = name;
 	}
 }
