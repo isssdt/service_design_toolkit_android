@@ -1,6 +1,7 @@
 package poc.servicedesigntoolkit.getpost;
 
 import android.app.Activity;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ListView;
@@ -15,13 +16,20 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import journey.dto.JourneyDTO;
+import journey.dto.JourneyListDTO;
 import poc.servicedesigntoolkit.getpost.Controller.TouchpointList_Controller;
 import poc.servicedesigntoolkit.getpost.Touchpoint.TouchpointList_Model;
+import touchpoint.dto.TouchPointFieldResearcherDTO;
+import touchpoint.dto.TouchPointFieldResearcherListDTO;
+import user.dto.SdtUserDTO;
 
 /**
  * Created by Gunjan Pathak on 04-Oct-16.
@@ -57,6 +65,7 @@ public class TouchpointList extends Activity  {
         touchpoint_controller = new TouchpointList_Controller(this,R.layout.list_row,touchList);
         listView.setAdapter(touchpoint_controller);
 
+        new HttpRequestTask().execute();
     }
 
     private void getJSONData() {
@@ -121,6 +130,37 @@ public class TouchpointList extends Activity  {
 
         // Adding request to request queue
         AppController.getInstance().addToRequestQueue(jsonObjReq);
+    }
+
+    private class HttpRequestTask extends AsyncTask<Void, Void, TouchPointFieldResearcherListDTO> {
+        @Override
+        protected TouchPointFieldResearcherListDTO doInBackground(Void... params) {
+            try {
+                final String url = "http://54.169.59.1:9090/service_design_toolkit-web/api/get_touch_point_list_of_registered_journey";
+                RestTemplate restTemplate = new RestTemplate();
+                restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
+
+                SdtUserDTO sdtUserDTO = new SdtUserDTO();
+                sdtUserDTO.setUsername("Gunjan");
+                TouchPointFieldResearcherListDTO touchPointFieldResearcherListDTO =
+                        restTemplate.getForObject(url, TouchPointFieldResearcherListDTO.class, sdtUserDTO);
+                for (TouchPointFieldResearcherDTO touchPointFieldResearcherDTO :
+                        touchPointFieldResearcherListDTO.getTouchPointFieldResearcherDTOList()) {
+                    Log.d("Touch Point Name", touchPointFieldResearcherDTO.getTouchpointDTO().getTouchPointDesc());
+                }
+                return touchPointFieldResearcherListDTO;
+            } catch (Exception e) {
+                Log.e("MainActivity", e.getMessage(), e);
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(TouchPointFieldResearcherListDTO touchPointFieldResearcherListDTO) {
+
+        }
+
     }
 
 }

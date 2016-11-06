@@ -3,6 +3,7 @@ package poc.servicedesigntoolkit.getpost;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -38,12 +39,20 @@ import com.google.android.gms.maps.model.LatLng;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.HashMap;
 import java.util.Map;
 
+import common.dto.RESTResponse;
+import journey.dto.JourneyDTO;
+import journey.dto.JourneyListDTO;
 import poc.servicedesigntoolkit.getpost.Touchpoint.TouchpointList_Model;
 import poc.servicedesigntoolkit.getpost.Touchpoint.TouchpointMain;
+import touchpoint.dto.TouchPointFieldResearcherDTO;
+import touchpoint.dto.TouchPointFieldResearcherListDTO;
+import user.dto.SdtUserDTO;
 
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
@@ -93,6 +102,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             e.printStackTrace();
         }
         Log.d("Request", request.toString());
+
+        new HttpRequestTask().execute();
+
         JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.PUT,
                 CURRENT_LOCATION_URL, request, new Response.Listener<JSONObject>()
         {
@@ -158,5 +170,36 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             journeyintent.putExtra("Username", user);
             startActivity(journeyintent);
         }*/
+    }
+
+    private class HttpRequestTask extends AsyncTask<Void, Void, TouchPointFieldResearcherListDTO> {
+        @Override
+        protected TouchPointFieldResearcherListDTO doInBackground(Void... params) {
+            try {
+                final String url = "http://54.169.59.1:9090/service_design_toolkit-web/api/get_touch_point_list_of_registered_journey";
+                RestTemplate restTemplate = new RestTemplate();
+                restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
+
+                SdtUserDTO sdtUserDTO = new SdtUserDTO();
+                sdtUserDTO.setUsername("Gunjan");
+                TouchPointFieldResearcherListDTO touchPointFieldResearcherListDTO =
+                        restTemplate.postForObject(url, sdtUserDTO, TouchPointFieldResearcherListDTO.class);
+                for (TouchPointFieldResearcherDTO touchPointFieldResearcherDTO :
+                        touchPointFieldResearcherListDTO.getTouchPointFieldResearcherDTOList()) {
+                    Log.d("Touch Point Name", touchPointFieldResearcherDTO.getTouchpointDTO().getTouchPointDesc());
+                }
+                return touchPointFieldResearcherListDTO;
+            } catch (Exception e) {
+                Log.e("MainActivity", e.getMessage(), e);
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(TouchPointFieldResearcherListDTO touchPointFieldResearcherListDTO) {
+
+        }
+
     }
 }
