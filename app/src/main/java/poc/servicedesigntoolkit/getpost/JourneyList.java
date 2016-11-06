@@ -3,6 +3,7 @@ package poc.servicedesigntoolkit.getpost;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.os.AsyncTask;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -24,6 +25,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import journey.dto.JourneyDTO;
 import journey.dto.JourneyListDTO;
 import poc.servicedesigntoolkit.getpost.SessionManagement.SessionManager;
 import poc.servicedesigntoolkit.getpost.Touchpoint.TouchpointMain;
@@ -57,10 +59,7 @@ public class JourneyList extends AppCompatActivity {
 
         journeyList = new ArrayList<String>();
 
-        RestTemplate restTemplate = new RestTemplate();
-        restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
-        JourneyListDTO journeyListDTO = restTemplate.getForObject(JOURNEYLIST_URL, JourneyListDTO.class);
-        System.out.print(journeyListDTO.getJourneyDTOList().size());
+        new HttpRequestTask().execute();
 
         JsonObjectRequest journeyListJSON = new JsonObjectRequest(Request.Method.GET,
                 JOURNEYLIST_URL, new Response.Listener<JSONObject>() {
@@ -176,5 +175,31 @@ public class JourneyList extends AppCompatActivity {
             }
         };
         AppController.getInstance().addToRequestQueue(registerJourney);
+    }
+
+    private class HttpRequestTask extends AsyncTask<Void, Void, JourneyListDTO> {
+        @Override
+        protected JourneyListDTO doInBackground(Void... params) {
+            try {
+                final String url = "http://54.169.59.1:9090/service_design_toolkit-web/api/get_journey_list_for_register";
+                RestTemplate restTemplate = new RestTemplate();
+                restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
+                JourneyListDTO journeyListDTO = restTemplate.getForObject(url, JourneyListDTO.class);
+                for (JourneyDTO journeyDTO : journeyListDTO.getJourneyDTOList()) {
+                    Log.d("Journey Name", journeyDTO.getJourneyName());
+                }
+                return journeyListDTO;
+            } catch (Exception e) {
+                Log.e("MainActivity", e.getMessage(), e);
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(JourneyListDTO journeyListDTO) {
+
+        }
+
     }
 }
