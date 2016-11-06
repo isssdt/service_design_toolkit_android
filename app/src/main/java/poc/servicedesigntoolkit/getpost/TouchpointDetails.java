@@ -1,6 +1,7 @@
 package poc.servicedesigntoolkit.getpost;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -17,6 +18,16 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 
 import org.json.JSONObject;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.web.client.RestTemplate;
+
+import common.dto.RESTResponse;
+import touchpoint.dto.RatingDTO;
+import touchpoint.dto.TouchPointDTO;
+import touchpoint.dto.TouchPointFieldResearcherDTO;
+import touchpoint.dto.TouchPointFieldResearcherListDTO;
+import user.dto.FieldResearcherDTO;
+import user.dto.SdtUserDTO;
 
 /**
  * Created by Gunjan Pathak on 06-Oct-16.
@@ -82,7 +93,7 @@ public class TouchpointDetails extends AppCompatActivity implements View.OnClick
 
         setText();
 
-
+        new HttpRequestTask().execute();
     }
 
     public void setText (){
@@ -137,28 +148,28 @@ public class TouchpointDetails extends AppCompatActivity implements View.OnClick
         try {
 
             JSONObject fieldResearcherDTO = new JSONObject();
-            request.put(TAG_FIELDRESEARCHERDTO,fieldResearcherDTO);
+            request.put(TAG_FIELDRESEARCHERDTO, fieldResearcherDTO);
 
             JSONObject sdtUserDTO = new JSONObject();
-            fieldResearcherDTO.put(TAG_SDTUSERDTO,sdtUserDTO);
+            fieldResearcherDTO.put(TAG_SDTUSERDTO, sdtUserDTO);
 
-            sdtUserDTO.put(TAG_USERNAME,"Gunjan");//username
+            sdtUserDTO.put(TAG_USERNAME, "Gunjan");//username
 
             JSONObject touchpointDTO = new JSONObject();
-            request.put(TAG_TOUCHPOINTDTO,touchpointDTO);
+            request.put(TAG_TOUCHPOINTDTO, touchpointDTO);
 
-            touchpointDTO.put(TAG_TOUCHPOINTDESC,"p1");//touchpoint
+            touchpointDTO.put(TAG_TOUCHPOINTDESC, "p1");//touchpoint
 
-            touchpointDTO.put(TAG_ID,"49");
+            touchpointDTO.put(TAG_ID, "49");
 
-            request.put(TAG_COMMENTS,"FROM APP COMMENT");//comment
+            request.put(TAG_COMMENTS, "FROM APP COMMENT");//comment
 
-            request.put(TAG_REACTION,"FROM APP REACTION");//reaction
+            request.put(TAG_REACTION, "FROM APP REACTION");//reaction
 
             JSONObject ratingDTO = new JSONObject();
-            request.put(TAG_RATINGDTO,ratingDTO);
+            request.put(TAG_RATINGDTO, ratingDTO);
 
-            ratingDTO.put(TAG_VALUE,4);
+            ratingDTO.put(TAG_VALUE, 4);
 
 
         } catch (Exception e) {
@@ -170,7 +181,7 @@ public class TouchpointDetails extends AppCompatActivity implements View.OnClick
             @Override
             public void onResponse(JSONObject response) {
                 Log.d("Response", response.toString());
-                Toast.makeText(getApplicationContext(),"Touchpoint is added into Database.",Toast.LENGTH_SHORT);
+                Toast.makeText(getApplicationContext(), "Touchpoint is added into Database.", Toast.LENGTH_SHORT);
             }
         },
                 new Response.ErrorListener() {
@@ -182,6 +193,50 @@ public class TouchpointDetails extends AppCompatActivity implements View.OnClick
                 }
         );
         AppController.getInstance().addToRequestQueue(jsonObjReq);
+    }
+
+    private class HttpRequestTask extends AsyncTask<Void, Void, RESTResponse> {
+        @Override
+        protected RESTResponse doInBackground(Void... params) {
+            try {
+                final String url = "http://54.169.59.1:9090/service_design_toolkit-web/api/update_research_work";
+                RestTemplate restTemplate = new RestTemplate();
+                restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
+
+                SdtUserDTO sdtUserDTO = new SdtUserDTO();
+                sdtUserDTO.setUsername("Gunjan");
+
+                FieldResearcherDTO fieldResearcherDTO = new FieldResearcherDTO();
+                fieldResearcherDTO.setSdtUserDTO(sdtUserDTO);
+
+                TouchPointDTO touchPointDTO = new TouchPointDTO();
+                touchPointDTO.setId(48);
+
+                TouchPointFieldResearcherDTO touchPointFieldResearcherDTO = new TouchPointFieldResearcherDTO();
+                touchPointFieldResearcherDTO.setTouchpointDTO(touchPointDTO);
+                touchPointFieldResearcherDTO.setFieldResearcherDTO(fieldResearcherDTO);
+                touchPointFieldResearcherDTO.setComments("Comment from Android");
+                touchPointFieldResearcherDTO.setReaction("Reaction from Android");
+
+                RatingDTO ratingDTO = new RatingDTO();
+                ratingDTO.setValue("4");
+                touchPointFieldResearcherDTO.setRatingDTO(ratingDTO);
+
+                RESTResponse response =
+                        restTemplate.postForObject(url, touchPointFieldResearcherDTO, RESTResponse.class);
+                Log.d("Message: ", response.getMessage());
+                return response;
+            } catch (Exception e) {
+                Log.e("MainActivity", e.getMessage(), e);
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(RESTResponse response) {
+
+        }
     }
 
 
