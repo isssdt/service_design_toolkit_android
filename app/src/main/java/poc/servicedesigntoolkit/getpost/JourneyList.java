@@ -24,8 +24,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import journey.dto.JourneyListDTO;
 import poc.servicedesigntoolkit.getpost.SessionManagement.SessionManager;
 import poc.servicedesigntoolkit.getpost.Touchpoint.TouchpointMain;
+
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.web.client.RestTemplate;
 
 public class JourneyList extends AppCompatActivity {
 
@@ -53,15 +57,10 @@ public class JourneyList extends AppCompatActivity {
 
         journeyList = new ArrayList<String>();
 
-/*
-        JSONObject request = new JSONObject();
-
-        try {
-
-            request.put("isActive", "Y");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }*/
+        RestTemplate restTemplate = new RestTemplate();
+        restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
+        JourneyListDTO journeyListDTO = restTemplate.getForObject(JOURNEYLIST_URL, JourneyListDTO.class);
+        System.out.print(journeyListDTO.getJourneyDTOList().size());
 
         JsonObjectRequest journeyListJSON = new JsonObjectRequest(Request.Method.GET,
                 JOURNEYLIST_URL, new Response.Listener<JSONObject>() {
