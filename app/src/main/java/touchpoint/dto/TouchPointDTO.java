@@ -12,6 +12,60 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 public class TouchPointDTO {
     private String touchPointDesc;
     private Integer id;
+    private String latitude;
+    private String longitude;
+    private String radius;
+    private String action;
+    private String channelDescription;
+    private ChannelDTO channelDTO;
+
+    public String getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(String latitude) {
+        this.latitude = latitude;
+    }
+
+    public String getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(String longitude) {
+        this.longitude = longitude;
+    }
+
+    public String getRadius() {
+        return radius;
+    }
+
+    public void setRadius(String radius) {
+        this.radius = radius;
+    }
+
+    public String getAction() {
+        return action;
+    }
+
+    public void setAction(String action) {
+        this.action = action;
+    }
+
+    public String getChannelDescription() {
+        return channelDescription;
+    }
+
+    public void setChannelDescription(String channelDescription) {
+        this.channelDescription = channelDescription;
+    }
+
+    public ChannelDTO getChannelDTO() {
+        return channelDTO;
+    }
+
+    public void setChannelDTO(ChannelDTO channelDTO) {
+        this.channelDTO = channelDTO;
+    }
 
     public Integer getId() {
         return id;

@@ -17,6 +17,15 @@ public class TouchPointFieldResearcherDTO {
     private String comments;
     private String reaction;
     private RatingDTO ratingDTO;
+    private String status;
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
 
     public RatingDTO getRatingDTO() {
         return ratingDTO;
