@@ -26,7 +26,6 @@ import java.util.Map;
 import journey.dto.JourneyDTO;
 import journey.dto.JourneyListDTO;
 import poc.servicedesigntoolkit.getpost.Controller.TouchpointList_Controller;
-import poc.servicedesigntoolkit.getpost.Touchpoint.TouchpointList_Model;
 import touchpoint.dto.TouchPointFieldResearcherDTO;
 import touchpoint.dto.TouchPointFieldResearcherListDTO;
 import user.dto.SdtUserDTO;
@@ -39,7 +38,7 @@ public class TouchpointList extends Activity  {
 
 
     ListView listView;
-    ArrayList<TouchpointList_Model> touchList;
+    ArrayList<TouchPointFieldResearcherDTO> touchList;
     String JourneyName,Username;
     TouchpointList_Controller touchpoint_controller;
 
@@ -58,7 +57,7 @@ public class TouchpointList extends Activity  {
 
         listView = (ListView) findViewById(R.id.touchpointlistview);
 
-        touchList = new ArrayList<TouchpointList_Model>();
+        touchList = new ArrayList<TouchPointFieldResearcherDTO>();
 
         getJSONData();
 
@@ -95,14 +94,14 @@ public class TouchpointList extends Activity  {
                         JSONArray list = jsonObj.getJSONArray(TAG_TOUCHPOINT);
 
                         // looping through All Contacts
-                        for (int i = 0; i < list.length(); i++) {
+                   /*     for (int i = 0; i < list.length(); i++) {
                             JSONObject c = list.getJSONObject(i);
-                            TouchpointList_Model item = new TouchpointList_Model();
-                            item.setName(c.getString(TAG_TOUCHPOINTDESCRIPTION));
-                            item.setChannel(c.getString(TAG_TOUCHPOINTDESCRIPTION));
+              //              TouchPointFieldResearcherDTO item = new TouchPointFieldResearcherDTO();
+                           // item.setName(c.getString(TAG_TOUCHPOINTDESCRIPTION));
+                           // item.setChannel(c.getString(TAG_TOUCHPOINTDESCRIPTION));
                             item.setStatus(c.getString(TAG_TOUCHPOINTDESCRIPTION));
                             touchList.add(item);
-                        }
+                        }*/
 
                     } catch (JSONException e) {
                         e.printStackTrace();

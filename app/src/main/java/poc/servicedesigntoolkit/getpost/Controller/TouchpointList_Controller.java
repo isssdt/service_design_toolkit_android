@@ -14,18 +14,19 @@ import android.widget.TextView;
 
 import java.util.List;
 
-import poc.servicedesigntoolkit.getpost.Touchpoint.TouchpointList_Model;
 import poc.servicedesigntoolkit.getpost.R;
+import touchpoint.dto.TouchPointDTO;
+import touchpoint.dto.TouchPointFieldResearcherDTO;
 
-public class TouchpointList_Controller extends ArrayAdapter<TouchpointList_Model>{
+public class TouchpointList_Controller extends ArrayAdapter<TouchPointFieldResearcherDTO>{
 
     private Activity activity;
-    List<TouchpointList_Model> Items;
+    List<TouchPointFieldResearcherDTO> Items;
     int resources;
 
     Context context;
 
-    public TouchpointList_Controller(Context context, int resource, List<TouchpointList_Model> items) {
+    public TouchpointList_Controller(Context context, int resource, List<TouchPointFieldResearcherDTO> items) {
         super(context, resource);
         Items = items;
         resources = resource;
@@ -35,7 +36,7 @@ public class TouchpointList_Controller extends ArrayAdapter<TouchpointList_Model
     public View getView(int position, View convertView, ViewGroup parent) {
 
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        TouchpointList_Model object = Items.get(position);
+        TouchPointFieldResearcherDTO object = Items.get(position);
 
 
         View itemView = inflater.inflate(resources, parent, false);
@@ -46,9 +47,9 @@ public class TouchpointList_Controller extends ArrayAdapter<TouchpointList_Model
 
         TextView status=(TextView)itemView.findViewById(R.id.status);
 
-        name.setText(object.getName());
+        name.setText(object.getTouchpointDTO().getChannelDescription());
 
-        channel.setText(object.getChannel());
+        channel.setText(object.getTouchpointDTO().getChannelDTO().getChannelName());
 
         status.setText(object.getStatus());
 

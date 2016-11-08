@@ -44,11 +44,6 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.HashMap;
 import java.util.Map;
-
-import common.dto.RESTResponse;
-import journey.dto.JourneyDTO;
-import journey.dto.JourneyListDTO;
-import poc.servicedesigntoolkit.getpost.Touchpoint.TouchpointList_Model;
 import poc.servicedesigntoolkit.getpost.Touchpoint.TouchpointMain;
 import touchpoint.dto.TouchPointFieldResearcherDTO;
 import touchpoint.dto.TouchPointFieldResearcherListDTO;
@@ -103,7 +98,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         Log.d("Request", request.toString());
 
-        new HttpRequestTask().execute();
+        //new HttpRequestTask().execute();
 
         JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.PUT,
                 CURRENT_LOCATION_URL, request, new Response.Listener<JSONObject>()
@@ -152,27 +147,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 return headers;
             }
         };
-
         AppController.getInstance().addToRequestQueue(jsonObjReq);
-
-        post();
     }
 
-
-    private void post() {
-        //if(){
-        Toast.makeText(getApplicationContext(),"DONE",Toast.LENGTH_SHORT);
-            /*final Intent journeyintent = new Intent(MainActivity.this, JourneyList.class);
-            journeyintent.putExtra("Username", user);
-            startActivity(journeyintent);*/
-       /* }else if(){
-            final Intent journeyintent = new Intent(MainActivity.this, TouchpointMain.class);
-            journeyintent.putExtra("Username", user);
-            startActivity(journeyintent);
-        }*/
-    }
-
-    private class HttpRequestTask extends AsyncTask<Void, Void, TouchPointFieldResearcherListDTO> {
+/*    private class HttpRequestTask extends AsyncTask<Void, Void, TouchPointFieldResearcherListDTO> {
         @Override
         protected TouchPointFieldResearcherListDTO doInBackground(Void... params) {
             try {
@@ -201,5 +179,5 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         }
 
-    }
+    }*/
 }

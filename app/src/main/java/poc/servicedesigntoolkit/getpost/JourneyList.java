@@ -60,55 +60,11 @@ public class JourneyList extends AppCompatActivity {
         journeyList = new ArrayList<String>();
 
         new HttpRequestTask().execute();
+        Log.d("FLOW","oncreate");
+        Log.d("Journey LIST", journeyList.toString());
 
-        JsonObjectRequest journeyListJSON = new JsonObjectRequest(Request.Method.GET,
-                JOURNEYLIST_URL, new Response.Listener<JSONObject>() {
+        listView.setAdapter(journeyAdapter);
 
-            @Override
-            public void onResponse(JSONObject response) {
-                Log.d("Response", response.toString());
-                JSONObject jsonObj;
-
-                if (response != null) {
-                    try {
-                        jsonObj = new JSONObject(response.toString());
-
-                        // Getting JSON Array node
-                        JSONArray list = jsonObj.getJSONArray(TAG_JOURNEYLIST);
-
-                        // looping through All Contacts
-                        for (int i = 0; i < list.length(); i++) {
-                            JSONObject c = list.getJSONObject(i);
-
-                            journeyList.add(c.getString(TAG_JOURNEYNAME));
-
-                        }
-                        Log.d("JourneyListBefore" ,journeyList.toString());
-
-                        journeyAdapter=new ArrayAdapter(JourneyList.this,android.R.layout.simple_list_item_1 ,journeyList);
-
-                        listView.setAdapter(journeyAdapter);
-
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-
-                }
-                journeyAdapter.notifyDataSetChanged();
-            }
-        }, new Response.ErrorListener() {
-
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.d("Error", "Error: " + error.getMessage());
-                Toast.makeText(getApplicationContext(),
-                        error.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        Log.d("REQUEST",journeyListJSON.toString());
-        // Adding request to request queue
-        AppController.getInstance().addToRequestQueue(journeyListJSON);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view,
@@ -187,7 +143,10 @@ public class JourneyList extends AppCompatActivity {
                 JourneyListDTO journeyListDTO = restTemplate.getForObject(url, JourneyListDTO.class);
                 for (JourneyDTO journeyDTO : journeyListDTO.getJourneyDTOList()) {
                     Log.d("Journey Name", journeyDTO.getJourneyName());
+                    journeyList.add(journeyDTO.getJourneyName());
                 }
+                Log.d("Journey LIST", journeyList.toString());
+
                 return journeyListDTO;
             } catch (Exception e) {
                 Log.e("MainActivity", e.getMessage(), e);
@@ -198,7 +157,9 @@ public class JourneyList extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(JourneyListDTO journeyListDTO) {
-
+            journeyAdapter=new ArrayAdapter(JourneyList.this,android.R.layout.simple_list_item_1 ,journeyList);
+            listView.setAdapter(journeyAdapter);
+            journeyAdapter.notifyDataSetChanged();
         }
 
     }

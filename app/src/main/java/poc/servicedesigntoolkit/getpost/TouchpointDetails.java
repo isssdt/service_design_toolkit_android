@@ -1,5 +1,7 @@
 package poc.servicedesigntoolkit.getpost;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -12,16 +14,17 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import common.dto.RESTResponse;
+import poc.servicedesigntoolkit.getpost.Touchpoint.TouchpointMain;
 import touchpoint.dto.RatingDTO;
 import touchpoint.dto.TouchPointDTO;
 import touchpoint.dto.TouchPointFieldResearcherDTO;
@@ -40,11 +43,14 @@ public class TouchpointDetails extends AppCompatActivity implements View.OnClick
     TextView image;
     Button submit, reset,photo;
 
-    String touchpoint ,username, reaction, comment;
+    String touchpoint ,username, reaction, comment,JourneyName;
     String name ,action, channel_desc, channel;
+    Integer id;
+    String id_String,rating_string;
     int rating;
+    private static final String touchpoint_complete = "Please informed that you have completed work for all Touch Points";
 
-    private static final String TOUCHPOINT_DETAILS_URL = "http://54.169.59.1:9090/service_design_toolkit-web/api/update_research_work";
+    private static final String COMPLETE_URL = "http://54.169.59.1:9090/service_design_toolkit-web/api/journey_mark_complete";
 
     private static final String TAG_FIELDRESEARCHERDTO = "fieldResearcherDTO";
     private static final String TAG_SDTUSERDTO = "sdtUserDTO";
@@ -56,6 +62,9 @@ public class TouchpointDetails extends AppCompatActivity implements View.OnClick
     private static final String TAG_REACTION = "reaction";
     private static final String TAG_RATINGDTO = "ratingDTO";
     private static final String TAG_VALUE = "value";
+    String message = "";
+    private static final String completed = "Please informed that you have completed work for all Touch Points";
+    private static final String completed_confirmation = "Journey has been marked as Completed";
 
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,10 +75,13 @@ public class TouchpointDetails extends AppCompatActivity implements View.OnClick
 
         touchpoint = (String) extras.get("Touchpoint");
         username = (String) extras.get("Username");
+        JourneyName = (String) extras.get("JourneyName");
         action = (String) extras.get("Action");
         channel = (String) extras.get("Channel");
         channel_desc = (String) extras.get("Channel_Desc");
         name = (String) extras.get("Name");
+        id = (Integer) extras.get("Id");
+        id_String = id.toString();
 
         setTitle(touchpoint);
 
@@ -93,7 +105,6 @@ public class TouchpointDetails extends AppCompatActivity implements View.OnClick
 
         setText();
 
-        new HttpRequestTask().execute();
     }
 
     public void setText (){
@@ -111,8 +122,7 @@ public class TouchpointDetails extends AppCompatActivity implements View.OnClick
         if (v == submit) {
             if(validate()){
                 getdetails();
-                touchpointDetails();
-                onBackPressed();
+                new HttpRequestTask().execute();
             }
         } else if ( v == reset){
 
@@ -140,60 +150,9 @@ public class TouchpointDetails extends AppCompatActivity implements View.OnClick
         reaction = reaction_edit.getText().toString();
         comment = comment_edit.getText().toString();
         rating = (int) ratingBar.getRating();
+        rating_string = Integer.toString(rating);
     }
 
-    private void touchpointDetails() {
-
-        final JSONObject request = new JSONObject();
-        try {
-
-            JSONObject fieldResearcherDTO = new JSONObject();
-            request.put(TAG_FIELDRESEARCHERDTO, fieldResearcherDTO);
-
-            JSONObject sdtUserDTO = new JSONObject();
-            fieldResearcherDTO.put(TAG_SDTUSERDTO, sdtUserDTO);
-
-            sdtUserDTO.put(TAG_USERNAME, "Gunjan");//username
-
-            JSONObject touchpointDTO = new JSONObject();
-            request.put(TAG_TOUCHPOINTDTO, touchpointDTO);
-
-            touchpointDTO.put(TAG_TOUCHPOINTDESC, "p1");//touchpoint
-
-            touchpointDTO.put(TAG_ID, "49");
-
-            request.put(TAG_COMMENTS, "FROM APP COMMENT");//comment
-
-            request.put(TAG_REACTION, "FROM APP REACTION");//reaction
-
-            JSONObject ratingDTO = new JSONObject();
-            request.put(TAG_RATINGDTO, ratingDTO);
-
-            ratingDTO.put(TAG_VALUE, 4);
-
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        Log.d("Touchpoint Request", request.toString());
-        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.PUT,
-                TOUCHPOINT_DETAILS_URL, request, new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-                Log.d("Response", response.toString());
-                Toast.makeText(getApplicationContext(), "Touchpoint is added into Database.", Toast.LENGTH_SHORT);
-            }
-        },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        // error
-                        Log.d("Error.Response", error.toString());
-                    }
-                }
-        );
-        AppController.getInstance().addToRequestQueue(jsonObjReq);
-    }
 
     private class HttpRequestTask extends AsyncTask<Void, Void, RESTResponse> {
         @Override
@@ -203,41 +162,66 @@ public class TouchpointDetails extends AppCompatActivity implements View.OnClick
                 RestTemplate restTemplate = new RestTemplate();
                 restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
 
+                Log.d("Username",username);
+                Log.d("id_String",id_String);
+                Log.d("rating_string",rating_string);
+                Log.d("comment",comment);
+                Log.d("reaction",reaction);
+
                 SdtUserDTO sdtUserDTO = new SdtUserDTO();
-                sdtUserDTO.setUsername("Gunjan");
+                sdtUserDTO.setUsername(username);
 
                 FieldResearcherDTO fieldResearcherDTO = new FieldResearcherDTO();
                 fieldResearcherDTO.setSdtUserDTO(sdtUserDTO);
 
                 TouchPointDTO touchPointDTO = new TouchPointDTO();
-                touchPointDTO.setId(48);
+                touchPointDTO.setId(Integer.parseInt(id_String));
 
                 TouchPointFieldResearcherDTO touchPointFieldResearcherDTO = new TouchPointFieldResearcherDTO();
                 touchPointFieldResearcherDTO.setTouchpointDTO(touchPointDTO);
                 touchPointFieldResearcherDTO.setFieldResearcherDTO(fieldResearcherDTO);
-                touchPointFieldResearcherDTO.setComments("Comment from Android");
-                touchPointFieldResearcherDTO.setReaction("Reaction from Android");
+                touchPointFieldResearcherDTO.setComments(comment);
+                touchPointFieldResearcherDTO.setReaction(reaction);
 
                 RatingDTO ratingDTO = new RatingDTO();
-                ratingDTO.setValue("4");
+                ratingDTO.setValue(rating_string);
                 touchPointFieldResearcherDTO.setRatingDTO(ratingDTO);
 
                 RESTResponse response =
                         restTemplate.postForObject(url, touchPointFieldResearcherDTO, RESTResponse.class);
-                Log.d("Message: ", response.getMessage());
-                return response;
+                message =response.getMessage();
+                if(message.equals(touchpoint_complete)) {
+                    SdtUserDTO user = new SdtUserDTO();
+                    user.setUsername(username);
+                    RESTResponse response2 =
+                            restTemplate.postForObject(COMPLETE_URL,user , RESTResponse.class);
+
+                    Intent i = new Intent(TouchpointDetails.this,MainActivity.class);
+                    startActivity(i);
+                    return response2;
+                }else{
+                    Intent i = new Intent(TouchpointDetails.this,TouchpointMain.class);
+                    i.putExtra("Username",username);
+                    i.putExtra("JourneyName",JourneyName);
+                    startActivity(i);
+                }
+
+                    return response;
             } catch (Exception e) {
                 Log.e("MainActivity", e.getMessage(), e);
             }
 
             return null;
         }
-
+        @Override
+        protected void onPreExecute(){
+            reaction = reaction_edit.getText().toString();
+            comment = comment_edit.getText().toString();
+            rating = (int) ratingBar.getRating();
+            rating_string = Integer.toString(rating);
+        }
         @Override
         protected void onPostExecute(RESTResponse response) {
-
         }
     }
-
-
 }

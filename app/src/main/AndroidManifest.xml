@@ -44,7 +44,8 @@
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
-        <activity android:name=".JourneyList" />
+        <activity android:name=".JourneyList"
+            android:label="@string/title_journey_list"/>
         <activity
             android:name=".TouchpointList"
             android:icon="@drawable/map"

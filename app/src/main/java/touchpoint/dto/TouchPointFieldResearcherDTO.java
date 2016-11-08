@@ -19,6 +19,8 @@ public class TouchPointFieldResearcherDTO {
     private RatingDTO ratingDTO;
     private String status;
 
+
+
     public String getStatus() {
         return status;
     }
