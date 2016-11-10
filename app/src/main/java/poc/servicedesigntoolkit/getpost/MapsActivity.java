@@ -1,28 +1,21 @@
 package poc.servicedesigntoolkit.getpost;
 
-import android.*;
 import android.Manifest;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
-import android.net.Uri;
 import android.os.Build;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
-import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
-import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.google.android.gms.appindexing.Action;
-import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
@@ -44,37 +37,29 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener ,LocationListener {
+public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
-    private GoogleMap mMap;
-    String journey;
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
-
-
     private static final String TOUCHPOINT_URL = "http://54.169.59.1:9090/service_design_toolkit-web/api/get_touch_point_list_of_journey";
-    private static final String LOCATIONUPDATE_URL= "http://54.169.59.1:9090/service_design_toolkit-web/api/refresh_current_location";
+    private static final String LOCATIONUPDATE_URL = "http://54.169.59.1:9090/service_design_toolkit-web/api/refresh_current_location";
     private static final String TAG_TOUCHPOINT = "touchPointDTOList";
     private static final String TAG_LATITUDE = "latitude";
     private static final String TAG_LONGITUDE = "longitude";
     private static final String TAG_NAME = "touchPointDesc";
-
-
     private static final String TAG_CURRENTLATITUDE = "currentLatitude";
     private static final String TAG_CURRENTLONGITUDE = "currentLongitude";
     private static final String TAG_SDTUSERDTO = "sdtUserDTO";
     private static final String TAG_USERNAME = "username";
-
+    String journey;
     String Username;
     Location mLastLocation;
     LocationRequest mLocationRequest;
     GoogleApiClient mGoogleApiClient;
-
     ArrayList<String> latitude;
     ArrayList<String> longitude;
     Double lat = 0.0, lon = 0.00;
-
     Marker mCurrLocationMarker;
-
+    private GoogleMap mMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,7 +90,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         Log.d("journey", "retriveaddcities");
         //       latitude = new ArrayList<String>();
 //        longitude = new ArrayList<String>();
-
 
 
         JSONObject request = new JSONObject();
@@ -283,7 +267,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
 
         //update
-       currentlocationUpdate(location);
+        currentlocationUpdate(location);
 
     }
 
@@ -322,51 +306,47 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
 
-private void currentlocationUpdate(Location location){
-    Log.d("currentlocationUpdate","currentlocationUpdate");
-    final JSONObject request = new JSONObject();
-    //journeyList = new ArrayList<JourneyListModel>();
-    try
+    private void currentlocationUpdate(Location location) {
+        Log.d("currentlocationUpdate", "currentlocationUpdate");
+        final JSONObject request = new JSONObject();
+        //journeyList = new ArrayList<JourneyListModel>();
+        try
 
-    {
-        request.put(TAG_CURRENTLATITUDE, location.getLatitude());
-        request.put(TAG_CURRENTLONGITUDE, location.getLongitude());
+        {
+            request.put(TAG_CURRENTLATITUDE, location.getLatitude());
+            request.put(TAG_CURRENTLONGITUDE, location.getLongitude());
 
-        JSONObject username = new JSONObject();
-        request.put(TAG_SDTUSERDTO, username);
+            JSONObject username = new JSONObject();
+            request.put(TAG_SDTUSERDTO, username);
 
-        username.put(TAG_USERNAME, Username);
-
-
+            username.put(TAG_USERNAME, Username);
 
 
-    }
+        } catch (
+                Exception e
+                )
 
-    catch(
-    Exception e
-    )
-
-    {
-        e.printStackTrace();
-    }
-
-    Log.d("Requestcurrentloc",request.toString());
-    JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.PUT,
-            LOCATIONUPDATE_URL, request, new Response.Listener<JSONObject>() {
-        @Override
-        public void onResponse(JSONObject response) {
-            Log.d("Response", response.toString());
+        {
+            e.printStackTrace();
         }
-    },
-            new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    // error
-                    Log.d("Error.Response", error.toString());
-                }
+
+        Log.d("Requestcurrentloc", request.toString());
+        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.PUT,
+                LOCATIONUPDATE_URL, request, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                Log.d("Response", response.toString());
             }
-    );
-    AppController.getInstance().addToRequestQueue(jsonObjReq);
-}
+        },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // error
+                        Log.d("Error.Response", error.toString());
+                    }
+                }
+        );
+        AppController.getInstance().addToRequestQueue(jsonObjReq);
+    }
 }
 

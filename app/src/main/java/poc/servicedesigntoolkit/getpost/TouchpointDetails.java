@@ -1,7 +1,5 @@
 package poc.servicedesigntoolkit.getpost;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -13,22 +11,18 @@ import android.widget.EditText;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.support.v7.app.ActionBarActivity;
 
-
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
-
-import java.util.HashMap;
-import java.util.Map;
 
 import common.dto.RESTResponse;
 import poc.servicedesigntoolkit.getpost.Touchpoint.TouchpointMain;
 import touchpoint.dto.RatingDTO;
 import touchpoint.dto.TouchPointDTO;
 import touchpoint.dto.TouchPointFieldResearcherDTO;
-import touchpoint.dto.TouchPointFieldResearcherListDTO;
 import user.dto.FieldResearcherDTO;
 import user.dto.SdtUserDTO;
 
@@ -38,34 +32,20 @@ import user.dto.SdtUserDTO;
 
 public class TouchpointDetails extends AppCompatActivity implements View.OnClickListener {
 
-    EditText touchpointName_edit,channelDescription_edit,channel_edit,action_edit,comment_edit,reaction_edit;
-    RatingBar ratingBar;
-    TextView image;
-    Button submit, reset,photo;
-
-    String touchpoint ,username, reaction, comment,JourneyName;
-    String name ,action, channel_desc, channel;
-    Integer id;
-    String id_String,rating_string;
-    int rating;
     private static final String touchpoint_complete = "Please informed that you have completed work for all Touch Points";
-
     private static final String COMPLETE_URL = "http://54.169.59.1:9090/service_design_toolkit-web/api/journey_mark_complete";
-
-    private static final String TAG_FIELDRESEARCHERDTO = "fieldResearcherDTO";
-    private static final String TAG_SDTUSERDTO = "sdtUserDTO";
-    private static final String TAG_USERNAME = "username";
-    private static final String TAG_TOUCHPOINTDTO = "touchpointDTO";
-    private static final String TAG_TOUCHPOINTDESC = "touchPointDesc";
-    private static final String TAG_ID = "id";
-    private static final String TAG_COMMENTS = "comments";
-    private static final String TAG_REACTION = "reaction";
-    private static final String TAG_RATINGDTO = "ratingDTO";
-    private static final String TAG_VALUE = "value";
-    String message = "";
     private static final String completed = "Please informed that you have completed work for all Touch Points";
     private static final String completed_confirmation = "Journey has been marked as Completed";
-
+    EditText touchpointName_edit, channelDescription_edit, channel_edit, action_edit, comment_edit, reaction_edit;
+    RatingBar ratingBar;
+    TextView image;
+    Button submit, reset, photo;
+    String touchpoint, username, reaction, comment, JourneyName;
+    String name, action, channel_desc, channel;
+    Integer id;
+    String id_String, rating_string;
+    int rating;
+    String message = "";
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -107,7 +87,7 @@ public class TouchpointDetails extends AppCompatActivity implements View.OnClick
 
     }
 
-    public void setText (){
+    public void setText() {
 
         touchpointName_edit.setText(name);
         channel_edit.setText(channel);
@@ -120,27 +100,30 @@ public class TouchpointDetails extends AppCompatActivity implements View.OnClick
     public void onClick(View v) {
 
         if (v == submit) {
-            if(validate()){
+            if (validate()) {
                 getdetails();
                 new HttpRequestTask().execute();
+                if(message.equals(completed_confirmation)){
+                    Toast.makeText(this, "Your Journey is Completed.", Toast.LENGTH_SHORT).show();
+                }
             }
-        } else if ( v == reset){
+        } else if (v == reset) {
 
-        }else if ( v == photo){
-            Intent i = new Intent(TouchpointDetails.this,SelectPhoto.class);
+        } else if (v == photo) {
+            Intent i = new Intent(TouchpointDetails.this, SelectPhoto.class);
             startActivity(i);
         }
     }
 
     private boolean validate() {
-        if(reaction_edit.getText().length() == 0 && ((int)ratingBar.getRating()) == 0.0){
-            Toast.makeText(TouchpointDetails.this,"Please enter the Rating and Reaction",Toast.LENGTH_SHORT).show();
+        if (reaction_edit.getText().length() == 0 && ((int) ratingBar.getRating()) == 0.0) {
+            Toast.makeText(TouchpointDetails.this, "Please enter the Rating and Reaction", Toast.LENGTH_SHORT).show();
             return false;
-        }else if(((int)ratingBar.getRating()) == 0.0){
-            Toast.makeText(TouchpointDetails.this,"Please enter the Rating",Toast.LENGTH_SHORT).show();
+        } else if (((int) ratingBar.getRating()) == 0.0) {
+            Toast.makeText(TouchpointDetails.this, "Please enter the Rating", Toast.LENGTH_SHORT).show();
             return false;
-        }else if(reaction_edit.getText().length() == 0){
-            Toast.makeText(TouchpointDetails.this,"Please enter the Reaction",Toast.LENGTH_SHORT).show();
+        } else if (reaction_edit.getText().length() == 0) {
+            Toast.makeText(TouchpointDetails.this, "Please enter the Reaction", Toast.LENGTH_SHORT).show();
             return false;
         }
         return true;
@@ -161,12 +144,6 @@ public class TouchpointDetails extends AppCompatActivity implements View.OnClick
                 final String url = "http://54.169.59.1:9090/service_design_toolkit-web/api/update_research_work";
                 RestTemplate restTemplate = new RestTemplate();
                 restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
-
-                Log.d("Username",username);
-                Log.d("id_String",id_String);
-                Log.d("rating_string",rating_string);
-                Log.d("comment",comment);
-                Log.d("reaction",reaction);
 
                 SdtUserDTO sdtUserDTO = new SdtUserDTO();
                 sdtUserDTO.setUsername(username);
@@ -189,39 +166,45 @@ public class TouchpointDetails extends AppCompatActivity implements View.OnClick
 
                 RESTResponse response =
                         restTemplate.postForObject(url, touchPointFieldResearcherDTO, RESTResponse.class);
-                message =response.getMessage();
-                if(message.equals(touchpoint_complete)) {
+                message = response.getMessage();
+                if (message.equals(touchpoint_complete)) {
                     SdtUserDTO user = new SdtUserDTO();
                     user.setUsername(username);
                     RESTResponse response2 =
-                            restTemplate.postForObject(COMPLETE_URL,user , RESTResponse.class);
+                            restTemplate.postForObject(COMPLETE_URL, user, RESTResponse.class);
 
-                    Intent i = new Intent(TouchpointDetails.this,MainActivity.class);
+                    Intent i = new Intent(TouchpointDetails.this, MainActivity.class);
+                    i.putExtra("Message", message);
                     startActivity(i);
                     return response2;
-                }else{
-                    Intent i = new Intent(TouchpointDetails.this,TouchpointMain.class);
-                    i.putExtra("Username",username);
-                    i.putExtra("JourneyName",JourneyName);
+                } else {
+                    Intent i = new Intent(TouchpointDetails.this, TouchpointMain.class);
+                    i.putExtra("Username", username);
+                    i.putExtra("JourneyName", JourneyName);
                     startActivity(i);
                 }
 
-                    return response;
+                return response;
             } catch (Exception e) {
                 Log.e("MainActivity", e.getMessage(), e);
             }
 
             return null;
         }
+
         @Override
-        protected void onPreExecute(){
+        protected void onPreExecute() {
             reaction = reaction_edit.getText().toString();
             comment = comment_edit.getText().toString();
             rating = (int) ratingBar.getRating();
             rating_string = Integer.toString(rating);
         }
+
         @Override
         protected void onPostExecute(RESTResponse response) {
+
         }
     }
+
+
 }

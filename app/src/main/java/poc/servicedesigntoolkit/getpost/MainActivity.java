@@ -1,14 +1,7 @@
 package poc.servicedesigntoolkit.getpost;
 
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.location.Location;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -18,51 +11,30 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
-import com.android.volley.NetworkError;
-import com.android.volley.NoConnectionError;
-import com.android.volley.ParseError;
 import com.android.volley.Request;
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
-import com.android.volley.ServerError;
-import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.LocationListener;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.model.LatLng;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.web.client.RestTemplate;
 
 import java.util.HashMap;
 import java.util.Map;
+
 import poc.servicedesigntoolkit.getpost.Touchpoint.TouchpointMain;
-import touchpoint.dto.TouchPointFieldResearcherDTO;
-import touchpoint.dto.TouchPointFieldResearcherListDTO;
-import user.dto.SdtUserDTO;
 
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
-    Button register;
-    TextView textView;
-    EditText username;
-
     private static final String CURRENT_LOCATION_URL = "http://54.169.59.1:9090/service_design_toolkit-web/api/field_researcher_register";
-    private String user;
     private static final String TAG_USERNAME = "username";
     private static final String TAG_REGISTER = "This Field Researcher already registered with a Journey";
     private static final String TAG_NOTREGISTER = "This Field Researcher has not registered with any Journey";
-
-
+    Button register;
+    TextView textView;
+    EditText username;
+    private String user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,7 +63,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void currentLocation() {
         final JSONObject request = new JSONObject();
         try {
-            request.put(TAG_USERNAME,user);
+            request.put(TAG_USERNAME, user);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -101,8 +73,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //new HttpRequestTask().execute();
 
         JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.PUT,
-                CURRENT_LOCATION_URL, request, new Response.Listener<JSONObject>()
-        {
+                CURRENT_LOCATION_URL, request, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 Log.d("Response", " > " + response.toString());
@@ -114,16 +85,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         jsonObj = new JSONObject(response.toString());
                         String Response = jsonObj.getString("message");
 
-                        if(TAG_NOTREGISTER.equals(Response)){
+                        if (TAG_NOTREGISTER.equals(Response)) {
                             final Intent journeyintent = new Intent(MainActivity.this, JourneyList.class);
                             journeyintent.putExtra("Username", user);
                             startActivity(journeyintent);
-                        }else if(TAG_REGISTER.equals(Response)){
+                        } else if (TAG_REGISTER.equals(Response)) {
                             final Intent journeyintent = new Intent(MainActivity.this, TouchpointMain.class);
                             journeyintent.putExtra("Username", user);
                             startActivity(journeyintent);
                         }
-                        Log.d("MESSAGE",jsonObj.getString("message"));
+                        Log.d("MESSAGE", jsonObj.getString("message"));
 
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -138,7 +109,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         Log.d("Error.Response", error.toString());
                     }
                 }
-        ){
+        ) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 HashMap<String, String> headers = new HashMap<String, String>();
@@ -149,35 +120,4 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         };
         AppController.getInstance().addToRequestQueue(jsonObjReq);
     }
-
-/*    private class HttpRequestTask extends AsyncTask<Void, Void, TouchPointFieldResearcherListDTO> {
-        @Override
-        protected TouchPointFieldResearcherListDTO doInBackground(Void... params) {
-            try {
-                final String url = "http://54.169.59.1:9090/service_design_toolkit-web/api/get_touch_point_list_of_registered_journey";
-                RestTemplate restTemplate = new RestTemplate();
-                restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
-
-                SdtUserDTO sdtUserDTO = new SdtUserDTO();
-                sdtUserDTO.setUsername("Gunjan");
-                TouchPointFieldResearcherListDTO touchPointFieldResearcherListDTO =
-                        restTemplate.postForObject(url, sdtUserDTO, TouchPointFieldResearcherListDTO.class);
-                for (TouchPointFieldResearcherDTO touchPointFieldResearcherDTO :
-                        touchPointFieldResearcherListDTO.getTouchPointFieldResearcherDTOList()) {
-                    Log.d("Touch Point Name", touchPointFieldResearcherDTO.getTouchpointDTO().getTouchPointDesc());
-                }
-                return touchPointFieldResearcherListDTO;
-            } catch (Exception e) {
-                Log.e("MainActivity", e.getMessage(), e);
-            }
-
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(TouchPointFieldResearcherListDTO touchPointFieldResearcherListDTO) {
-
-        }
-
-    }*/
 }

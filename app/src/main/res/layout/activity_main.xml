@@ -10,36 +10,36 @@
     tools:context="poc.servicedesigntoolkit.getpost.MainActivity">
 
     <TextView
+        android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Service Design ToolKit"
-        android:id="@+id/textView"
-        android:layout_marginTop="73dp"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="73dp"
+        android:text="Service Design ToolKit"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <Button
+        android:id="@+id/researchList"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Research List"
-        android:id="@+id/researchList"
-        android:background="@drawable/buttonshape"
-        android:shadowColor="@color/colorPrimary"
-        android:textColor="@color/colorPrimary"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="138dp" />
+        android:layout_marginBottom="138dp"
+        android:background="@drawable/buttonshape"
+        android:shadowColor="@color/colorPrimary"
+        android:text="Research List"
+        android:textColor="@color/colorPrimary" />
 
     <EditText
+        android:id="@+id/username"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:inputType="textPersonName"
-        android:ems="10"
-        android:id="@+id/username"
-        android:layout_marginBottom="69dp"
         android:layout_above="@+id/researchList"
         android:layout_alignLeft="@+id/textView"
-        android:layout_alignStart="@+id/textView" />
+        android:layout_alignStart="@+id/textView"
+        android:layout_marginBottom="69dp"
+        android:ems="10"
+        android:inputType="textPersonName" />
 
 </RelativeLayout>

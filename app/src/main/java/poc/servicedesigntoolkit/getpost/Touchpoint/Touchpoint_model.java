@@ -13,6 +13,12 @@ public class Touchpoint_model {
     Integer id;
     String action;
 
+    public Touchpoint_model(String name, String status, String channel) {
+        this.name = name;
+        this.status = status;
+        this.channel = channel;
+    }
+
     public String getAction() {
         return action;
     }
@@ -37,26 +43,12 @@ public class Touchpoint_model {
         this.channel_desc = channel_desc;
     }
 
-    public Touchpoint_model(String name, String status, String channel) {
-        this.name = name;
-        this.status = status;
-        this.channel = channel;
-    }
-
     public String getChannel() {
         return channel;
     }
 
-    public void setChannel(String channel) {
-        this.channel = channel;
-    }
-
     public String getStatus() {
         return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
     }
 
     public String getName() {
@@ -67,12 +59,4 @@ public class Touchpoint_model {
         this.name = name;
     }
 
-    @Override
-    public String toString() {
-        return "Touchpoint_model{" +
-                "name='" + name + '\'' +
-                ", status='" + status + '\'' +
-                ", channel='" + channel + '\'' +
-                '}';
-    }
 }

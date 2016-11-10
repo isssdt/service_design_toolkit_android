@@ -3,6 +3,7 @@ package touchpoint.dto;
 /**
  * Created by longnguyen on 11/6/16.
  */
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
@@ -18,7 +19,6 @@ public class TouchPointFieldResearcherDTO {
     private String reaction;
     private RatingDTO ratingDTO;
     private String status;
-
 
 
     public String getStatus() {

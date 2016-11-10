@@ -6,14 +6,12 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -36,29 +34,21 @@ import java.util.Date;
 import java.util.Hashtable;
 import java.util.Map;
 
-public class SelectPhoto extends AppCompatActivity implements View.OnClickListener  {
+public class SelectPhoto extends AppCompatActivity implements View.OnClickListener {
 
+    static final int REQUEST_TAKE_PHOTO = 1;
+    private static final String TAG = "selectphoto";
+    String mCurrentPhotoPath;
     private Button buttonCamera;
     private Button buttonGallery;
     private Button buttonUpload;
-
     private ImageView imageView;
-
     private EditText editTextName;
-
     private Bitmap bitmap;
-
     private int PICK_IMAGE_REQUEST = 1;
-
-    private String UPLOAD_URL ="http://simplifiedcoding.16mb.com/VolleyUpload/upload.php";
-
+    private String UPLOAD_URL = "http://simplifiedcoding.16mb.com/VolleyUpload/upload.php";
     private String KEY_IMAGE = "image";
     private String KEY_NAME = "name";
-
-    static final int REQUEST_TAKE_PHOTO = 1;
-    String mCurrentPhotoPath;
-
-    private static final String TAG = "selectphoto";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,14 +61,14 @@ public class SelectPhoto extends AppCompatActivity implements View.OnClickListen
 
         editTextName = (EditText) findViewById(R.id.editText);
 
-        imageView  = (ImageView) findViewById(R.id.imageView);
+        imageView = (ImageView) findViewById(R.id.imageView);
 
         buttonCamera.setOnClickListener(this);
         buttonGallery.setOnClickListener(this);
         buttonUpload.setOnClickListener(this);
     }
 
-    public String getStringImage(Bitmap bmp){
+    public String getStringImage(Bitmap bmp) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bmp.compress(Bitmap.CompressFormat.JPEG, 100, baos);
         byte[] imageBytes = baos.toByteArray();
@@ -86,9 +76,9 @@ public class SelectPhoto extends AppCompatActivity implements View.OnClickListen
         return encodedImage;
     }
 
-    private void uploadImage(){
+    private void uploadImage() {
         //Showing the progress dialog
-        final ProgressDialog loading = ProgressDialog.show(this,"Uploading...","Please wait...",false,false);
+        final ProgressDialog loading = ProgressDialog.show(this, "Uploading...", "Please wait...", false, false);
         StringRequest stringRequest = new StringRequest(Request.Method.POST, UPLOAD_URL,
                 new Response.Listener<String>() {
                     @Override
@@ -96,7 +86,7 @@ public class SelectPhoto extends AppCompatActivity implements View.OnClickListen
                         //Disimissing the progress dialog
                         loading.dismiss();
                         //Showing toast message of the response
-                        Toast.makeText(SelectPhoto.this, s , Toast.LENGTH_LONG).show();
+                        Toast.makeText(SelectPhoto.this, s, Toast.LENGTH_LONG).show();
                     }
                 },
                 new Response.ErrorListener() {
@@ -108,7 +98,7 @@ public class SelectPhoto extends AppCompatActivity implements View.OnClickListen
                         //Showing toast
                         Toast.makeText(SelectPhoto.this, volleyError.getMessage().toString(), Toast.LENGTH_LONG).show();
                     }
-                }){
+                }) {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 //Converting Bitmap to String
@@ -118,7 +108,7 @@ public class SelectPhoto extends AppCompatActivity implements View.OnClickListen
                 String name = editTextName.getText().toString().trim();
 
                 //Creating parameters
-                Map<String,String> params = new Hashtable<String, String>();
+                Map<String, String> params = new Hashtable<String, String>();
 
                 //Adding parameters
                 params.put(KEY_IMAGE, image);
@@ -236,7 +226,7 @@ public class SelectPhoto extends AppCompatActivity implements View.OnClickListen
         int photoH = bmOptions.outHeight;
 
         // Determine how much to scale down the image
-        int scaleFactor = Math.min(photoW/targetW, photoH/targetH);
+        int scaleFactor = Math.min(photoW / targetW, photoH / targetH);
 
         // Decode the image file into a Bitmap sized to fill the View
         bmOptions.inJustDecodeBounds = false;
@@ -256,7 +246,7 @@ public class SelectPhoto extends AppCompatActivity implements View.OnClickListen
         imageView.setImageBitmap(rotatedBMP);
 
         try {
-           // sendPhoto(rotatedBMP);
+            // sendPhoto(rotatedBMP);
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
