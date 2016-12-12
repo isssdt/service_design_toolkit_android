@@ -10,10 +10,11 @@ import journey.dto.JourneyDTO;
  */
 
 public class JourneyController {
+    private JourneyAPI journeyAPI;
+
     public JourneyDTO getJourneyByName(JourneyDTO journeyDTO) {
         try {
             JourneyDTO result = null;
-            JourneyAPI journeyAPI = null;
             result = journeyAPI.APIGetJourneyByName(journeyDTO);
             return result;
         } catch (Resources.NotFoundException e) {
