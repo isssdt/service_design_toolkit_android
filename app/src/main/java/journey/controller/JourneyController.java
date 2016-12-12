@@ -12,6 +12,10 @@ import journey.dto.JourneyDTO;
 public class JourneyController {
     private JourneyAPI journeyAPI;
 
+    public JourneyController() {
+        journeyAPI = new JourneyAPI();
+    }
+
     public JourneyDTO getJourneyByName(JourneyDTO journeyDTO) {
         try {
             JourneyDTO result = null;
