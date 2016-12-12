@@ -10,14 +10,39 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class TouchPointDTO {
-    private String touchPointDesc;
     private Integer id;
+    private String touchPointDesc;
     private String latitude;
     private String longitude;
     private String radius;
     private String action;
     private String channelDescription;
     private ChannelDTO channelDTO;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public ChannelDTO getChannelDTO() {
+        return channelDTO;
+    }
+
+    public void setChannelDTO(ChannelDTO channelDTO) {
+        this.channelDTO = channelDTO;
+    }
+
+
+    public String getTouchPointDesc() {
+        return touchPointDesc;
+    }
+
+    public void setTouchPointDesc(String touchPointDesc) {
+        this.touchPointDesc = touchPointDesc;
+    }
 
     public String getLatitude() {
         return latitude;
@@ -57,29 +82,5 @@ public class TouchPointDTO {
 
     public void setChannelDescription(String channelDescription) {
         this.channelDescription = channelDescription;
-    }
-
-    public ChannelDTO getChannelDTO() {
-        return channelDTO;
-    }
-
-    public void setChannelDTO(ChannelDTO channelDTO) {
-        this.channelDTO = channelDTO;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getTouchPointDesc() {
-        return touchPointDesc;
-    }
-
-    public void setTouchPointDesc(String touchPointDesc) {
-        this.touchPointDesc = touchPointDesc;
     }
 }

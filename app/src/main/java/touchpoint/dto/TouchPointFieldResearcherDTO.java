@@ -20,29 +20,20 @@ public class TouchPointFieldResearcherDTO {
     private RatingDTO ratingDTO;
     private String status;
 
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public RatingDTO getRatingDTO() {
-        return ratingDTO;
-    }
-
-    public void setRatingDTO(RatingDTO ratingDTO) {
-        this.ratingDTO = ratingDTO;
-    }
-
     public FieldResearcherDTO getFieldResearcherDTO() {
         return fieldResearcherDTO;
     }
 
     public void setFieldResearcherDTO(FieldResearcherDTO fieldResearcherDTO) {
         this.fieldResearcherDTO = fieldResearcherDTO;
+    }
+
+    public TouchPointDTO getTouchpointDTO() {
+        return touchpointDTO;
+    }
+
+    public void setTouchpointDTO(TouchPointDTO touchpointDTO) {
+        this.touchpointDTO = touchpointDTO;
     }
 
     public String getComments() {
@@ -61,11 +52,19 @@ public class TouchPointFieldResearcherDTO {
         this.reaction = reaction;
     }
 
-    public TouchPointDTO getTouchpointDTO() {
-        return touchpointDTO;
+    public RatingDTO getRatingDTO() {
+        return ratingDTO;
     }
 
-    public void setTouchpointDTO(TouchPointDTO touchpointDTO) {
-        this.touchpointDTO = touchpointDTO;
+    public void setRatingDTO(RatingDTO ratingDTO) {
+        this.ratingDTO = ratingDTO;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

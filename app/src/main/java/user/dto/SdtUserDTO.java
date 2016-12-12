@@ -11,6 +11,8 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class SdtUserDTO {
     private String username;
+    private Character isActive;
+    private FieldResearcherDTO fieldResearcherDTO;
 
     public String getUsername() {
         return username;
@@ -18,5 +20,21 @@ public class SdtUserDTO {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public Character getIsActive() {
+        return isActive;
+    }
+
+    public void setIsActive(Character isActive) {
+        this.isActive = isActive;
+    }
+
+    public FieldResearcherDTO getFieldResearcherDTO() {
+        return fieldResearcherDTO;
+    }
+
+    public void setFieldResearcherDTO(FieldResearcherDTO fieldResearcherDTO) {
+        this.fieldResearcherDTO = fieldResearcherDTO;
     }
 }

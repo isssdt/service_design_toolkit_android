@@ -53,12 +53,4 @@ public class JourneyDTO {
     public void setEndDate(Date endDate) {
         this.endDate = endDate;
     }
-
-    public Character getCanBeRegistered() {
-        return canBeRegistered;
-    }
-
-    public void setCanBeRegistered(Character canBeRegistered) {
-        this.canBeRegistered = canBeRegistered;
-    }
 }
