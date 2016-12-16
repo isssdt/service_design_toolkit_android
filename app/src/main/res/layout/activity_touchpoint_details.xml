@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/scrollView1"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
     <LinearLayout
 
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:weightSum="1">
@@ -19,7 +20,7 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="500dp"
+                android:layout_height="wrap_content"
                 android:layout_weight="0.50"
                 android:orientation="vertical">
 
@@ -70,28 +71,18 @@
                     android:inputType="textPostalAddress"
                     android:text="Channel" />
 
-                <RatingBar
-                    android:id="@+id/ratingBar"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/rating_text"
-                    android:layout_centerHorizontal="true"
-                    android:numStars="5"
-                    android:rating="0.0"
-                    android:stepSize="1.0" />
-
                 <EditText
                     android:id="@+id/comment"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignLeft="@+id/photo"
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentRight="true"
-                    android:layout_alignStart="@+id/photo"
                     android:layout_below="@+id/comment_text"
                     android:layout_marginRight="19dp"
                     android:ems="10"
-                    android:inputType="textMultiLine" />
+                    android:inputType="textMultiLine"
+                    android:layout_alignLeft="@+id/comment_text"
+                    android:layout_alignStart="@+id/comment_text" />
 
 
                 <EditText
@@ -126,8 +117,8 @@
                     android:layout_alignStart="@+id/textView5"
                     android:layout_below="@+id/Name"
                     android:focusable="false"
-                    android:text="Action"
-                    android:textAlignment="center" />
+                    android:text="What I need to do"
+                    android:textAlignment="viewStart" />
 
                 <TextView
                     android:id="@+id/textView4"
@@ -138,8 +129,8 @@
                     android:layout_alignRight="@+id/touchpoint"
                     android:layout_alignStart="@+id/touchpoint"
                     android:layout_below="@+id/touchpoint_name"
-                    android:text="Channel"
-                    android:textAlignment="center" />
+                    android:text="Using"
+                    android:textAlignment="viewStart" />
 
                 <TextView
                     android:id="@+id/textView5"
@@ -151,7 +142,7 @@
                     android:layout_alignStart="@+id/textView4"
                     android:layout_below="@+id/channel"
                     android:text="Description"
-                    android:textAlignment="center" />
+                    android:textAlignment="viewStart" />
 
                 <EditText
                     android:id="@+id/action"
@@ -175,22 +166,8 @@
                     android:layout_alignRight="@+id/action"
                     android:layout_alignStart="@+id/action_text"
                     android:layout_below="@+id/action"
-                    android:text="Ratings for Touchpoint"
-                    android:textAlignment="center" />
-
-                <Button
-                    android:id="@+id/photo"
-                    android:layout_width="100dp"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true"
-                    android:layout_below="@+id/comment"
-                    android:layout_marginLeft="19dp"
-                    android:layout_marginStart="19dp"
-                    android:background="@drawable/buttonshape"
-                    android:shadowColor="@color/colorPrimary"
-                    android:text="Photo"
-                    android:textColor="@color/colorPrimary" />
+                    android:text="Rating"
+                    android:textAlignment="viewStart" />
 
                 <TextView
                     android:id="@+id/comment_text"
@@ -201,21 +178,8 @@
                     android:layout_alignRight="@+id/reaction"
                     android:layout_alignStart="@+id/reaction_text"
                     android:layout_below="@+id/reaction"
-                    android:text="Comments"
-                    android:textAlignment="center" />
-
-                <TextView
-                    android:id="@+id/touchpoint"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_alignEnd="@+id/map"
-                    android:layout_alignLeft="@+id/comment"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignRight="@+id/map"
-                    android:layout_alignStart="@+id/comment"
-                    android:layout_marginTop="19dp"
-                    android:text="Touchpoint Name"
-                    android:textAlignment="center" />
+                    android:text="How I feel"
+                    android:textAlignment="viewStart" />
 
                 <TextView
                     android:id="@+id/reaction_text"
@@ -226,8 +190,40 @@
                     android:layout_alignRight="@+id/rating_text"
                     android:layout_alignStart="@+id/rating_text"
                     android:layout_below="@+id/ratingBar"
-                    android:text="Reaction"
-                    android:textAlignment="center" />
+                    android:text="What did I do"
+                    android:textAlignment="viewStart" />
+
+                <RatingBar
+                    android:id="@+id/ratingBar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:numStars="5"
+                    android:rating="0.0"
+                    android:stepSize="1.0"
+                    android:layout_below="@+id/rating_text"
+                    android:layout_alignLeft="@+id/rating_text"
+                    android:layout_alignStart="@+id/rating_text" />
+
+                <TextView
+                    android:id="@+id/touchpoint"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Touchpoint Name"
+                    android:textAlignment="viewStart"
+                    android:layout_below="@+id/image"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginLeft="19dp"
+                    android:layout_marginStart="19dp" />
+
+                <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@android:drawable/ic_menu_camera"
+                    android:id="@+id/photo1"
+                    android:layout_below="@+id/rating_text"
+                    android:layout_alignRight="@+id/rating_text"
+                    android:layout_alignEnd="@+id/rating_text" />
             </RelativeLayout>
         </ScrollView>
 

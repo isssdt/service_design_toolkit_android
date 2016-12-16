@@ -42,4 +42,13 @@
         android:ems="10"
         android:inputType="textPersonName" />
 
+    <TextView
+        android:text="Enter your name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/username"
+        android:layout_alignLeft="@+id/username"
+        android:layout_alignStart="@+id/username"
+        android:id="@+id/textView6" />
+
 </RelativeLayout>
