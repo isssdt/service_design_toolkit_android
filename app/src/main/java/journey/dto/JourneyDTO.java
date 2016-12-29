@@ -4,8 +4,13 @@ package journey.dto;
  * Created by longnguyen on 11/6/16.
  */
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 import java.util.Date;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class JourneyDTO {
     private String journeyName;
     private Integer noOfFieldResearcher;

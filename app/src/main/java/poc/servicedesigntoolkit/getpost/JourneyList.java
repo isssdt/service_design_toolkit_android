@@ -25,12 +25,15 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import common.constants.APIUrl;
+import journey.api.APIGetJourneyList;
+import journey.api.HttpJSONGetJourneyListTaskCaller;
 import journey.dto.JourneyDTO;
 import journey.dto.JourneyListDTO;
 import poc.servicedesigntoolkit.getpost.Touchpoint.TouchpointMain;
 import user.dto.SdtUserDTO;
 
-public class JourneyList extends AppCompatActivity {
+public class JourneyList extends AppCompatActivity implements HttpJSONGetJourneyListTaskCaller {
 
     private static final String JOURNEYLIST_URL = "http://54.169.59.1:9090/service_design_toolkit-web/api/get_journey_list_for_register";
     private static final String REGISTER_URL = "http://54.169.59.1:9090/service_design_toolkit-web/api/register_field_researcher_with_journey";
@@ -54,9 +57,9 @@ public class JourneyList extends AppCompatActivity {
 
         journeyList = new ArrayList<String>();
 
-        new HttpRequestTask().execute();
-        Log.d("FLOW", "oncreate");
-        Log.d("Journey LIST", journeyList.toString());
+//        new HttpRequestTask().execute();
+
+        new APIGetJourneyList(this, APIUrl.API_GET_JOURNEY_LIST_FOR_REGISTER).execute();
 
         listView.setAdapter(journeyAdapter);
 
@@ -124,34 +127,15 @@ public class JourneyList extends AppCompatActivity {
         AppController.getInstance().addToRequestQueue(registerJourney);
     }
 
-    private class HttpRequestTask extends AsyncTask<Void, Void, JourneyListDTO> {
-        @Override
-        protected JourneyListDTO doInBackground(Void... params) {
-            try {
-                RestTemplate restTemplate = new RestTemplate();
-                restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
-
-                SdtUserDTO sdtUserDTO = new SdtUserDTO();
-                sdtUserDTO.setUsername(Username);
-
-                JourneyListDTO journeyListDTO = restTemplate.postForObject(JOURNEYLIST_URL,sdtUserDTO, JourneyListDTO.class);
-                for (JourneyDTO journeyDTO : journeyListDTO.getJourneyDTOList()) {
-                    journeyList.add(journeyDTO.getJourneyName());
-                }
-                return journeyListDTO;
-            } catch (Exception e) {
-                Log.e("MainActivity", e.getMessage(), e);
-            }
-
-            return null;
+    @Override
+    public void onHttpGetTaskSucceeded(JourneyListDTO journeyListDTO) {
+        Log.d("onHttpGetTaskSucceeded: ", String.valueOf(journeyListDTO.getJourneyDTOList().size()));
+        for (JourneyDTO journeyDTO : journeyListDTO.getJourneyDTOList()) {
+            journeyList.add(journeyDTO.getJourneyName());
         }
 
-        @Override
-        protected void onPostExecute(JourneyListDTO journeyListDTO) {
-            journeyAdapter = new ArrayAdapter(JourneyList.this, android.R.layout.simple_list_item_1, journeyList);
-            listView.setAdapter(journeyAdapter);
-            journeyAdapter.notifyDataSetChanged();
-        }
-
+        journeyAdapter = new ArrayAdapter(JourneyList.this, android.R.layout.simple_list_item_1, journeyList);
+        listView.setAdapter(journeyAdapter);
+        journeyAdapter.notifyDataSetChanged();
     }
 }
