@@ -1,7 +1,6 @@
 package poc.servicedesigntoolkit.getpost;
 
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -18,22 +17,18 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 
 import org.json.JSONObject;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import common.constants.APIUrl;
-import journey.api.APIGetJourneyList;
-import journey.api.HttpJSONGetJourneyListTaskCaller;
+import common.api.APIDataHandler;
+import journey.controller.JourneyController;
 import journey.dto.JourneyDTO;
 import journey.dto.JourneyListDTO;
 import poc.servicedesigntoolkit.getpost.Touchpoint.TouchpointMain;
-import user.dto.SdtUserDTO;
 
-public class JourneyList extends AppCompatActivity implements HttpJSONGetJourneyListTaskCaller {
+public class JourneyList extends AppCompatActivity implements APIDataHandler {
 
     private static final String JOURNEYLIST_URL = "http://54.169.59.1:9090/service_design_toolkit-web/api/get_journey_list_for_register";
     private static final String REGISTER_URL = "http://54.169.59.1:9090/service_design_toolkit-web/api/register_field_researcher_with_journey";
@@ -57,9 +52,10 @@ public class JourneyList extends AppCompatActivity implements HttpJSONGetJourney
 
         journeyList = new ArrayList<String>();
 
-//        new HttpRequestTask().execute();
 
-        new APIGetJourneyList(this, APIUrl.API_GET_JOURNEY_LIST_FOR_REGISTER).execute();
+        new JourneyController(this).getJourneyList();
+
+
 
         listView.setAdapter(journeyAdapter);
 
@@ -128,8 +124,8 @@ public class JourneyList extends AppCompatActivity implements HttpJSONGetJourney
     }
 
     @Override
-    public void onHttpGetTaskSucceeded(JourneyListDTO journeyListDTO) {
-        Log.d("onHttpGetTaskSucceeded: ", String.valueOf(journeyListDTO.getJourneyDTOList().size()));
+    public void handleData(Object data) {
+        JourneyListDTO journeyListDTO = (JourneyListDTO) data;
         for (JourneyDTO journeyDTO : journeyListDTO.getJourneyDTOList()) {
             journeyList.add(journeyDTO.getJourneyName());
         }

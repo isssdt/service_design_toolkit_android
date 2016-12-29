@@ -23,14 +23,16 @@ import org.springframework.web.client.RestTemplate;
 import java.util.ArrayList;
 import java.util.List;
 
+import common.api.APIDataHandler;
 import poc.servicedesigntoolkit.getpost.MapsActivity;
 import poc.servicedesigntoolkit.getpost.R;
 import poc.servicedesigntoolkit.getpost.TouchpointDetails;
+import touchpoint.controller.TouchPointController;
 import touchpoint.dto.TouchPointFieldResearcherDTO;
 import touchpoint.dto.TouchPointFieldResearcherListDTO;
 import user.dto.SdtUserDTO;
 
-public class TouchpointMain extends AppCompatActivity {
+public class TouchpointMain extends AppCompatActivity implements APIDataHandler {
 
 
     List<Touchpoint_model> touchpointData;
@@ -54,7 +56,11 @@ public class TouchpointMain extends AppCompatActivity {
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView1);
         recyclerView.setHasFixedSize(true);
 
-        new HttpRequestTask().execute();
+//        new HttpRequestTask().execute();
+        SdtUserDTO sdtUserDTO = new SdtUserDTO();
+        sdtUserDTO.setUsername(Username);
+
+        new TouchPointController(this).getListOfTouchPointForRegisteredJourney(sdtUserDTO);
 
         recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getApplicationContext(), recyclerView, new RecyclerTouchListener.ClickListener() {
             @Override
@@ -102,6 +108,33 @@ public class TouchpointMain extends AppCompatActivity {
                 return true;
         }
         return false;
+    }
+
+    @Override
+    public void handleData(Object data) {
+        TouchPointFieldResearcherListDTO touchPointFieldResearcherListDTO = (TouchPointFieldResearcherListDTO)data;
+        Log.d("data: ", String.valueOf(touchPointFieldResearcherListDTO.getTouchPointFieldResearcherDTOList().size()));
+        for (TouchPointFieldResearcherDTO touchPointFieldResearcherDTO :
+                touchPointFieldResearcherListDTO.getTouchPointFieldResearcherDTOList()) {
+
+            Touchpoint_model model = new Touchpoint_model(
+                    touchPointFieldResearcherDTO.getTouchpointDTO().getTouchPointDesc(),
+                    touchPointFieldResearcherDTO.getStatus(),
+                    touchPointFieldResearcherDTO.getTouchpointDTO().getChannelDTO().getChannelName());
+            touchpointData.add(model);
+
+            model.setId(touchPointFieldResearcherDTO.getTouchpointDTO().getId());
+            model.setChannel_desc(touchPointFieldResearcherDTO.getTouchpointDTO().getChannelDescription());
+            model.setAction(touchPointFieldResearcherDTO.getTouchpointDTO().getAction());
+
+        }
+
+        LinearLayoutManager llm = new LinearLayoutManager(TouchpointMain.this);
+        llm.setOrientation(LinearLayoutManager.VERTICAL);
+        recyclerViewadapter = new TouchpointAdapter(touchpointData, TouchpointMain.this);
+        recyclerView.setLayoutManager(llm);
+        recyclerView.setAdapter(recyclerViewadapter);
+        recyclerViewadapter.notifyDataSetChanged();
     }
 
     private class HttpRequestTask extends AsyncTask<Void, Void, TouchPointFieldResearcherListDTO> {
