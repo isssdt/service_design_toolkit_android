@@ -1,26 +1,52 @@
 package touchpoint.controller;
 
-import common.api.APIDataHandler;
-import common.constants.APIUrl;
-import common.api.APIGateway;
-import common.api.APICaller;
-import touchpoint.dto.TouchPointFieldResearcherListDTO;
-import user.dto.SdtUserDTO;
+import android.support.v7.widget.RecyclerView;
+import android.view.MotionEvent;
+import android.view.View;
+
+import java.util.Map;
+
+import common.actionlistener.ViewController;
+import common.actionlistener.ViewOfScreen;
+import common.constants.ConstantValues;
+import journey.action.ActionTouchPointSelected;
 
 /**
  * Created by longnguyen on 12/29/16.
  */
 
-public class TouchPointController extends APICaller {
-    public TouchPointController(APIDataHandler apiDataHandler) {
-        super(apiDataHandler);
+public class TouchPointController extends ViewController implements RecyclerView.OnItemTouchListener, View.OnClickListener {
+    public TouchPointController(ViewOfScreen viewBind) {
+        super(viewBind);
     }
 
-    public void getListOfTouchPointForRegisteredJourney(SdtUserDTO sdtUserDTO) {
-        getApiGateway().setUrl(APIUrl.API_GET_TOUCH_POINT_LIST_OF_REGISTER_JOURNEY);
-        getApiGateway().setOutputClass(TouchPointFieldResearcherListDTO.class);
-        getApiGateway().setMethod(APIUrl.METHOD_POST);
-        getApiGateway().setInput(sdtUserDTO);
-        getApiGateway().execute();
+
+    @Override
+    public void addObservers() {
+        addObserver(new ActionTouchPointSelected());
+        addObserver(new ActionSubmitResearchWork());
+    }
+
+    @Override
+    public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
+        Map<String, Object> updateObjects = setUpdateObjects(rv);
+        updateObjects.put(ConstantValues.ACTION_LISTENER_MOTION_EVENT_KEY, e);
+        notifyObservers(updateObjects);
+        return false;
+    }
+
+    @Override
+    public void onTouchEvent(RecyclerView rv, MotionEvent e) {
+
+    }
+
+    @Override
+    public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
+
+    }
+
+    @Override
+    public void onClick(View view) {
+        notifyObservers(setUpdateObjects(view));
     }
 }

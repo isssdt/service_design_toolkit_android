@@ -3,13 +3,17 @@ package touchpoint.dto;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
+import java.io.Serializable;
+
+import journey.dto.JourneyDTO;
+
 /**
  * Created by longnguyen on 11/6/16.
  */
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class TouchPointDTO {
+public class TouchPointDTO implements Serializable {
     private Integer id;
     private String touchPointDesc;
     private String latitude;
@@ -18,6 +22,15 @@ public class TouchPointDTO {
     private String action;
     private String channelDescription;
     private ChannelDTO channelDTO;
+    private JourneyDTO journeyDTO;
+
+    public JourneyDTO getJourneyDTO() {
+        return journeyDTO;
+    }
+
+    public void setJourneyDTO(JourneyDTO journeyDTO) {
+        this.journeyDTO = journeyDTO;
+    }
 
     public Integer getId() {
         return id;

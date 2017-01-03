@@ -44,13 +44,13 @@
             android:value="@integer/google_play_services_version" />
 
         <activity
-            android:name=".JourneyList"
+            android:name="journey.activity.JourneyListActivity"
             android:label="@string/title_journey_list" />
         <activity
-            android:name=".TouchpointDetails"
+            android:name="touchpoint.activity.TouchPointDetailsActivity"
             android:label="@string/title_touchpoint_details" />
         <activity
-            android:name=".Touchpoint.TouchpointMain"
+            android:name="touchpoint.activity.TouchPointListActivity"
             android:label="@string/title_touchpoint_list" />
         <activity
             android:name=".SelectPhoto"

@@ -5,6 +5,8 @@ import android.os.AsyncTask;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.Observable;
+
 import common.constants.APIUrl;
 
 /**
@@ -12,22 +14,18 @@ import common.constants.APIUrl;
  */
 
 public class APIGateway extends AsyncTask<Void, Void, Object> {
-    private APICaller caller;
+    private APICaller apiCaller;
     private String url;
     private Class outputClass;
     private Object input;
     private String method;
 
-    public APIGateway(APICaller caller, String url, Class outputClass, Object input, String method) {
-        this.caller = caller;
+    public APIGateway(APICaller apiCaller, String url, Class outputClass, Object input, String method) {
+        this.apiCaller = apiCaller;
         this.url = url;
         this.outputClass = outputClass;
         this.input = input;
         this.method = method;
-    }
-
-    public APIGateway(APICaller caller) {
-        this.caller = caller;
     }
 
     @Override
@@ -44,7 +42,7 @@ public class APIGateway extends AsyncTask<Void, Void, Object> {
 
     @Override
     protected void onPostExecute(Object outputData) {
-        caller.onAPICallSucceeded(outputData);
+        apiCaller.onAPICallSucceeded(outputData);
     }
 
     public void setUrl(String url) {

@@ -7,11 +7,12 @@ package journey.dto;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
+import java.io.Serializable;
 import java.util.Date;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class JourneyDTO {
+public class JourneyDTO implements Serializable {
     private String journeyName;
     private Integer noOfFieldResearcher;
     private Character isActive;

@@ -1,24 +1,35 @@
 package journey.controller;
 
-import common.api.APIDataHandler;
-import common.constants.APIUrl;
-import common.api.APIGateway;
-import common.api.APICaller;
-import journey.dto.JourneyListDTO;
+import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
+
+import java.util.Map;
+
+import common.actionlistener.ViewController;
+import common.actionlistener.ViewOfScreen;
+import common.constants.ConstantValues;
+import journey.action.ActionFieldResearcherRegisterJourney;
+import poc.servicedesigntoolkit.getpost.R;
 
 /**
  * Created by longnguyen on 12/29/16.
  */
 
-public class JourneyController extends APICaller {
-    public JourneyController(APIDataHandler apiDataHandler) {
-        super(apiDataHandler);
+public class JourneyController extends ViewController implements AdapterView.OnItemClickListener {
+    public JourneyController(ViewOfScreen viewBind) {
+        super(viewBind);
     }
 
-    public void getJourneyList() {
-        getApiGateway().setMethod(APIUrl.METHOD_GET);
-        getApiGateway().setOutputClass(JourneyListDTO.class);
-        getApiGateway().setUrl(APIUrl.API_GET_JOURNEY_LIST_FOR_REGISTER);
-        getApiGateway().execute();
+    @Override
+    public void addObservers() {
+        addObserver(new ActionFieldResearcherRegisterJourney());
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+        Map<String, Object> updateObjects = setUpdateObjects(adapterView);
+        updateObjects.put(ConstantValues.ACTION_LISTENER_JOURNEY_SELECTED_POSITION_KEY, position);
+        notifyObservers(updateObjects);
     }
 }

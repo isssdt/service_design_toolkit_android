@@ -1,12 +1,14 @@
 package journey.dto;
 
+import java.io.Serializable;
+
 import user.dto.FieldResearcherDTO;
 
 /**
  * Created by longnguyen on 11/6/16.
  */
 
-public class JourneyFieldResearcherDTO {
+public class JourneyFieldResearcherDTO implements Serializable {
     private JourneyDTO journeyDTO;
     private FieldResearcherDTO fieldResearcherDTO;
     private String status;
