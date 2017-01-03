@@ -101,8 +101,6 @@
                     android:id="@+id/image"
                     android:layout_width="100dp"
                     android:layout_height="wrap_content"
-                    android:layout_alignBaseline="@+id/photo"
-                    android:layout_alignBottom="@+id/photo"
                     android:layout_centerHorizontal="true"
                     android:textAlignment="center"
                     android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
@@ -118,7 +116,7 @@
                     android:layout_below="@+id/Name"
                     android:focusable="false"
                     android:text="What I need to do"
-                    android:textAlignment="viewStart" />
+                     />
 
                 <TextView
                     android:id="@+id/textView4"
@@ -130,7 +128,7 @@
                     android:layout_alignStart="@+id/touchpoint"
                     android:layout_below="@+id/touchpoint_name"
                     android:text="Using"
-                    android:textAlignment="viewStart" />
+                     />
 
                 <TextView
                     android:id="@+id/textView5"
@@ -142,7 +140,7 @@
                     android:layout_alignStart="@+id/textView4"
                     android:layout_below="@+id/channel"
                     android:text="Description"
-                    android:textAlignment="viewStart" />
+                     />
 
                 <EditText
                     android:id="@+id/action"
@@ -167,7 +165,7 @@
                     android:layout_alignStart="@+id/action_text"
                     android:layout_below="@+id/action"
                     android:text="Rating"
-                    android:textAlignment="viewStart" />
+                     />
 
                 <TextView
                     android:id="@+id/comment_text"
@@ -179,7 +177,7 @@
                     android:layout_alignStart="@+id/reaction_text"
                     android:layout_below="@+id/reaction"
                     android:text="How I feel"
-                    android:textAlignment="viewStart" />
+                     />
 
                 <TextView
                     android:id="@+id/reaction_text"
@@ -191,7 +189,7 @@
                     android:layout_alignStart="@+id/rating_text"
                     android:layout_below="@+id/ratingBar"
                     android:text="What did I do"
-                    android:textAlignment="viewStart" />
+                     />
 
                 <RatingBar
                     android:id="@+id/ratingBar"
@@ -209,7 +207,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Touchpoint Name"
-                    android:textAlignment="viewStart"
+
                     android:layout_below="@+id/image"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"

@@ -13,7 +13,7 @@ import poc.servicedesigntoolkit.getpost.MainActivity;
 @SuppressLint("CommitPrefEdits")
 public class SessionManager {
     // in future store phone number of the user
-    public static final String KEY_JOURNEY = "journey";
+    public static final String KEY_JOURNEY = "poc/servicedesigntoolkit/getpost/journey";
     // Sharedpref file name
     private static final String PREF_NAME = "Userfile";
     // All Shared Preferences Keys
@@ -76,7 +76,7 @@ public class SessionManager {
         HashMap<String, String> user = new HashMap<String, String>();
         // user name
         user.put(KEY_NAME, pref.getString(KEY_NAME, null));
-        // user journey
+        // user poc.servicedesigntoolkit.getpost.journey
         user.put(KEY_JOURNEY, pref.getString(KEY_JOURNEY, null));
 
         return user;

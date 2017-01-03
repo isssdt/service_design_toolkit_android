@@ -1,14 +1,17 @@
-package journey.dto;
+package poc.servicedesigntoolkit.getpost.journey.dto;
 
-import java.io.Serializable;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
+import poc.servicedesigntoolkit.getpost.journey.view.JourneyDTO;
 import user.dto.FieldResearcherDTO;
 
 /**
  * Created by longnguyen on 11/6/16.
  */
-
-public class JourneyFieldResearcherDTO implements Serializable {
+@JsonIgnoreProperties(ignoreUnknown = true)
+@JsonInclude(JsonInclude.Include.NON_NULL)
+public class JourneyFieldResearcherDTO {
     private JourneyDTO journeyDTO;
     private FieldResearcherDTO fieldResearcherDTO;
     private String status;

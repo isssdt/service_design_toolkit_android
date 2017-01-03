@@ -44,13 +44,17 @@
             android:value="@integer/google_play_services_version" />
 
         <activity
-            android:name="journey.activity.JourneyListActivity"
+            android:name=".journey.view.Journey_recycle"
+            android:label="@string/title_journey_list" />
+
+        <activity
+            android:name=".JourneyList"
             android:label="@string/title_journey_list" />
         <activity
-            android:name="touchpoint.activity.TouchPointDetailsActivity"
+            android:name=".TouchpointDetails"
             android:label="@string/title_touchpoint_details" />
         <activity
-            android:name="touchpoint.activity.TouchPointListActivity"
+            android:name=".Touchpoint.TouchpointMain"
             android:label="@string/title_touchpoint_list" />
         <activity
             android:name=".SelectPhoto"
@@ -71,6 +75,10 @@
         <activity
             android:name=".MapsActivity"
             android:label="@string/title_activity_maps" />
+        <activity
+            android:name=".Touchpoint.TouchpointFull"
+            android:label="@string/title_activity_touchpoint_full"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>
