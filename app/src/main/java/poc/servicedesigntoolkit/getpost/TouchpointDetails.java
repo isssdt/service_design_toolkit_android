@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -39,7 +40,8 @@ public class TouchpointDetails extends AppCompatActivity implements View.OnClick
     EditText touchpointName_edit, channelDescription_edit, channel_edit, action_edit, comment_edit, reaction_edit;
     RatingBar ratingBar;
     TextView image;
-    Button submit, reset, photo;
+    Button submit, reset;
+    ImageButton photo;
     String touchpoint, username, reaction, comment, JourneyName;
     String name, action, channel_desc, channel;
     Integer id;
@@ -77,7 +79,7 @@ public class TouchpointDetails extends AppCompatActivity implements View.OnClick
 
         submit = (Button) findViewById(R.id.submit);
         reset = (Button) findViewById(R.id.reset);
-        photo = (Button) findViewById(R.id.photo);
+        photo = (ImageButton) findViewById(R.id.photo1);
 
         submit.setOnClickListener(this);
         reset.setOnClickListener(this);
@@ -167,22 +169,12 @@ public class TouchpointDetails extends AppCompatActivity implements View.OnClick
                 RESTResponse response =
                         restTemplate.postForObject(url, touchPointFieldResearcherDTO, RESTResponse.class);
                 message = response.getMessage();
-                if (message.equals(touchpoint_complete)) {
-                    SdtUserDTO user = new SdtUserDTO();
-                    user.setUsername(username);
-                    RESTResponse response2 =
-                            restTemplate.postForObject(COMPLETE_URL, user, RESTResponse.class);
 
-                    Intent i = new Intent(TouchpointDetails.this, MainActivity.class);
-                    i.putExtra("Message", message);
-                    startActivity(i);
-                    return response2;
-                } else {
                     Intent i = new Intent(TouchpointDetails.this, TouchpointMain.class);
                     i.putExtra("Username", username);
                     i.putExtra("JourneyName", JourneyName);
                     startActivity(i);
-                }
+
 
                 return response;
             } catch (Exception e) {

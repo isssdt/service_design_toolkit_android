@@ -1,13 +1,18 @@
 package poc.servicedesigntoolkit.getpost;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -23,11 +28,16 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-import journey.dto.JourneyDTO;
-import journey.dto.JourneyListDTO;
+import poc.servicedesigntoolkit.getpost.Touchpoint.RecyclerTouchListener;
+import poc.servicedesigntoolkit.getpost.Touchpoint.Touchpoint_model;
+import poc.servicedesigntoolkit.getpost.journey.view.JourneyDTO;
+import poc.servicedesigntoolkit.getpost.journey.dto.JourneyListDTO;
 import poc.servicedesigntoolkit.getpost.Touchpoint.TouchpointMain;
+import poc.servicedesigntoolkit.getpost.journey.view.Journey_model;
+import poc.servicedesigntoolkit.getpost.journey.view.Journey_recycle_adapter;
 import user.dto.SdtUserDTO;
 
 public class JourneyList extends AppCompatActivity {
@@ -36,43 +46,105 @@ public class JourneyList extends AppCompatActivity {
     private static final String REGISTER_URL = "http://54.169.59.1:9090/service_design_toolkit-web/api/register_field_researcher_with_journey";
     private static final String TAG_JOURNEYLIST = "journeyDTOList";
     private static final String TAG_JOURNEYNAME = "journeyName";
-    ListView listView;
+    //ListView listView;
     String Username;
-    ArrayList<String> journeyList;
+    List<Journey_model> touchpointData;
+    ArrayList<Journey_model> journeyList;
 
+    RecyclerView recyclerView;
+    RecyclerView.Adapter recyclerViewadapter;
+    Button signUp;
     ArrayAdapter journeyAdapter;
     String seljourney;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_journey_list);
+        setContentView(R.layout.journey_recycle);
         Bundle extras = getIntent().getExtras();
         Username = (String) extras.get("Username");
 
+        signUp = (Button) findViewById(R.id.signup);
+
+        recyclerView = (RecyclerView) findViewById(R.id.journeyrecycle);
+        recyclerView.setHasFixedSize(true);
+
+        touchpointData = new ArrayList<Journey_model>();
+/*
+
         listView = (ListView) findViewById(R.id.listView);
 
-        journeyList = new ArrayList<String>();
+        journeyList = new ArrayList<Journey_model>();
+*/
 
         new HttpRequestTask().execute();
-        Log.d("FLOW", "oncreate");
-        Log.d("Journey LIST", journeyList.toString());
+        recyclerView.setAdapter(recyclerViewadapter);
+        //listView.setAdapter(journeyAdapter);
 
-        listView.setAdapter(journeyAdapter);
+        recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getApplicationContext(), recyclerView, new RecyclerTouchListener.ClickListener() {
+            @Override
+            public void onClick(View view, int position) {
+                final Journey_model model =touchpointData.get(position);
 
+                //if(view.getId() == signUp.getId()){
+                //    registeruser(model.getJourneyName());
+                //}else{
+                    AlertDialog.Builder adb = new AlertDialog.Builder(
+                            JourneyList.this);
+                    adb.setTitle("Register");
+                    adb.setMessage(" Journey Name : " + model.getJourneyName()+"\n"+
+                                    "Start Date : "+model.getStartDate()+"\n"+
+                                    "End Date : "+model.getEndDate());
+                    adb.setPositiveButton("Sign Up", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            registeruser(model.getJourneyName());
+                        }
+                    });
+                    adb.setNegativeButton("Cancel", null);
+                    adb.show();
 
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                //}
+
+            }
+
+            @Override
+            public void onLongClick(View view, int position) {
+
+            }
+        }));
+
+        /*listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
 
-                String journey = (String) listView.getItemAtPosition(position);
+                final String journey = (String) listView.getItemAtPosition(position);
                 Log.d("PRESSED", journey);
-                Toast.makeText(getApplicationContext(), "Registered for : " + journey+" journey.", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getApplicationContext(), "Registered for : " + journey+" poc.servicedesigntoolkit.getpost.journey.", Toast.LENGTH_SHORT).show();
 
-                registeruser(journey);
+
+                AlertDialog.Builder adb = new AlertDialog.Builder(
+                        JourneyList.this);
+                adb.setTitle("Register");
+                adb.setMessage(" Journey Name "
+                        +parent.getItemAtPosition(position));
+                adb.setPositiveButton("Sign Up", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        registeruser(journey);
+                    }
+                });
+                adb.setNegativeButton("Cancel", null);
+                adb.show();
+
+                //registeruser(journey);
 
             }
-        });
+        });*/
+
+
+
+
     }
 
     public void registeruser(String journey) {
@@ -134,9 +206,16 @@ public class JourneyList extends AppCompatActivity {
                 SdtUserDTO sdtUserDTO = new SdtUserDTO();
                 sdtUserDTO.setUsername(Username);
 
-                JourneyListDTO journeyListDTO = restTemplate.postForObject(JOURNEYLIST_URL,sdtUserDTO, JourneyListDTO.class);
+                JourneyListDTO journeyListDTO = restTemplate.getForObject(JOURNEYLIST_URL, JourneyListDTO.class);
                 for (JourneyDTO journeyDTO : journeyListDTO.getJourneyDTOList()) {
-                    journeyList.add(journeyDTO.getJourneyName());
+                    Log.d("Journey Name ",journeyDTO.getJourneyName());
+                    Log.d("Start Date ",journeyDTO.getStartDate().toString());
+                    Log.d("End Date ",journeyDTO.getEndDate().toString());
+                    Journey_model journey_model = new Journey_model(journeyDTO.getJourneyName(),journeyDTO.getStartDate(),journeyDTO.getEndDate());
+                    journey_model.setJourneyName(journeyDTO.getJourneyName());
+                    journey_model.setStartDate(journeyDTO.getStartDate());
+                    journey_model.setEndDate(journeyDTO.getEndDate());
+                    touchpointData.add(journey_model);
                 }
                 return journeyListDTO;
             } catch (Exception e) {
@@ -148,9 +227,17 @@ public class JourneyList extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(JourneyListDTO journeyListDTO) {
-            journeyAdapter = new ArrayAdapter(JourneyList.this, android.R.layout.simple_list_item_1, journeyList);
+            LinearLayoutManager llm = new LinearLayoutManager(JourneyList.this);
+            llm.setOrientation(LinearLayoutManager.VERTICAL);
+            recyclerViewadapter = new Journey_recycle_adapter(touchpointData, JourneyList.this);
+            recyclerView.setLayoutManager(llm);
+            recyclerView.setAdapter(recyclerViewadapter);
+            recyclerViewadapter.notifyDataSetChanged();
+
+
+           /* journeyAdapter = new ArrayAdapter(JourneyList.this, android.R.layout.simple_list_item_1, journeyList);
             listView.setAdapter(journeyAdapter);
-            journeyAdapter.notifyDataSetChanged();
+            journeyAdapter.notifyDataSetChanged();*/
         }
 
     }

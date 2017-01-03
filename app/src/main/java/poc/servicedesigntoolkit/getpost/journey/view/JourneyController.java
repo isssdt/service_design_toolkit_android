@@ -1,9 +1,10 @@
-package journey.controller;
+package poc.servicedesigntoolkit.getpost.journey.view;
 
 import android.content.res.Resources;
 
-import journey.api.JourneyAPI;
-import journey.dto.JourneyDTO;
+import poc.servicedesigntoolkit.getpost.journey.dto.JourneyListDTO;
+import poc.servicedesigntoolkit.getpost.journey.view.JourneyAPI;
+import poc.servicedesigntoolkit.getpost.journey.view.JourneyDTO;
 
 /**
  * Created by dingyi on 12/12/16.
@@ -26,4 +27,8 @@ public class JourneyController {
             return null;
         }
     }
+
+    public JourneyListDTO getJourneyListForRegister(JourneyListDTO journeyListDTO){
+        return journeyListDTO;
+    };
 }

@@ -12,6 +12,18 @@ public class Touchpoint_model {
     String channel_desc;
     Integer id;
     String action;
+    String rating;
+    String reaction;
+    String comment;
+
+    public Touchpoint_model(String name, String status, String channel, String rating, String reaction, String comment) {
+        this.name = name;
+        this.status = status;
+        this.channel = channel;
+        this.rating = rating;
+        this.reaction = reaction;
+        this.comment = comment;
+    }
 
     public Touchpoint_model(String name, String status, String channel) {
         this.name = name;
@@ -59,4 +71,27 @@ public class Touchpoint_model {
         this.name = name;
     }
 
+    public String getRating() {
+        return rating;
+    }
+
+    public void setRating(String rating) {
+        this.rating = rating;
+    }
+
+    public String getReaction() {
+        return reaction;
+    }
+
+    public void setReaction(String reaction) {
+        this.reaction = reaction;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
 }

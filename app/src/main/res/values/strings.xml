@@ -6,5 +6,8 @@
     <string name="title_touchpoint_details">Touchpoint Details</string>
     <string name="title_select_photo">Select Photo</string>
     <string name="title_activity_touchpoint_new">touchpoint_new</string>
+    <string name="title_activity_touchpoint_full">TouchpointFull</string>
+    <string name="action_settings">Settings</string>
+    <string name="section_format">Hello World from section: %1$d</string>
 
 </resources>

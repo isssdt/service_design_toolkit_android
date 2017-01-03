@@ -4,9 +4,11 @@ package poc.servicedesigntoolkit.getpost.Touchpoint;
  * Created by Gunjan Pathak on 28-Oct-16.
  */
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -15,6 +17,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
@@ -23,6 +26,8 @@ import org.springframework.web.client.RestTemplate;
 import java.util.ArrayList;
 import java.util.List;
 
+import common.dto.RESTResponse;
+import poc.servicedesigntoolkit.getpost.MainActivity;
 import poc.servicedesigntoolkit.getpost.MapsActivity;
 import poc.servicedesigntoolkit.getpost.R;
 import poc.servicedesigntoolkit.getpost.TouchpointDetails;
@@ -36,9 +41,13 @@ public class TouchpointMain extends AppCompatActivity {
     List<Touchpoint_model> touchpointData;
     RecyclerView recyclerView;
     RecyclerView.Adapter recyclerViewadapter;
+    private static final String touchpoint_complete = "Please informed that you have completed work for all Touch Points";
     String TOUCHPOINTLIST_URL = "http://54.169.59.1:9090/service_design_toolkit-web/api/get_touch_point_list_of_registered_journey";
+    private static final String COMPLETE_URL = "http://54.169.59.1:9090/service_design_toolkit-web/api/journey_mark_complete";
 
-    String JourneyName, Username;
+    Button submitJourney;
+
+    String JourneyName, Username, Message;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +57,9 @@ public class TouchpointMain extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
         JourneyName = (String) extras.get("JourneyName");
         Username = (String) extras.get("Username");
+        Message = (String) extras.get("Message");
+
+        submitJourney = (Button) findViewById(R.id.submitJourney);
 
         touchpointData = new ArrayList<Touchpoint_model>();
 
@@ -56,12 +68,32 @@ public class TouchpointMain extends AppCompatActivity {
 
         new HttpRequestTask().execute();
 
+        submitJourney.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder adb = new AlertDialog.Builder(
+                        TouchpointMain.this);
+                adb.setTitle("Submit Journey");
+                adb.setMessage(" Journey will be submitted and no changes will be allowed");
+                adb.setPositiveButton("Submit", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        SdtUserDTO user = new SdtUserDTO();
+                        user.setUsername(Username);
+                        new CompleteJourney().execute();
+                    }
+                });
+                adb.setNegativeButton("Cancel", null);
+                adb.show();
+            }
+        });
+
         recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getApplicationContext(), recyclerView, new RecyclerTouchListener.ClickListener() {
             @Override
             public void onClick(View view, int position) {
                 Touchpoint_model model = touchpointData.get(position);
-
-                if (!model.getStatus().equals("DONE")) {
+                Log.d("pos",""+position);
+                if (position == 0){
                     Intent i = new Intent(TouchpointMain.this, TouchpointDetails.class);
                     i.putExtra("Action", model.getChannel());
                     i.putExtra("Channel", model.getChannel());
@@ -70,10 +102,30 @@ public class TouchpointMain extends AppCompatActivity {
                     i.putExtra("Id", model.getId());
                     i.putExtra("Username", Username);
                     i.putExtra("JourneyName", JourneyName);
+                    i.putExtra("Rating", model.getRating());
+                    i.putExtra("Reaction", model.getReaction());
+                    i.putExtra("Comment", model.getComment());
                     startActivity(i);
-                } else {
-                    Toast.makeText(getApplicationContext(), "You have submitted response for this touchpoint", Toast.LENGTH_LONG).show();
-                }
+                }else if (position >= 1) {
+                    if (touchpointData.get(position - 1).getStatus().equals("DONE")) {
+                        Intent i = new Intent(TouchpointMain.this, TouchpointDetails.class);
+
+                        i.putExtra("Action", model.getChannel());
+                        i.putExtra("Channel", model.getChannel());
+                        i.putExtra("Channel_Desc", model.getChannel_desc());
+                        i.putExtra("Name", model.getName());
+                        i.putExtra("Id", model.getId());
+                        i.putExtra("Username", Username);
+                        i.putExtra("JourneyName", JourneyName);
+                        i.putExtra("Rating", model.getRating());
+                        i.putExtra("Reaction", model.getReaction());
+                        i.putExtra("Comment", model.getComment());
+                        startActivity(i);
+                    }else
+                        Toast.makeText(TouchpointMain.this, "Please complete previous Touchpoint", Toast.LENGTH_SHORT).show();
+
+                }else
+                    Toast.makeText(TouchpointMain.this, "Please complete previous Touchpoint", Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -82,8 +134,8 @@ public class TouchpointMain extends AppCompatActivity {
             }
         }));
 
-    }
 
+    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -124,6 +176,9 @@ public class TouchpointMain extends AppCompatActivity {
                             touchPointFieldResearcherDTO.getTouchpointDTO().getTouchPointDesc(),
                             touchPointFieldResearcherDTO.getStatus(),
                             touchPointFieldResearcherDTO.getTouchpointDTO().getChannelDTO().getChannelName());
+                            //touchPointFieldResearcherDTO.getRatingDTO().getValue(),
+                            //touchPointFieldResearcherDTO.getReaction(),
+                            //touchPointFieldResearcherDTO.getComments());
                     touchpointData.add(model);
 
                     model.setId(touchPointFieldResearcherDTO.getTouchpointDTO().getId());
@@ -147,6 +202,43 @@ public class TouchpointMain extends AppCompatActivity {
             recyclerView.setLayoutManager(llm);
             recyclerView.setAdapter(recyclerViewadapter);
             recyclerViewadapter.notifyDataSetChanged();
+
+            if((touchpointData.get(touchpointData.size()-1).getStatus()).equals("DONE")){
+                submitJourney.setVisibility(View.VISIBLE);
+            }
+        }
+
+    }
+
+    private class CompleteJourney extends AsyncTask<Void, Void, RESTResponse> {
+        @Override
+        protected RESTResponse doInBackground(Void... params) {
+            try {
+                RestTemplate restTemplate = new RestTemplate();
+                restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
+
+                SdtUserDTO sdtUserDTO = new SdtUserDTO();
+                sdtUserDTO.setUsername(Username);
+
+                RESTResponse response =
+                        restTemplate.postForObject(COMPLETE_URL, sdtUserDTO, RESTResponse.class);
+
+                Message = response.getMessage();
+                Log.d("Message",Message);
+                Intent i = new Intent(TouchpointMain.this, MainActivity.class);
+                i.putExtra("Message", Message);
+                startActivity(i);
+
+                return response;
+            } catch (Exception e) {
+                Log.e("Touchpoint", e.getMessage(), e);
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(RESTResponse touchPointFieldResearcherListDTO) {
         }
 
     }

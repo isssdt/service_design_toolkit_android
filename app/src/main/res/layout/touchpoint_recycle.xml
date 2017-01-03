@@ -8,6 +8,18 @@
         android:id="@+id/recyclerView1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/button"></android.support.v7.widget.RecyclerView>
+        android:layout_above="@+id/button"
+        android:layout_weight="1"></android.support.v7.widget.RecyclerView>
+
+    <Button
+        android:text="Button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/submitJourney"
+        android:visibility="gone"
+        android:layout_gravity="bottom"
+        android:background="@drawable/buttonshape"
+        android:shadowColor="@color/colorPrimary"
+        android:textColor="@color/colorPrimary"/>
 
 </LinearLayout>

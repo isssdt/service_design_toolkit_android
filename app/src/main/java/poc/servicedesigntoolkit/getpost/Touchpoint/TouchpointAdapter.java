@@ -30,45 +30,37 @@ public class TouchpointAdapter extends RecyclerView.Adapter<TouchpointAdapter.Vi
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.touchpoint_item_recycle, parent, false);
         ViewHolder viewHolder = new ViewHolder(v);
         return viewHolder;
+
     }
 
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-
-
         Touchpoint_model getDataAdapter1 = getDataAdapter.get(position);
-        Log.d("ADAPTER", getDataAdapter1.getName());
-        Log.d("ADAPTER", getDataAdapter1.getChannel());
-        Log.d("ADAPTER", getDataAdapter1.getStatus());
         holder.NameTextView.setText(getDataAdapter1.getName());
-        holder.IdTextView.setText(String.valueOf(getDataAdapter1.getChannel()));
-        holder.PhoneNumberTextView.setText(getDataAdapter1.getStatus());
-
-
+        holder.ChannelTextView.setText(String.valueOf(getDataAdapter1.getChannel()));
+        holder.StatusView.setText(getDataAdapter1.getStatus());
     }
 
     @Override
     public int getItemCount() {
-
         return getDataAdapter.size();
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
 
-        public TextView IdTextView;
+        public TextView ChannelTextView;
         public TextView NameTextView;
-        public TextView PhoneNumberTextView;
+        public TextView StatusView;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            IdTextView = (TextView) itemView.findViewById(R.id.channel);
+            ChannelTextView = (TextView) itemView.findViewById(R.id.channel);
             NameTextView = (TextView) itemView.findViewById(R.id.name);
-            PhoneNumberTextView = (TextView) itemView.findViewById(R.id.status);
+            StatusView = (TextView) itemView.findViewById(R.id.status);
 
         }
     }

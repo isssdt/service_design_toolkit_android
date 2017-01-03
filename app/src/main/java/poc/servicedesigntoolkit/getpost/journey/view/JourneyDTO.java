@@ -1,11 +1,15 @@
-package journey.dto;
+package poc.servicedesigntoolkit.getpost.journey.view;
 
 /**
  * Created by longnguyen on 11/6/16.
  */
 
-import java.util.Date;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
+import java.util.Date;
+@JsonIgnoreProperties(ignoreUnknown = true)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class JourneyDTO {
     private String journeyName;
     private Integer noOfFieldResearcher;
@@ -13,6 +17,14 @@ public class JourneyDTO {
     private Date startDate;
     private Date endDate;
     private Character canBeRegistered;
+
+    public JourneyDTO( String journeyName, Date startDate, Date endDate) {
+        this.endDate = endDate;
+        this.startDate = startDate;
+        this.journeyName = journeyName;
+    }
+
+    public JourneyDTO(){}
 
     public String getJourneyName() {
         return journeyName;

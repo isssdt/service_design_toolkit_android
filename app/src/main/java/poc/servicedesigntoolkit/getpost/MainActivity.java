@@ -22,7 +22,11 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
+import poc.servicedesigntoolkit.getpost.journey.view.Journey_recycle;
 import poc.servicedesigntoolkit.getpost.Touchpoint.TouchpointMain;
+import user.dto.SdtUserDTO;
+
+import static poc.servicedesigntoolkit.getpost.R.layout.journey_recycle;
 
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
@@ -40,7 +44,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         register = (Button) findViewById(R.id.researchList);
         textView = (TextView) findViewById(R.id.textView);
         username = (EditText) findViewById(R.id.username);

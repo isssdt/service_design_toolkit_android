@@ -1,11 +1,16 @@
-package journey.dto;
+package poc.servicedesigntoolkit.getpost.journey.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+
+import poc.servicedesigntoolkit.getpost.journey.view.JourneyDTO;
 import user.dto.FieldResearcherDTO;
 
 /**
  * Created by longnguyen on 11/6/16.
  */
-
+@JsonIgnoreProperties(ignoreUnknown = true)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class JourneyFieldResearcherDTO {
     private JourneyDTO journeyDTO;
     private FieldResearcherDTO fieldResearcherDTO;

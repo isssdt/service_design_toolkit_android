@@ -69,7 +69,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         setContentView(R.layout.activity_maps);
         Bundle extras = getIntent().getExtras();
         Username = (String) extras.get("Username");
-        journey = (String) extras.get("journey");
+        journey = (String) extras.get("poc/servicedesigntoolkit/getpost/journey");
 
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             checkLocationPermission();
@@ -87,7 +87,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     protected void retrieveAndAddCities() throws IOException {
-        Log.d("journey", "retriveaddcities");
+        Log.d("poc/servicedesigntoolkit/getpost/journey", "retriveaddcities");
         //       latitude = new ArrayList<String>();
 //        longitude = new ArrayList<String>();
 
@@ -96,7 +96,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         try {
             request.put("journeyName", journey);
-            Log.d("journey", journey);
+            Log.d("poc/servicedesigntoolkit/getpost/journey", journey);
 
         } catch (Exception e) {
             e.printStackTrace();
