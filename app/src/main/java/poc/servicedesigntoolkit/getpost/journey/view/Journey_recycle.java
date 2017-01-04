@@ -11,7 +11,7 @@ import android.widget.Button;
 import java.util.ArrayList;
 import java.util.List;
 
-import poc.servicedesigntoolkit.getpost.journey.dto.JourneyListDTO;
+import journey.dto.JourneyListDTO;
 import poc.servicedesigntoolkit.getpost.R;
 import poc.servicedesigntoolkit.getpost.Touchpoint.RecyclerTouchListener;
 import user.dto.SdtUserDTO;

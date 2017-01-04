@@ -10,11 +10,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ListView;
-import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -31,11 +28,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import journey.dto.JourneyListDTO;
 import poc.servicedesigntoolkit.getpost.Touchpoint.RecyclerTouchListener;
-import poc.servicedesigntoolkit.getpost.Touchpoint.Touchpoint_model;
-import poc.servicedesigntoolkit.getpost.journey.view.JourneyDTO;
-import poc.servicedesigntoolkit.getpost.journey.dto.JourneyListDTO;
 import poc.servicedesigntoolkit.getpost.Touchpoint.TouchpointMain;
+import poc.servicedesigntoolkit.getpost.journey.view.JourneyDTO;
 import poc.servicedesigntoolkit.getpost.journey.view.Journey_model;
 import poc.servicedesigntoolkit.getpost.journey.view.Journey_recycle_adapter;
 import user.dto.SdtUserDTO;
