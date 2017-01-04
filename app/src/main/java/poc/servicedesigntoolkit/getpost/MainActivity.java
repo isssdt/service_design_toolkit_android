@@ -22,11 +22,8 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
-import poc.servicedesigntoolkit.getpost.journey.view.Journey_recycle;
-import poc.servicedesigntoolkit.getpost.Touchpoint.TouchpointMain;
-import user.dto.SdtUserDTO;
-
-import static poc.servicedesigntoolkit.getpost.R.layout.journey_recycle;
+import journey.activity.JourneyListActivity;
+import touchpoint.activity.TouchPointListActivity;
 
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
@@ -89,11 +86,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         String Response = jsonObj.getString("message");
 
                         if (TAG_NOTREGISTER.equals(Response)) {
-                            final Intent journeyintent = new Intent(MainActivity.this, JourneyList.class);
+                            final Intent journeyintent = new Intent(MainActivity.this, JourneyListActivity.class);
                             journeyintent.putExtra("Username", user);
                             startActivity(journeyintent);
                         } else if (TAG_REGISTER.equals(Response)) {
-                            final Intent journeyintent = new Intent(MainActivity.this, TouchpointMain.class);
+                            final Intent journeyintent = new Intent(MainActivity.this, TouchPointListActivity.class);
                             journeyintent.putExtra("Username", user);
                             startActivity(journeyintent);
                         }

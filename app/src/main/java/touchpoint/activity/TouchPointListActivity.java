@@ -1,4 +1,4 @@
-package poc.servicedesigntoolkit.getpost.Touchpoint;
+package touchpoint.activity;
 
 /**
  * Created by Gunjan Pathak on 28-Oct-16.
@@ -30,12 +30,15 @@ import common.dto.RESTResponse;
 import poc.servicedesigntoolkit.getpost.MainActivity;
 import poc.servicedesigntoolkit.getpost.MapsActivity;
 import poc.servicedesigntoolkit.getpost.R;
+import poc.servicedesigntoolkit.getpost.Touchpoint.RecyclerTouchListener;
+import poc.servicedesigntoolkit.getpost.Touchpoint.TouchpointAdapter;
+import poc.servicedesigntoolkit.getpost.Touchpoint.Touchpoint_model;
 import poc.servicedesigntoolkit.getpost.TouchpointDetails;
 import touchpoint.dto.TouchPointFieldResearcherDTO;
 import touchpoint.dto.TouchPointFieldResearcherListDTO;
 import user.dto.SdtUserDTO;
 
-public class TouchpointMain extends AppCompatActivity {
+public class TouchPointListActivity extends AppCompatActivity {
 
 
     List<Touchpoint_model> touchpointData;
@@ -72,7 +75,7 @@ public class TouchpointMain extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 AlertDialog.Builder adb = new AlertDialog.Builder(
-                        TouchpointMain.this);
+                        TouchPointListActivity.this);
                 adb.setTitle("Submit Journey");
                 adb.setMessage(" Journey will be submitted and no changes will be allowed");
                 adb.setPositiveButton("Submit", new DialogInterface.OnClickListener() {
@@ -94,7 +97,7 @@ public class TouchpointMain extends AppCompatActivity {
                 Touchpoint_model model = touchpointData.get(position);
                 Log.d("pos",""+position);
                 if (position == 0){
-                    Intent i = new Intent(TouchpointMain.this, TouchpointDetails.class);
+                    Intent i = new Intent(TouchPointListActivity.this, TouchpointDetails.class);
                     i.putExtra("Action", model.getChannel());
                     i.putExtra("Channel", model.getChannel());
                     i.putExtra("Channel_Desc", model.getChannel_desc());
@@ -108,7 +111,7 @@ public class TouchpointMain extends AppCompatActivity {
                     startActivity(i);
                 }else if (position >= 1) {
                     if (touchpointData.get(position - 1).getStatus().equals("DONE")) {
-                        Intent i = new Intent(TouchpointMain.this, TouchpointDetails.class);
+                        Intent i = new Intent(TouchPointListActivity.this, TouchpointDetails.class);
 
                         i.putExtra("Action", model.getChannel());
                         i.putExtra("Channel", model.getChannel());
@@ -122,10 +125,10 @@ public class TouchpointMain extends AppCompatActivity {
                         i.putExtra("Comment", model.getComment());
                         startActivity(i);
                     }else
-                        Toast.makeText(TouchpointMain.this, "Please complete previous Touchpoint", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(TouchPointListActivity.this, "Please complete previous Touchpoint", Toast.LENGTH_SHORT).show();
 
                 }else
-                    Toast.makeText(TouchpointMain.this, "Please complete previous Touchpoint", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(TouchPointListActivity.this, "Please complete previous Touchpoint", Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -149,7 +152,7 @@ public class TouchpointMain extends AppCompatActivity {
             case R.id.action_map:
                 Toast.makeText(this, "Pressed Map",
                         Toast.LENGTH_SHORT).show();
-                Intent i = new Intent(TouchpointMain.this, MapsActivity.class);
+                Intent i = new Intent(TouchPointListActivity.this, MapsActivity.class);
                 startActivity(i);
                 return true;
         }
@@ -196,9 +199,9 @@ public class TouchpointMain extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(TouchPointFieldResearcherListDTO touchPointFieldResearcherListDTO) {
-            LinearLayoutManager llm = new LinearLayoutManager(TouchpointMain.this);
+            LinearLayoutManager llm = new LinearLayoutManager(TouchPointListActivity.this);
             llm.setOrientation(LinearLayoutManager.VERTICAL);
-            recyclerViewadapter = new TouchpointAdapter(touchpointData, TouchpointMain.this);
+            recyclerViewadapter = new TouchpointAdapter(touchpointData, TouchPointListActivity.this);
             recyclerView.setLayoutManager(llm);
             recyclerView.setAdapter(recyclerViewadapter);
             recyclerViewadapter.notifyDataSetChanged();
@@ -225,7 +228,7 @@ public class TouchpointMain extends AppCompatActivity {
 
                 Message = response.getMessage();
                 Log.d("Message",Message);
-                Intent i = new Intent(TouchpointMain.this, MainActivity.class);
+                Intent i = new Intent(TouchPointListActivity.this, MainActivity.class);
                 i.putExtra("Message", Message);
                 startActivity(i);
 

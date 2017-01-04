@@ -12,15 +12,12 @@ import android.widget.ImageButton;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
-import android.support.v7.app.ActionBarActivity;
 
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 
 import common.dto.RESTResponse;
-import poc.servicedesigntoolkit.getpost.Touchpoint.TouchpointMain;
+import touchpoint.activity.TouchPointListActivity;
 import touchpoint.dto.RatingDTO;
 import touchpoint.dto.TouchPointDTO;
 import touchpoint.dto.TouchPointFieldResearcherDTO;
@@ -170,7 +167,7 @@ public class TouchpointDetails extends AppCompatActivity implements View.OnClick
                         restTemplate.postForObject(url, touchPointFieldResearcherDTO, RESTResponse.class);
                 message = response.getMessage();
 
-                    Intent i = new Intent(TouchpointDetails.this, TouchpointMain.class);
+                Intent i = new Intent(TouchpointDetails.this, TouchPointListActivity.class);
                     i.putExtra("Username", username);
                     i.putExtra("JourneyName", JourneyName);
                     startActivity(i);

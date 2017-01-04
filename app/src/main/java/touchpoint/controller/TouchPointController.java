@@ -1,6 +1,6 @@
 package touchpoint.controller;
 
-import common.api.APICaller;
+import common.api.APICaller_Old;
 import common.api.APIDataHandler;
 import common.constants.APIUrl;
 import touchpoint.dto.TouchPointFieldResearcherListDTO;
@@ -10,7 +10,7 @@ import user.dto.SdtUserDTO;
  * Created by longnguyen on 12/29/16.
  */
 
-public class TouchPointController extends APICaller {
+public class TouchPointController extends APICaller_Old {
     public TouchPointController(APIDataHandler apiDataHandler) {
         super(apiDataHandler);
     }
