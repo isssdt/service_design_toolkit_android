@@ -1,9 +1,8 @@
 package touchpoint.controller;
 
+import common.api.APICaller;
 import common.api.APIDataHandler;
 import common.constants.APIUrl;
-import common.api.APIGateway;
-import common.api.APICaller;
 import touchpoint.dto.TouchPointFieldResearcherListDTO;
 import user.dto.SdtUserDTO;
 
@@ -17,7 +16,7 @@ public class TouchPointController extends APICaller {
     }
 
     public void getListOfTouchPointForRegisteredJourney(SdtUserDTO sdtUserDTO) {
-        getApiGateway().setUrl(APIUrl.API_GET_TOUCH_POINT_LIST_OF_REGISTER_JOURNEY);
+        getApiGateway().setUrl(APIUrl.API_GET_TOUCH_POINT_LIST_OF_REGISTERED_JOURNEY);
         getApiGateway().setOutputClass(TouchPointFieldResearcherListDTO.class);
         getApiGateway().setMethod(APIUrl.METHOD_POST);
         getApiGateway().setInput(sdtUserDTO);
