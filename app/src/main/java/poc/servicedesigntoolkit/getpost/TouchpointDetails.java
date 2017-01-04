@@ -16,7 +16,10 @@ import android.widget.Toast;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 
+import common.constants.ConstantValues;
 import common.dto.RESTResponse;
+import journey.dto.JourneyFieldResearcherDTO;
+import poc.servicedesigntoolkit.getpost.journey.view.JourneyDTO;
 import touchpoint.activity.TouchPointListActivity;
 import touchpoint.dto.RatingDTO;
 import touchpoint.dto.TouchPointDTO;
@@ -168,6 +171,13 @@ public class TouchpointDetails extends AppCompatActivity implements View.OnClick
                 message = response.getMessage();
 
                 Intent i = new Intent(TouchpointDetails.this, TouchPointListActivity.class);
+                JourneyFieldResearcherDTO journeyFieldResearcherDTO = new JourneyFieldResearcherDTO();
+                journeyFieldResearcherDTO.setJourneyDTO(new JourneyDTO());
+                journeyFieldResearcherDTO.getJourneyDTO().setJourneyName(JourneyName);
+                journeyFieldResearcherDTO.setFieldResearcherDTO(new FieldResearcherDTO());
+                journeyFieldResearcherDTO.getFieldResearcherDTO().setSdtUserDTO(new SdtUserDTO());
+                journeyFieldResearcherDTO.getFieldResearcherDTO().getSdtUserDTO().setUsername(username);
+                i.putExtra(ConstantValues.BUNDLE_KEY_JOURNEY_FIELD_RESEARCHER_DTO, journeyFieldResearcherDTO);
                     i.putExtra("Username", username);
                     i.putExtra("JourneyName", JourneyName);
                     startActivity(i);

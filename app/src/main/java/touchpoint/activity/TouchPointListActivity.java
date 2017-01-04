@@ -26,7 +26,9 @@ import org.springframework.web.client.RestTemplate;
 import java.util.ArrayList;
 import java.util.List;
 
+import common.constants.ConstantValues;
 import common.dto.RESTResponse;
+import journey.dto.JourneyFieldResearcherDTO;
 import poc.servicedesigntoolkit.getpost.MainActivity;
 import poc.servicedesigntoolkit.getpost.MapsActivity;
 import poc.servicedesigntoolkit.getpost.R;
@@ -58,8 +60,11 @@ public class TouchPointListActivity extends AppCompatActivity {
         setContentView(R.layout.touchpoint_recycle);
 
         Bundle extras = getIntent().getExtras();
-        JourneyName = (String) extras.get("JourneyName");
-        Username = (String) extras.get("Username");
+        JourneyFieldResearcherDTO journeyFieldResearcherDTO = (JourneyFieldResearcherDTO) extras.get(ConstantValues.BUNDLE_KEY_JOURNEY_FIELD_RESEARCHER_DTO);
+        if (null != journeyFieldResearcherDTO.getJourneyDTO()) {
+            JourneyName = journeyFieldResearcherDTO.getJourneyDTO().getJourneyName();
+        }
+        Username = journeyFieldResearcherDTO.getFieldResearcherDTO().getSdtUserDTO().getUsername();
         Message = (String) extras.get("Message");
 
         submitJourney = (Button) findViewById(R.id.submitJourney);

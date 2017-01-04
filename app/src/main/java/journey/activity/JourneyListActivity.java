@@ -28,6 +28,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import common.constants.ConstantValues;
+import journey.dto.JourneyFieldResearcherDTO;
 import journey.dto.JourneyListDTO;
 import poc.servicedesigntoolkit.getpost.AppController;
 import poc.servicedesigntoolkit.getpost.R;
@@ -36,6 +38,7 @@ import poc.servicedesigntoolkit.getpost.journey.view.JourneyDTO;
 import poc.servicedesigntoolkit.getpost.journey.view.Journey_model;
 import poc.servicedesigntoolkit.getpost.journey.view.Journey_recycle_adapter;
 import touchpoint.activity.TouchPointListActivity;
+import user.dto.FieldResearcherDTO;
 import user.dto.SdtUserDTO;
 
 public class JourneyListActivity extends AppCompatActivity {
@@ -60,7 +63,8 @@ public class JourneyListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.journey_recycle);
         Bundle extras = getIntent().getExtras();
-        Username = (String) extras.get("Username");
+//        Username = (String) extras.get("Username");
+        Username = ((JourneyFieldResearcherDTO) extras.get(ConstantValues.BUNDLE_KEY_JOURNEY_FIELD_RESEARCHER_DTO)).getFieldResearcherDTO().getSdtUserDTO().getUsername();
 
         signUp = (Button) findViewById(R.id.signup);
 
@@ -170,6 +174,13 @@ public class JourneyListActivity extends AppCompatActivity {
             @Override
             public void onResponse(JSONObject response) {
                 Intent i = new Intent(JourneyListActivity.this, TouchPointListActivity.class);
+                JourneyFieldResearcherDTO journeyFieldResearcherDTO = new JourneyFieldResearcherDTO();
+                journeyFieldResearcherDTO.setJourneyDTO(new JourneyDTO());
+                journeyFieldResearcherDTO.getJourneyDTO().setJourneyName(seljourney);
+                journeyFieldResearcherDTO.setFieldResearcherDTO(new FieldResearcherDTO());
+                journeyFieldResearcherDTO.getFieldResearcherDTO().setSdtUserDTO(new SdtUserDTO());
+                journeyFieldResearcherDTO.getFieldResearcherDTO().getSdtUserDTO().setUsername(Username);
+                i.putExtra(ConstantValues.BUNDLE_KEY_JOURNEY_FIELD_RESEARCHER_DTO, journeyFieldResearcherDTO);
                 i.putExtra("JourneyName", seljourney);
                 i.putExtra("Username", Username);
                 startActivity(i);

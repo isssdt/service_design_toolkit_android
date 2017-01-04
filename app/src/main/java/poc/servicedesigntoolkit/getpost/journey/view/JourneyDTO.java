@@ -7,10 +7,11 @@ package poc.servicedesigntoolkit.getpost.journey.view;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
+import java.io.Serializable;
 import java.util.Date;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class JourneyDTO {
+public class JourneyDTO implements Serializable {
     private String journeyName;
     private Integer noOfFieldResearcher;
     private Character isActive;

@@ -30,14 +30,11 @@ public class DHFieldResearcherSignIn implements Observer {
         RESTResponse response = (RESTResponse) o;
         MainView mainView = (MainView) apiContext.getAbstractController().getAbstractView();
 
-        SdtUserDTO sdtUserDTO = new SdtUserDTO();
-
-        sdtUserDTO.setUsername(((EditText) mainView.getComponent(ConstantValues.COMPONENT_MAIN_VIEW_EDIT_TEXT_USERNAME)).getText().toString());
-        FieldResearcherDTO fieldResearcherDTO = new FieldResearcherDTO();
-        fieldResearcherDTO.setSdtUserDTO(sdtUserDTO);
-
         JourneyFieldResearcherDTO journeyFieldResearcherDTO = new JourneyFieldResearcherDTO();
-        journeyFieldResearcherDTO.setFieldResearcherDTO(fieldResearcherDTO);
+        journeyFieldResearcherDTO.setFieldResearcherDTO(new FieldResearcherDTO());
+        journeyFieldResearcherDTO.getFieldResearcherDTO().setSdtUserDTO(new SdtUserDTO());
+        journeyFieldResearcherDTO.getFieldResearcherDTO().getSdtUserDTO().
+                setUsername(((EditText) mainView.getComponent(ConstantValues.COMPONENT_MAIN_VIEW_EDIT_TEXT_USERNAME)).getText().toString());
 
         if (ConstantValues.REST_MESSAGE_FIELD_RESEARCHER_NOT_REGISTERED.equals(response.getMessage())) {
             apiContext.getAbstractController().forwardToScreen(JourneyListActivity.class, ConstantValues.BUNDLE_KEY_JOURNEY_FIELD_RESEARCHER_DTO, journeyFieldResearcherDTO);

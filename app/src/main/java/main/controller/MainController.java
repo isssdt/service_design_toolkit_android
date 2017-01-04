@@ -4,6 +4,7 @@ import android.view.View;
 
 import common.controller.AbstractController;
 import common.view.AbstractView;
+import main.action.ActionFieldResearcherSignIn;
 
 /**
  * Created by longnguyen on 1/4/17.
@@ -16,6 +17,7 @@ public class MainController extends AbstractController implements View.OnClickLi
 
     @Override
     protected void addObservers() {
+        addObserver(new ActionFieldResearcherSignIn());
     }
 
     @Override
