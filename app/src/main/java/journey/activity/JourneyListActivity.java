@@ -28,6 +28,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import common.constants.APIUrl;
 import common.constants.ConstantValues;
 import journey.dto.JourneyFieldResearcherDTO;
 import journey.dto.JourneyListDTO;
@@ -43,8 +44,8 @@ import user.dto.SdtUserDTO;
 
 public class JourneyListActivity extends AppCompatActivity {
 
-    private static final String JOURNEYLIST_URL = "http://54.169.59.1:9090/service_design_toolkit-web/api/get_journey_list_for_register";
-    private static final String REGISTER_URL = "http://54.169.59.1:9090/service_design_toolkit-web/api/register_field_researcher_with_journey";
+    private static final String JOURNEYLIST_URL = APIUrl.API_GET_JOURNEY_LIST_FOR_REGISTER;
+    private static final String REGISTER_URL = APIUrl.API_REGISTER_FIELD_RESEARCHER_WITH_JOURNEY;
     private static final String TAG_JOURNEYLIST = "journeyDTOList";
     private static final String TAG_JOURNEYNAME = "journeyName";
     //ListView listView;
@@ -191,7 +192,7 @@ public class JourneyListActivity extends AppCompatActivity {
                     public void onErrorResponse(VolleyError error) {
                         // error
                         Log.d("Error.Response", error.toString());
-                        AlertDialog.Builder adb = new AlertDialog.Builder(JourneyList.this);
+                        AlertDialog.Builder adb = new AlertDialog.Builder(JourneyListActivity.this);
                         adb.setTitle("Register");
                         adb.setMessage(" You have Already Completed this Journey ");
                         adb.setPositiveButton("Ok", null);

@@ -37,11 +37,13 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import common.constants.APIUrl;
+
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
-    private static final String TOUCHPOINT_URL = "http://54.169.59.1:9090/service_design_toolkit-web/api/get_touch_point_list_of_journey";
-    private static final String LOCATIONUPDATE_URL = "http://54.169.59.1:9090/service_design_toolkit-web/api/refresh_current_location";
+    private static final String TOUCHPOINT_URL = APIUrl.API_GET_TOUCH_POINT_LIST_OF_REGISTERED_JOURNEY;
+    private static final String LOCATIONUPDATE_URL = APIUrl.API_UDPDATE_FIELD_RESEARCHER_CURRENT_LOCATION;
     private static final String TAG_TOUCHPOINT = "touchPointDTOList";
     private static final String TAG_LATITUDE = "latitude";
     private static final String TAG_LONGITUDE = "longitude";

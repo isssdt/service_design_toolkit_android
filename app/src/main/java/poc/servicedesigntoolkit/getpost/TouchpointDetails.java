@@ -1,7 +1,6 @@
 package poc.servicedesigntoolkit.getpost;
 
 import android.content.Intent;
-import android.media.Rating;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -17,6 +16,7 @@ import android.widget.Toast;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 
+import common.constants.APIUrl;
 import common.constants.ConstantValues;
 import common.dto.RESTResponse;
 import journey.dto.JourneyFieldResearcherDTO;
@@ -35,7 +35,7 @@ import user.dto.SdtUserDTO;
 public class TouchpointDetails extends AppCompatActivity implements View.OnClickListener {
 
     private static final String touchpoint_complete = "Please informed that you have completed work for all Touch Points";
-    private static final String COMPLETE_URL = "http://54.169.59.1:9090/service_design_toolkit-web/api/journey_mark_complete";
+    private static final String COMPLETE_URL = APIUrl.API_MARK_JOURNEY_COMPLETED;
     private static final String completed = "Please informed that you have completed work for all Touch Points";
     private static final String completed_confirmation = "Journey has been marked as Completed";
     EditText touchpointName_edit, channelDescription_edit, channel_edit, action_edit, comment_edit, reaction_edit;
@@ -153,7 +153,7 @@ public class TouchpointDetails extends AppCompatActivity implements View.OnClick
         @Override
         protected RESTResponse doInBackground(Void... params) {
             try {
-                final String url = "http://54.169.59.1:9090/service_design_toolkit-web/api/update_research_work";
+                final String url = APIUrl.API_UPDATE_RESEARCH_WORK;
                 RestTemplate restTemplate = new RestTemplate();
                 restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
 

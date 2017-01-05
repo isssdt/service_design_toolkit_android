@@ -26,6 +26,7 @@ import org.springframework.web.client.RestTemplate;
 import java.util.ArrayList;
 import java.util.List;
 
+import common.constants.APIUrl;
 import common.constants.ConstantValues;
 import common.dto.RESTResponse;
 import journey.dto.JourneyFieldResearcherDTO;
@@ -47,9 +48,9 @@ public class TouchPointListActivity extends AppCompatActivity {
     RecyclerView recyclerView;
     RecyclerView.Adapter recyclerViewadapter;
     private static final String touchpoint_complete = "Please informed that you have completed work for all Touch Points";
-    String TOUCHPOINTLIST_URL = "http://54.169.59.1:9090/service_design_toolkit-web/api/get_touch_point_list_of_registered_journey";
-    private static final String COMPLETE_URL = "http://54.169.59.1:9090/service_design_toolkit-web/api/journey_mark_complete";
-    private static final String TouchDetail = "http://54.169.59.1:9090/service_design_toolkit-web/api/get_research_work_list_by_journey_name_and_username";
+    String TOUCHPOINTLIST_URL = APIUrl.API_GET_TOUCH_POINT_LIST_OF_REGISTERED_JOURNEY;
+    private static final String COMPLETE_URL = APIUrl.API_MARK_JOURNEY_COMPLETED;
+    private static final String TouchDetail = APIUrl.API_GET_RESEARCH_WORK_LIST_BY_JOURNEY_NAME_AND_USERNAME;
 
     Button submitJourney;
 
