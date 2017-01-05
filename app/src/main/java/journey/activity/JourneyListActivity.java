@@ -1,4 +1,4 @@
-package poc.servicedesigntoolkit.getpost;
+package journey.activity;
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -10,11 +10,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ListView;
-import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -31,16 +28,20 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import common.constants.ConstantValues;
+import journey.dto.JourneyFieldResearcherDTO;
+import journey.dto.JourneyListDTO;
+import poc.servicedesigntoolkit.getpost.AppController;
+import poc.servicedesigntoolkit.getpost.R;
 import poc.servicedesigntoolkit.getpost.Touchpoint.RecyclerTouchListener;
-import poc.servicedesigntoolkit.getpost.Touchpoint.Touchpoint_model;
 import poc.servicedesigntoolkit.getpost.journey.view.JourneyDTO;
-import poc.servicedesigntoolkit.getpost.journey.dto.JourneyListDTO;
-import poc.servicedesigntoolkit.getpost.Touchpoint.TouchpointMain;
 import poc.servicedesigntoolkit.getpost.journey.view.Journey_model;
 import poc.servicedesigntoolkit.getpost.journey.view.Journey_recycle_adapter;
+import touchpoint.activity.TouchPointListActivity;
+import user.dto.FieldResearcherDTO;
 import user.dto.SdtUserDTO;
 
-public class JourneyList extends AppCompatActivity {
+public class JourneyListActivity extends AppCompatActivity {
 
     private static final String JOURNEYLIST_URL = "http://54.169.59.1:9090/service_design_toolkit-web/api/get_journey_list_for_register";
     private static final String REGISTER_URL = "http://54.169.59.1:9090/service_design_toolkit-web/api/register_field_researcher_with_journey";
@@ -62,7 +63,8 @@ public class JourneyList extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.journey_recycle);
         Bundle extras = getIntent().getExtras();
-        Username = (String) extras.get("Username");
+//        Username = (String) extras.get("Username");
+        Username = ((JourneyFieldResearcherDTO) extras.get(ConstantValues.BUNDLE_KEY_JOURNEY_FIELD_RESEARCHER_DTO)).getFieldResearcherDTO().getSdtUserDTO().getUsername();
 
         signUp = (Button) findViewById(R.id.signup);
 
@@ -90,7 +92,7 @@ public class JourneyList extends AppCompatActivity {
                 //    registeruser(model.getJourneyName());
                 //}else{
                     AlertDialog.Builder adb = new AlertDialog.Builder(
-                            JourneyList.this);
+                            JourneyListActivity.this);
                     adb.setTitle("Register");
                     adb.setMessage(" Journey Name : " + model.getJourneyName()+"\n"+
                                     "Start Date : "+model.getStartDate()+"\n"+
@@ -124,7 +126,7 @@ public class JourneyList extends AppCompatActivity {
 
 
                 AlertDialog.Builder adb = new AlertDialog.Builder(
-                        JourneyList.this);
+                        JourneyListActivity.this);
                 adb.setTitle("Register");
                 adb.setMessage(" Journey Name "
                         +parent.getItemAtPosition(position));
@@ -171,7 +173,14 @@ public class JourneyList extends AppCompatActivity {
                 REGISTER_URL, request, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-                Intent i = new Intent(JourneyList.this, TouchpointMain.class);
+                Intent i = new Intent(JourneyListActivity.this, TouchPointListActivity.class);
+                JourneyFieldResearcherDTO journeyFieldResearcherDTO = new JourneyFieldResearcherDTO();
+                journeyFieldResearcherDTO.setJourneyDTO(new JourneyDTO());
+                journeyFieldResearcherDTO.getJourneyDTO().setJourneyName(seljourney);
+                journeyFieldResearcherDTO.setFieldResearcherDTO(new FieldResearcherDTO());
+                journeyFieldResearcherDTO.getFieldResearcherDTO().setSdtUserDTO(new SdtUserDTO());
+                journeyFieldResearcherDTO.getFieldResearcherDTO().getSdtUserDTO().setUsername(Username);
+                i.putExtra(ConstantValues.BUNDLE_KEY_JOURNEY_FIELD_RESEARCHER_DTO, journeyFieldResearcherDTO);
                 i.putExtra("JourneyName", seljourney);
                 i.putExtra("Username", Username);
                 startActivity(i);
@@ -232,15 +241,15 @@ public class JourneyList extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(JourneyListDTO journeyListDTO) {
-            LinearLayoutManager llm = new LinearLayoutManager(JourneyList.this);
+            LinearLayoutManager llm = new LinearLayoutManager(JourneyListActivity.this);
             llm.setOrientation(LinearLayoutManager.VERTICAL);
-            recyclerViewadapter = new Journey_recycle_adapter(touchpointData, JourneyList.this);
+            recyclerViewadapter = new Journey_recycle_adapter(touchpointData, JourneyListActivity.this);
             recyclerView.setLayoutManager(llm);
             recyclerView.setAdapter(recyclerViewadapter);
             recyclerViewadapter.notifyDataSetChanged();
 
 
-           /* journeyAdapter = new ArrayAdapter(JourneyList.this, android.R.layout.simple_list_item_1, journeyList);
+           /* journeyAdapter = new ArrayAdapter(JourneyListActivity.this, android.R.layout.simple_list_item_1, journeyList);
             listView.setAdapter(journeyAdapter);
             journeyAdapter.notifyDataSetChanged();*/
         }

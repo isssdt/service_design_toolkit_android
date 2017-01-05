@@ -9,10 +9,7 @@ import org.springframework.web.client.RestTemplate;
 import java.util.ArrayList;
 import java.util.List;
 
-import poc.servicedesigntoolkit.getpost.journey.dto.JourneyFieldResearcherDTO;
-import poc.servicedesigntoolkit.getpost.journey.view.JourneyDTO;
-import poc.servicedesigntoolkit.getpost.journey.dto.JourneyListDTO;
-import poc.servicedesigntoolkit.getpost.journey.view.Journey_recycle;
+import journey.dto.JourneyListDTO;
 import user.dto.SdtUserDTO;
 
 /**

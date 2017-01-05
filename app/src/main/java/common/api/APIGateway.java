@@ -12,22 +12,31 @@ import common.constants.APIUrl;
  */
 
 public class APIGateway extends AsyncTask<Void, Void, Object> {
-    private APICaller caller;
+    private APICaller_Old apiCaller_old;
+    private APICaller apiCaller;
     private String url;
     private Class outputClass;
     private Object input;
     private String method;
 
-    public APIGateway(APICaller caller, String url, Class outputClass, Object input, String method) {
-        this.caller = caller;
+    public APIGateway(APICaller apiCaller, String url, Class outputClass, Object input, String method) {
+        this.apiCaller = apiCaller;
         this.url = url;
         this.outputClass = outputClass;
         this.input = input;
         this.method = method;
     }
 
-    public APIGateway(APICaller caller) {
-        this.caller = caller;
+    public APIGateway(APICaller_Old apiCaller_old, String url, Class outputClass, Object input, String method) {
+        this.apiCaller_old = apiCaller_old;
+        this.url = url;
+        this.outputClass = outputClass;
+        this.input = input;
+        this.method = method;
+    }
+
+    public APIGateway(APICaller_Old apiCaller_old) {
+        this.apiCaller_old = apiCaller_old;
     }
 
     @Override
@@ -44,7 +53,15 @@ public class APIGateway extends AsyncTask<Void, Void, Object> {
 
     @Override
     protected void onPostExecute(Object outputData) {
-        caller.onAPICallSucceeded(outputData);
+        /** will be removed */
+        if (null != apiCaller_old) {
+            apiCaller_old.onAPICallSucceeded(outputData);
+        }
+        /**/
+
+        if (null != apiCaller) {
+            apiCaller.onAPICallSucceeded(outputData);
+        }
     }
 
     public void setUrl(String url) {
