@@ -44,6 +44,7 @@ public class TouchpointMain extends AppCompatActivity {
     private static final String touchpoint_complete = "Please informed that you have completed work for all Touch Points";
     String TOUCHPOINTLIST_URL = "http://54.169.59.1:9090/service_design_toolkit-web/api/get_touch_point_list_of_registered_journey";
     private static final String COMPLETE_URL = "http://54.169.59.1:9090/service_design_toolkit-web/api/journey_mark_complete";
+    private static final String TouchDetail = "http://54.169.59.1:9090/service_design_toolkit-web/api/get_research_work_list_by_journey_name_and_username";
 
     Button submitJourney;
 
@@ -102,9 +103,12 @@ public class TouchpointMain extends AppCompatActivity {
                     i.putExtra("Id", model.getId());
                     i.putExtra("Username", Username);
                     i.putExtra("JourneyName", JourneyName);
-                    i.putExtra("Rating", model.getRating());
-                    i.putExtra("Reaction", model.getReaction());
-                    i.putExtra("Comment", model.getComment());
+                    if (null != model.getRating()){
+                        i.putExtra("rating",model.getRating());
+                        i.putExtra("comment",model.getComment());
+                        i.putExtra("reaction",model.getReaction());
+                    }
+
                     startActivity(i);
                 }else if (position >= 1) {
                     if (touchpointData.get(position - 1).getStatus().equals("DONE")) {
@@ -117,9 +121,7 @@ public class TouchpointMain extends AppCompatActivity {
                         i.putExtra("Id", model.getId());
                         i.putExtra("Username", Username);
                         i.putExtra("JourneyName", JourneyName);
-                        i.putExtra("Rating", model.getRating());
-                        i.putExtra("Reaction", model.getReaction());
-                        i.putExtra("Comment", model.getComment());
+
                         startActivity(i);
                     }else
                         Toast.makeText(TouchpointMain.this, "Please complete previous Touchpoint", Toast.LENGTH_SHORT).show();
@@ -176,9 +178,13 @@ public class TouchpointMain extends AppCompatActivity {
                             touchPointFieldResearcherDTO.getTouchpointDTO().getTouchPointDesc(),
                             touchPointFieldResearcherDTO.getStatus(),
                             touchPointFieldResearcherDTO.getTouchpointDTO().getChannelDTO().getChannelName());
-                            //touchPointFieldResearcherDTO.getRatingDTO().getValue(),
-                            //touchPointFieldResearcherDTO.getReaction(),
-                            //touchPointFieldResearcherDTO.getComments());
+
+                    if (null != touchPointFieldResearcherDTO.getRatingDTO().getValue()){
+                        model.setRating(touchPointFieldResearcherDTO.getRatingDTO().getValue());
+                        model.setReaction(touchPointFieldResearcherDTO.getReaction());
+                        model.setComment(touchPointFieldResearcherDTO.getComments());
+                    }
+
                     touchpointData.add(model);
 
                     model.setId(touchPointFieldResearcherDTO.getTouchpointDTO().getId());

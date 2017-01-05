@@ -182,6 +182,11 @@ public class JourneyList extends AppCompatActivity {
                     public void onErrorResponse(VolleyError error) {
                         // error
                         Log.d("Error.Response", error.toString());
+                        AlertDialog.Builder adb = new AlertDialog.Builder(JourneyList.this);
+                        adb.setTitle("Register");
+                        adb.setMessage(" You have Already Completed this Journey ");
+                        adb.setPositiveButton("Ok", null);
+                        adb.show();
                     }
                 }
         ) {

@@ -1,6 +1,7 @@
 package poc.servicedesigntoolkit.getpost;
 
 import android.content.Intent;
+import android.media.Rating;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -42,10 +43,12 @@ public class TouchpointDetails extends AppCompatActivity implements View.OnClick
     TextView image;
     Button submit, reset;
     ImageButton photo;
-    String touchpoint, username, reaction, comment, JourneyName;
+    String touchpoint, username, Reaction, Comment, JourneyName, reaction_string, comment_string;
     String name, action, channel_desc, channel;
+    String Rating;
     Integer id;
     String id_String, rating_string;
+    String rating_intent,reaction_intent,comment_intent;
     int rating;
     String message = "";
 
@@ -64,6 +67,9 @@ public class TouchpointDetails extends AppCompatActivity implements View.OnClick
         name = (String) extras.get("Name");
         id = (Integer) extras.get("Id");
         id_String = id.toString();
+        rating_intent = (String) extras.get("rating");
+        reaction_intent = (String) extras.get("reaction");
+        comment_intent = (String) extras.get("comment");
 
         setTitle(touchpoint);
 
@@ -95,7 +101,11 @@ public class TouchpointDetails extends AppCompatActivity implements View.OnClick
         channel_edit.setText(channel);
         action_edit.setText(action);
         channelDescription_edit.setText(channel_desc);
-
+        if(null != rating_intent){
+            ratingBar.setRating(Float.parseFloat(rating_intent));
+            reaction_edit.setText(reaction_intent);
+            comment_edit.setText(comment_intent);
+        }
     }
 
     @Override
@@ -132,8 +142,8 @@ public class TouchpointDetails extends AppCompatActivity implements View.OnClick
     }
 
     private void getdetails() {
-        reaction = reaction_edit.getText().toString();
-        comment = comment_edit.getText().toString();
+        reaction_string = reaction_edit.getText().toString();
+        comment_string = comment_edit.getText().toString();
         rating = (int) ratingBar.getRating();
         rating_string = Integer.toString(rating);
     }
@@ -159,8 +169,8 @@ public class TouchpointDetails extends AppCompatActivity implements View.OnClick
                 TouchPointFieldResearcherDTO touchPointFieldResearcherDTO = new TouchPointFieldResearcherDTO();
                 touchPointFieldResearcherDTO.setTouchpointDTO(touchPointDTO);
                 touchPointFieldResearcherDTO.setFieldResearcherDTO(fieldResearcherDTO);
-                touchPointFieldResearcherDTO.setComments(comment);
-                touchPointFieldResearcherDTO.setReaction(reaction);
+                touchPointFieldResearcherDTO.setComments(comment_string);
+                touchPointFieldResearcherDTO.setReaction(reaction_string);
 
                 RatingDTO ratingDTO = new RatingDTO();
                 ratingDTO.setValue(rating_string);
@@ -186,8 +196,8 @@ public class TouchpointDetails extends AppCompatActivity implements View.OnClick
 
         @Override
         protected void onPreExecute() {
-            reaction = reaction_edit.getText().toString();
-            comment = comment_edit.getText().toString();
+            reaction_string = reaction_edit.getText().toString();
+            comment_string = comment_edit.getText().toString();
             rating = (int) ratingBar.getRating();
             rating_string = Integer.toString(rating);
         }
