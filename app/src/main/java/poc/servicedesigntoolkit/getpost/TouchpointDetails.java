@@ -103,6 +103,7 @@ public class TouchpointDetails extends AppCompatActivity implements View.OnClick
         channelDescription_edit.setText(channel_desc);
         if(null != rating_intent){
             ratingBar.setRating(Float.parseFloat(rating_intent));
+            ratingBar.setIsIndicator(true);
             reaction_edit.setText(reaction_intent);
             comment_edit.setText(comment_intent);
         }
@@ -120,6 +121,9 @@ public class TouchpointDetails extends AppCompatActivity implements View.OnClick
                 }
             }
         } else if (v == reset) {
+            ratingBar.setRating(0);
+            reaction_edit.setText("");
+            comment_edit.setText("");
 
         } else if (v == photo) {
             Intent i = new Intent(TouchpointDetails.this, SelectPhoto.class);

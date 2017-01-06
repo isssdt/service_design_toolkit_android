@@ -105,7 +105,7 @@ public class TouchPointListActivity extends AppCompatActivity {
                 Log.d("pos",""+position);
                 if (position == 0){
                     Intent i = new Intent(TouchPointListActivity.this, TouchpointDetails.class);
-                    i.putExtra("Action", model.getChannel());
+                    i.putExtra("Action", model.getAction());
                     i.putExtra("Channel", model.getChannel());
                     i.putExtra("Channel_Desc", model.getChannel_desc());
                     i.putExtra("Name", model.getName());
@@ -123,7 +123,7 @@ public class TouchPointListActivity extends AppCompatActivity {
                     if (touchpointData.get(position - 1).getStatus().equals("DONE")) {
                         Intent i = new Intent(TouchPointListActivity.this, TouchpointDetails.class);
 
-                        i.putExtra("Action", model.getChannel());
+                        i.putExtra("Action", model.getAction());
                         i.putExtra("Channel", model.getChannel());
                         i.putExtra("Channel_Desc", model.getChannel_desc());
                         i.putExtra("Name", model.getName());

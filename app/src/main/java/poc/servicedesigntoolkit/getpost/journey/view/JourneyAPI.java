@@ -18,7 +18,7 @@ import user.dto.SdtUserDTO;
 
 public class JourneyAPI extends AsyncTask<Void, Void, JourneyListDTO> {
 
-    public static final String JOURNEY_URL = "http://54.169.59.1:9090/service_design_toolkit-web/api/get_journey_list_for_register";
+    public static final String JOURNEY_URL = "http://54.169.243.190:8080/service_design_toolkit-web/api/get_journey_list_for_register";
     SdtUserDTO sdtUserDTO;
     List<Journey_model> journeyList;
     Journey_recycle journey_recycle;
