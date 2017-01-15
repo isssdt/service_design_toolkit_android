@@ -1,8 +1,4 @@
-package touchpoint.activity;
-
-/**
- * Created by Gunjan Pathak on 28-Oct-16.
- */
+package journeyVisualization;
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -11,80 +7,98 @@ import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.Toast;
+
+import java.util.ArrayList;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.cache.InternalCacheDiskCacheFactory;
 
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import common.constants.APIUrl;
 import common.constants.ConstantValues;
 import common.dto.RESTResponse;
 import journey.dto.JourneyFieldResearcherDTO;
 import poc.servicedesigntoolkit.getpost.MainActivity;
-import poc.servicedesigntoolkit.getpost.MapsActivity;
 import poc.servicedesigntoolkit.getpost.R;
-import poc.servicedesigntoolkit.getpost.Touchpoint.RecyclerTouchListener;
 import poc.servicedesigntoolkit.getpost.Touchpoint.TouchpointAdapter;
 import poc.servicedesigntoolkit.getpost.Touchpoint.Touchpoint_model;
 import poc.servicedesigntoolkit.getpost.TouchpointDetails;
+import timeline.RoundTimelineView;
+import timeline.TimelineView;
+import touchpoint.activity.TouchPointListActivity;
 import touchpoint.dto.TouchPointFieldResearcherDTO;
 import touchpoint.dto.TouchPointFieldResearcherListDTO;
 import user.dto.SdtUserDTO;
 
-public class TouchPointListActivity extends AppCompatActivity {
+import static poc.servicedesigntoolkit.getpost.R.id.submitJourney;
 
+/**
+ * Created by Gunjan Pathak on 11/01/2017.
+ */
 
-    List<Touchpoint_model> touchpointData;
-    RecyclerView recyclerView;
-    RecyclerView.Adapter recyclerViewadapter;
-    private static final String touchpoint_complete = "Please informed that you have completed work for all Touch Points";
+public class Journey_Visualization extends AppCompatActivity {
+
+    String Username, JourneyName, Message;
     String TOUCHPOINTLIST_URL = APIUrl.API_GET_TOUCH_POINT_LIST_OF_REGISTERED_JOURNEY;
     private static final String COMPLETE_URL = APIUrl.API_MARK_JOURNEY_COMPLETED;
-    private static final String TouchDetail = APIUrl.API_GET_RESEARCH_WORK_LIST_BY_JOURNEY_NAME_AND_USERNAME;
-
+    ArrayList<Touchpoint_model> touchpointData;
+    ListView list;
     Button submitJourney;
-
-    String JourneyName, Username, Message;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.touchpoint_recycle);
+        setContentView(R.layout.visulaization_journey);
 
         Bundle extras = getIntent().getExtras();
         JourneyFieldResearcherDTO journeyFieldResearcherDTO = (JourneyFieldResearcherDTO) extras.get(ConstantValues.BUNDLE_KEY_JOURNEY_FIELD_RESEARCHER_DTO);
         if (null != journeyFieldResearcherDTO.getJourneyDTO()) {
             JourneyName = journeyFieldResearcherDTO.getJourneyDTO().getJourneyName();
         }
-        Username = journeyFieldResearcherDTO.getFieldResearcherDTO().getSdtUserDTO().getUsername();
+        Username = ((JourneyFieldResearcherDTO) extras.get(ConstantValues.BUNDLE_KEY_JOURNEY_FIELD_RESEARCHER_DTO)).getFieldResearcherDTO().getSdtUserDTO().getUsername();
         Message = (String) extras.get("Message");
-
-        submitJourney = (Button) findViewById(R.id.submitJourney);
-
         touchpointData = new ArrayList<Touchpoint_model>();
 
-        recyclerView = (RecyclerView) findViewById(R.id.recyclerView1);
-        recyclerView.setHasFixedSize(true);
-
+        submitJourney = (Button) findViewById(R.id.submitJourney1);
+        list = (ListView) findViewById(R.id.list);
         new HttpRequestTask().execute();
+
+        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick (AdapterView < ? > adapter, View view, int position, long arg){
+                    Touchpoint_model model = touchpointData.get(position);
+                    Intent i = new Intent(Journey_Visualization.this, TouchpointDetails.class);
+                    i.putExtra("Action", model.getAction());
+                    i.putExtra("Channel", model.getChannel());
+                    i.putExtra("Channel_Desc", model.getChannel_desc());
+                    i.putExtra("Name", model.getName());
+                    i.putExtra("Id", model.getId());
+                    i.putExtra("Username", Username);
+                    i.putExtra("JourneyName", JourneyName);
+                    if (null != model.getRating()){
+                        i.putExtra("rating",model.getRating());
+                        i.putExtra("comment",model.getComment());
+                        i.putExtra("reaction",model.getReaction());
+                    }
+                    startActivity(i);
+                }
+            }
+        );
 
         submitJourney.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 AlertDialog.Builder adb = new AlertDialog.Builder(
-                        TouchPointListActivity.this);
+                        Journey_Visualization.this);
                 adb.setTitle("Submit Journey");
-                adb.setMessage(" Thank you for your response.");
+                adb.setMessage(" Thank you for your response.Please proceed for new journey registeration");
                 adb.setPositiveButton("Submit", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -98,73 +112,21 @@ public class TouchPointListActivity extends AppCompatActivity {
             }
         });
 
-        recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getApplicationContext(), recyclerView, new RecyclerTouchListener.ClickListener() {
-            @Override
-            public void onClick(View view, int position) {
-                Touchpoint_model model = touchpointData.get(position);
-                Log.d("pos",""+position);
-                if (position == 0){
-                    Intent i = new Intent(TouchPointListActivity.this, TouchpointDetails.class);
-                    i.putExtra("Action", model.getAction());
-                    i.putExtra("Channel", model.getChannel());
-                    i.putExtra("Channel_Desc", model.getChannel_desc());
-                    i.putExtra("Name", model.getName());
-                    i.putExtra("Id", model.getId());
-                    i.putExtra("Username", Username);
-                    i.putExtra("JourneyName", JourneyName);
-                    if (null != model.getRating()){
-                        i.putExtra("rating",model.getRating());
-                        i.putExtra("comment",model.getComment());
-                        i.putExtra("reaction",model.getReaction());
-                    }
-
-                    startActivity(i);
-                }else if (position >= 1) {
-                    if (touchpointData.get(position - 1).getStatus().equals("DONE")) {
-                        Intent i = new Intent(TouchPointListActivity.this, TouchpointDetails.class);
-
-                        i.putExtra("Action", model.getAction());
-                        i.putExtra("Channel", model.getChannel());
-                        i.putExtra("Channel_Desc", model.getChannel_desc());
-                        i.putExtra("Name", model.getName());
-                        i.putExtra("Id", model.getId());
-                        i.putExtra("Username", Username);
-                        i.putExtra("JourneyName", JourneyName);
-
-                        startActivity(i);
-                    }else
-                        Toast.makeText(TouchPointListActivity.this, "Please complete previous Touchpoint", Toast.LENGTH_SHORT).show();
-
-                }else
-                    Toast.makeText(TouchPointListActivity.this, "Please complete previous Touchpoint", Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onLongClick(View view, int position) {
-
-            }
-        }));
-
-
     }
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.touch_menu, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_map:
-                Toast.makeText(this, "Pressed Map",
-                        Toast.LENGTH_SHORT).show();
-                Intent i = new Intent(TouchPointListActivity.this, MapsActivity.class);
-                startActivity(i);
-                return true;
-        }
-        return false;
+    public void onBackPressed() {
+        AlertDialog.Builder exit = new AlertDialog.Builder(
+                Journey_Visualization.this);
+        exit.setMessage(" Are you sure you want to exit Journey ?");
+        exit.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Intent intent = new Intent(Journey_Visualization.this, MainActivity.class);
+                startActivity(intent);
+            }
+        });
+        exit.setNegativeButton("No", null);
+        exit.show();
     }
 
     private class HttpRequestTask extends AsyncTask<Void, Void, TouchPointFieldResearcherListDTO> {
@@ -211,16 +173,16 @@ public class TouchPointListActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(TouchPointFieldResearcherListDTO touchPointFieldResearcherListDTO) {
-            LinearLayoutManager llm = new LinearLayoutManager(TouchPointListActivity.this);
-            llm.setOrientation(LinearLayoutManager.VERTICAL);
-            recyclerViewadapter = new TouchpointAdapter(touchpointData, TouchPointListActivity.this);
-            recyclerView.setLayoutManager(llm);
-            recyclerView.setAdapter(recyclerViewadapter);
-            recyclerViewadapter.notifyDataSetChanged();
+            list.setAdapter(new visualization_adapter(getApplicationContext(),touchpointData));
 
-            if((touchpointData.get(touchpointData.size()-1).getStatus()).equals("DONE")){
-                submitJourney.setVisibility(View.VISIBLE);
+            Integer i = 0;
+            for (Touchpoint_model touchpoint_model: touchpointData) {
+                if (touchpoint_model.getStatus().equals("DONE")){
+                    i++;
+                }
             }
+            if(i == touchpointData.size())
+                submitJourney.setVisibility(View.VISIBLE);
         }
 
     }
@@ -240,7 +202,7 @@ public class TouchPointListActivity extends AppCompatActivity {
 
                 Message = response.getMessage();
                 Log.d("Message",Message);
-                Intent i = new Intent(TouchPointListActivity.this, MainActivity.class);
+                Intent i = new Intent(Journey_Visualization.this, MainActivity.class);
                 i.putExtra("Message", Message);
                 startActivity(i);
 
@@ -257,4 +219,5 @@ public class TouchPointListActivity extends AppCompatActivity {
         }
 
     }
+
 }

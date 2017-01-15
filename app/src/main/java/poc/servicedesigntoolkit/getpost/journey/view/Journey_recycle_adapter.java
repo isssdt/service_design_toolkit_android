@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import java.util.List;
@@ -42,7 +43,6 @@ public class Journey_recycle_adapter extends RecyclerView.Adapter<Journey_recycl
         Journey_model getDataAdapter1 = getDataAdapter.get(position);
         Log.d("check flow","-->1");
         holder.JourneyTextView.setText(getDataAdapter1.getJourneyName());
-        Log.d("check flow","->"+getDataAdapter1.getJourneyName());
     }
 
     @Override
@@ -53,10 +53,12 @@ public class Journey_recycle_adapter extends RecyclerView.Adapter<Journey_recycl
     class ViewHolder extends RecyclerView.ViewHolder {
 
         public TextView JourneyTextView;
+        public Button viewJourney;
 
         public ViewHolder(View itemView) {
             super(itemView);
             JourneyTextView = (TextView) itemView.findViewById(R.id.journey_item);
+            viewJourney = (Button) itemView.findViewById(R.id.signup);
         }
     }
 }

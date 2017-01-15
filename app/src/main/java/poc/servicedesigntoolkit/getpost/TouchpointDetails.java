@@ -20,6 +20,7 @@ import common.constants.APIUrl;
 import common.constants.ConstantValues;
 import common.dto.RESTResponse;
 import journey.dto.JourneyFieldResearcherDTO;
+import journeyVisualization.Journey_Visualization;
 import poc.servicedesigntoolkit.getpost.journey.view.JourneyDTO;
 import touchpoint.activity.TouchPointListActivity;
 import touchpoint.dto.RatingDTO;
@@ -70,8 +71,6 @@ public class TouchpointDetails extends AppCompatActivity implements View.OnClick
         rating_intent = (String) extras.get("rating");
         reaction_intent = (String) extras.get("reaction");
         comment_intent = (String) extras.get("comment");
-
-        setTitle(touchpoint);
 
         touchpointName_edit = (EditText) findViewById(R.id.touchpoint_name);
         channel_edit = (EditText) findViewById(R.id.channel);
@@ -184,7 +183,7 @@ public class TouchpointDetails extends AppCompatActivity implements View.OnClick
                         restTemplate.postForObject(url, touchPointFieldResearcherDTO, RESTResponse.class);
                 message = response.getMessage();
 
-                Intent i = new Intent(TouchpointDetails.this, TouchPointListActivity.class);
+                Intent i = new Intent(TouchpointDetails.this, Journey_Visualization.class);
                 JourneyFieldResearcherDTO journeyFieldResearcherDTO = new JourneyFieldResearcherDTO();
                 journeyFieldResearcherDTO.setJourneyDTO(new JourneyDTO());
                 journeyFieldResearcherDTO.getJourneyDTO().setJourneyName(JourneyName);

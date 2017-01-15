@@ -7,12 +7,14 @@ package common.constants;
 public class APIUrl {
 
     /** UAT */
-//    private static final String API_HOST = "http://54.169.59.1:9090/service_design_toolkit-web/api/";
+
+
+ private static final String API_HOST = "http://54.169.59.1:9090/service_design_toolkit-web/api/";
 
     /**
      * DEV
      */
-    private static final String API_HOST = "http://54.169.243.190:8080/service_design_toolkit-web/api/";
+   // private static final String API_HOST = "http://54.169.243.190:8080/service_design_toolkit-web/api/";
 
     public static final String API_GET_JOURNEY_LIST_FOR_REGISTER = API_HOST + "get_journey_list_for_register";
 

@@ -10,6 +10,7 @@ import common.constants.ConstantValues;
 import common.dto.RESTResponse;
 import journey.activity.JourneyListActivity;
 import journey.dto.JourneyFieldResearcherDTO;
+import journeyVisualization.Journey_Visualization;
 import main.view.MainView;
 import touchpoint.activity.TouchPointListActivity;
 import user.dto.FieldResearcherDTO;
@@ -39,7 +40,7 @@ public class DHFieldResearcherSignIn implements Observer {
         if (ConstantValues.REST_MESSAGE_FIELD_RESEARCHER_NOT_REGISTERED.equals(response.getMessage())) {
             apiContext.getAbstractController().forwardToScreen(JourneyListActivity.class, ConstantValues.BUNDLE_KEY_JOURNEY_FIELD_RESEARCHER_DTO, journeyFieldResearcherDTO);
         } else {
-            apiContext.getAbstractController().forwardToScreen(TouchPointListActivity.class, ConstantValues.BUNDLE_KEY_JOURNEY_FIELD_RESEARCHER_DTO, journeyFieldResearcherDTO);
+            apiContext.getAbstractController().forwardToScreen(Journey_Visualization.class, ConstantValues.BUNDLE_KEY_JOURNEY_FIELD_RESEARCHER_DTO, journeyFieldResearcherDTO);
         }
     }
 }

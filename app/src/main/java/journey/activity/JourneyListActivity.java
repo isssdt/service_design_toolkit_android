@@ -23,7 +23,11 @@ import org.json.JSONObject;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,6 +36,8 @@ import common.constants.APIUrl;
 import common.constants.ConstantValues;
 import journey.dto.JourneyFieldResearcherDTO;
 import journey.dto.JourneyListDTO;
+import journeyVisualization.Journey_Visualization;
+import journeyemotion.emotionMeter;
 import poc.servicedesigntoolkit.getpost.AppController;
 import poc.servicedesigntoolkit.getpost.R;
 import poc.servicedesigntoolkit.getpost.Touchpoint.RecyclerTouchListener;
@@ -58,13 +64,17 @@ public class JourneyListActivity extends AppCompatActivity {
     Button signUp;
     ArrayAdapter journeyAdapter;
     String seljourney;
+    SimpleDateFormat format;
+    Date startDate;
+    Date endDate;
+    String start;
+    String end;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.journey_recycle);
         Bundle extras = getIntent().getExtras();
-//        Username = (String) extras.get("Username");
         Username = ((JourneyFieldResearcherDTO) extras.get(ConstantValues.BUNDLE_KEY_JOURNEY_FIELD_RESEARCHER_DTO)).getFieldResearcherDTO().getSdtUserDTO().getUsername();
 
         signUp = (Button) findViewById(R.id.signup);
@@ -73,12 +83,6 @@ public class JourneyListActivity extends AppCompatActivity {
         recyclerView.setHasFixedSize(true);
 
         touchpointData = new ArrayList<Journey_model>();
-/*
-
-        listView = (ListView) findViewById(R.id.listView);
-
-        journeyList = new ArrayList<Journey_model>();
-*/
 
         new HttpRequestTask().execute();
         recyclerView.setAdapter(recyclerViewadapter);
@@ -89,15 +93,20 @@ public class JourneyListActivity extends AppCompatActivity {
             public void onClick(View view, int position) {
                 final Journey_model model =touchpointData.get(position);
 
-                //if(view.getId() == signUp.getId()){
-                //    registeruser(model.getJourneyName());
-                //}else{
+                startDate = model.getStartDate();
+                endDate = model.getEndDate();
                     AlertDialog.Builder adb = new AlertDialog.Builder(
                             JourneyListActivity.this);
                     adb.setTitle("Register");
-                    adb.setMessage(" Journey Name : " + model.getJourneyName()+"\n"+
-                                    "Start Date : "+model.getStartDate()+"\n"+
-                                    "End Date : "+model.getEndDate());
+
+                    format = new SimpleDateFormat("dd MMM yyyy");
+                    start = format.format(startDate);
+                    end = format.format(endDate);
+
+                Log.d("Start"," "+model.getStartDate());
+                adb.setMessage("Journey Name : " + model.getJourneyName()+"\n"+
+                                    "Start Date : "+start+"\n"+
+                                    "End Date : "+end);
                     adb.setPositiveButton("Sign Up", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
@@ -116,38 +125,6 @@ public class JourneyListActivity extends AppCompatActivity {
 
             }
         }));
-
-        /*listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            public void onItemClick(AdapterView<?> parent, View view,
-                                    int position, long id) {
-
-                final String journey = (String) listView.getItemAtPosition(position);
-                Log.d("PRESSED", journey);
-//                Toast.makeText(getApplicationContext(), "Registered for : " + journey+" poc.servicedesigntoolkit.getpost.journey.", Toast.LENGTH_SHORT).show();
-
-
-                AlertDialog.Builder adb = new AlertDialog.Builder(
-                        JourneyListActivity.this);
-                adb.setTitle("Register");
-                adb.setMessage(" Journey Name "
-                        +parent.getItemAtPosition(position));
-                adb.setPositiveButton("Sign Up", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        registeruser(journey);
-                    }
-                });
-                adb.setNegativeButton("Cancel", null);
-                adb.show();
-
-                //registeruser(journey);
-
-            }
-        });*/
-
-
-
-
     }
 
     public void registeruser(String journey) {
@@ -174,7 +151,7 @@ public class JourneyListActivity extends AppCompatActivity {
                 REGISTER_URL, request, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-                Intent i = new Intent(JourneyListActivity.this, TouchPointListActivity.class);
+                Intent i = new Intent(JourneyListActivity.this, Journey_Visualization.class);
                 JourneyFieldResearcherDTO journeyFieldResearcherDTO = new JourneyFieldResearcherDTO();
                 journeyFieldResearcherDTO.setJourneyDTO(new JourneyDTO());
                 journeyFieldResearcherDTO.getJourneyDTO().setJourneyName(seljourney);
@@ -192,11 +169,15 @@ public class JourneyListActivity extends AppCompatActivity {
                     public void onErrorResponse(VolleyError error) {
                         // error
                         Log.d("Error.Response", error.toString());
+                        Intent i = new Intent(JourneyListActivity.this, emotionMeter.class);
+                        startActivity(i);
+                        /*
                         AlertDialog.Builder adb = new AlertDialog.Builder(JourneyListActivity.this);
                         adb.setTitle("Register");
                         adb.setMessage(" You have Already Completed this Journey ");
                         adb.setPositiveButton("Ok", null);
                         adb.show();
+*/
                     }
                 }
         ) {

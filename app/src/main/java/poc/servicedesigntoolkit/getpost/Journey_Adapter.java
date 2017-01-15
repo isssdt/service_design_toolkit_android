@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import java.util.List;
@@ -53,10 +54,12 @@ public class Journey_Adapter extends RecyclerView.Adapter<Journey_Adapter.ViewHo
     public class ViewHolder extends RecyclerView.ViewHolder{
 
         public TextView journeyname;
+        public Button signup;
 
         public ViewHolder(View itemView) {
             super(itemView);
             journeyname = (TextView) itemView.findViewById(R.id.journey_item);
+            signup = (Button) itemView.findViewById(R.id.signup);
         }
     }
 
