@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -95,17 +96,18 @@ public class JourneyListActivity extends AppCompatActivity {
 
                 startDate = model.getStartDate();
                 endDate = model.getEndDate();
-                    AlertDialog.Builder adb = new AlertDialog.Builder(
-                            JourneyListActivity.this);
+                format = new SimpleDateFormat("dd MMM yyyy");
+                start = format.format(startDate);
+                end = format.format(endDate);
+
+                if("DONE".equals(model.getCompleted())){
+                    Intent i = new Intent(JourneyListActivity.this,emotionMeter.class);
+                    startActivity(i);
+                }else{
+                    AlertDialog.Builder adb = new AlertDialog.Builder(JourneyListActivity.this);
                     adb.setTitle("Register");
-
-                    format = new SimpleDateFormat("dd MMM yyyy");
-                    start = format.format(startDate);
-                    end = format.format(endDate);
-
-                Log.d("Start"," "+model.getStartDate());
-                adb.setMessage("Journey Name : " + model.getJourneyName()+"\n"+
-                                    "Date : "+start+" - "+end);
+                    adb.setMessage("Journey Name : " + model.getJourneyName()+"\n"+
+                            "Date : "+start+" - "+end);
                     adb.setPositiveButton("Sign Up", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
@@ -115,8 +117,7 @@ public class JourneyListActivity extends AppCompatActivity {
                     adb.setNegativeButton("Cancel", null);
                     adb.show();
 
-                //}
-
+                }
             }
 
             @Override
@@ -166,17 +167,6 @@ public class JourneyListActivity extends AppCompatActivity {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        // error
-                        Log.d("Error.Response", error.toString());
-                        Intent i = new Intent(JourneyListActivity.this, emotionMeter.class);
-                        startActivity(i);
-                        /*
-                        AlertDialog.Builder adb = new AlertDialog.Builder(JourneyListActivity.this);
-                        adb.setTitle("Register");
-                        adb.setMessage(" You have Already Completed this Journey ");
-                        adb.setPositiveButton("Ok", null);
-                        adb.show();
-*/
                     }
                 }
         ) {
@@ -201,14 +191,21 @@ public class JourneyListActivity extends AppCompatActivity {
                 SdtUserDTO sdtUserDTO = new SdtUserDTO();
                 sdtUserDTO.setUsername(Username);
 
-                JourneyListDTO journeyListDTO = restTemplate.getForObject(JOURNEYLIST_URL, JourneyListDTO.class);
-
+                JourneyListDTO journeyListDTO = restTemplate.postForObject(JOURNEYLIST_URL, sdtUserDTO,JourneyListDTO.class);
                 for (JourneyDTO journeyDTO : journeyListDTO.getJourneyDTOList()) {
                     Journey_model journey_model = new Journey_model(journeyDTO.getJourneyName(),journeyDTO.getStartDate(),journeyDTO.getEndDate());
                     journey_model.setJourneyName(journeyDTO.getJourneyName());
                     journey_model.setStartDate(journeyDTO.getStartDate());
                     journey_model.setEndDate(journeyDTO.getEndDate());
+                    if(journeyDTO.getJourneyFieldResearcherListDTO()!= null){
+                        List<JourneyFieldResearcherDTO> frList= journeyDTO.getJourneyFieldResearcherListDTO().getJourneyFieldResearcherDTOList();
 
+                        for (JourneyFieldResearcherDTO t:frList)
+                        {
+                                journey_model.setCompleted(t.getStatus());
+                                Log.d("t.getStatus",t.getStatus());
+                        }
+                   }
                     touchpointData.add(journey_model);
                 }
                 return journeyListDTO;

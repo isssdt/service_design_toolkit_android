@@ -9,23 +9,76 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 
 import java.io.Serializable;
 import java.util.Date;
+
+import user.dto.JourneyFieldResearcherListDTO;
+
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class JourneyDTO implements Serializable {
+
     private String journeyName;
     private Integer noOfFieldResearcher;
     private Character isActive;
     private Date startDate;
     private Date endDate;
     private Character canBeRegistered;
+    private String description;
+    private Character isSequence;
+    private JourneyFieldResearcherListDTO journeyFieldResearcherListDTO;
 
-    public JourneyDTO( String journeyName, Date startDate, Date endDate) {
-        this.endDate = endDate;
-        this.startDate = startDate;
-        this.journeyName = journeyName;
+    public JourneyDTO() {
     }
 
-    public JourneyDTO(){}
+    public JourneyDTO(String journeyName, Integer noOfFieldResearcher, Character isActive, Date startDate, Date endDate, Character canBeRegistered, String description) {
+        this.journeyName = journeyName;
+        this.noOfFieldResearcher = noOfFieldResearcher;
+        this.isActive = isActive;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.canBeRegistered = canBeRegistered;
+        this.description = description;
+    }
+
+    public Character getIsSequence() {
+        return isSequence;
+    }
+
+    public void setIsSequence(Character isSequence) {
+        this.isSequence = isSequence;
+    }
+
+    public JourneyFieldResearcherListDTO getJourneyFieldResearcherListDTO() {
+        return journeyFieldResearcherListDTO;
+    }
+
+    public void setJourneyFieldResearcherListDTO(JourneyFieldResearcherListDTO journeyFieldResearcherListDTO) {
+        this.journeyFieldResearcherListDTO = journeyFieldResearcherListDTO;
+    }
+
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Character getCanBeRegistered() {
+        return canBeRegistered;
+    }
+
+    public void setCanBeRegistered(Character canBeRegistered) {
+        this.canBeRegistered = canBeRegistered;
+    }
+
+    public Date getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
+    }
 
     public String getJourneyName() {
         return journeyName;
@@ -51,19 +104,16 @@ public class JourneyDTO implements Serializable {
         this.isActive = isActive;
     }
 
-    public Date getStartDate() {
-        return startDate;
-    }
-
-    public void setStartDate(Date startDate) {
-        this.startDate = startDate;
-    }
-
     public Date getEndDate() {
         return endDate;
     }
 
     public void setEndDate(Date endDate) {
         this.endDate = endDate;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return journeyName.equals(((JourneyDTO)obj).getJourneyName());
     }
 }

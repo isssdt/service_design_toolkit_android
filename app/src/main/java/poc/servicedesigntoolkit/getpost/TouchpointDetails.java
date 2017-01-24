@@ -6,6 +6,7 @@ import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -128,6 +129,8 @@ public class TouchpointDetails extends AppCompatActivity implements View.OnClick
             comment_edit.setText("");
 
         } else if (v == photo) {
+            int permissionCheck = ContextCompat.checkSelfPermission(TouchpointDetails.this,
+                    Manifest.permission.CAMERA);
             ActivityCompat.requestPermissions(TouchpointDetails.this,
                     new String[]{Manifest.permission.CAMERA},
                     1);

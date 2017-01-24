@@ -43,6 +43,11 @@ public class Journey_recycle_adapter extends RecyclerView.Adapter<Journey_recycl
         Journey_model getDataAdapter1 = getDataAdapter.get(position);
         Log.d("check flow","-->1");
         holder.JourneyTextView.setText(getDataAdapter1.getJourneyName());
+        if("DONE".equals(getDataAdapter1.getCompleted())){
+
+            Log.d("DONE",getDataAdapter1.getCompleted());
+            holder.viewJourney.setText("View");
+        }
     }
 
     @Override

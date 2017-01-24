@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -50,6 +51,7 @@ public class Journey_Visualization extends AppCompatActivity {
     private static final String COMPLETE_URL = APIUrl.API_MARK_JOURNEY_COMPLETED;
     ArrayList<Touchpoint_model> touchpointData;
     ListView list;
+    TextView journeyName,journeydesc;
     Button submitJourney;
 
     @Override
@@ -64,11 +66,16 @@ public class Journey_Visualization extends AppCompatActivity {
         }
         Username = ((JourneyFieldResearcherDTO) extras.get(ConstantValues.BUNDLE_KEY_JOURNEY_FIELD_RESEARCHER_DTO)).getFieldResearcherDTO().getSdtUserDTO().getUsername();
         Message = (String) extras.get("Message");
+
         touchpointData = new ArrayList<Touchpoint_model>();
 
         submitJourney = (Button) findViewById(R.id.submitJourney1);
         list = (ListView) findViewById(R.id.list);
+        journeyName = (TextView) findViewById(R.id.displayJourneyName);
+        journeydesc = (TextView) findViewById(R.id.displayJourneyDesc);
         new HttpRequestTask().execute();
+
+        journeyName.setText(JourneyName);
 
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
