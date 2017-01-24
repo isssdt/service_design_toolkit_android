@@ -19,6 +19,7 @@ import poc.servicedesigntoolkit.getpost.journey.view.JourneyDTO;
 public class JourneyListDTO implements Serializable {
 
     public JourneyListDTO(){}
+
     private List<JourneyDTO> journeyDTOList = new ArrayList<>();
 
     public JourneyListDTO(List<JourneyDTO> journeyDTOList) {

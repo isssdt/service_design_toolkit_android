@@ -11,6 +11,7 @@ public class Journey_model
     String journeyName;
     Date startDate;
     Date endDate;
+    String completed;
 
     public Journey_model(){
 
@@ -44,6 +45,10 @@ public class Journey_model
     public void setEndDate(Date endDate) {
         this.endDate = endDate;
     }
+
+    public String getCompleted() {return completed;}
+
+    public void setCompleted(String completed) {this.completed = completed;}
 
 
 }

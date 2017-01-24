@@ -105,8 +105,7 @@ public class JourneyListActivity extends AppCompatActivity {
 
                 Log.d("Start"," "+model.getStartDate());
                 adb.setMessage("Journey Name : " + model.getJourneyName()+"\n"+
-                                    "Start Date : "+start+"\n"+
-                                    "End Date : "+end);
+                                    "Date : "+start+" - "+end);
                     adb.setPositiveButton("Sign Up", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
@@ -203,14 +202,13 @@ public class JourneyListActivity extends AppCompatActivity {
                 sdtUserDTO.setUsername(Username);
 
                 JourneyListDTO journeyListDTO = restTemplate.getForObject(JOURNEYLIST_URL, JourneyListDTO.class);
+
                 for (JourneyDTO journeyDTO : journeyListDTO.getJourneyDTOList()) {
-                    Log.d("Journey Name ",journeyDTO.getJourneyName());
-                    Log.d("Start Date ",journeyDTO.getStartDate().toString());
-                    Log.d("End Date ",journeyDTO.getEndDate().toString());
                     Journey_model journey_model = new Journey_model(journeyDTO.getJourneyName(),journeyDTO.getStartDate(),journeyDTO.getEndDate());
                     journey_model.setJourneyName(journeyDTO.getJourneyName());
                     journey_model.setStartDate(journeyDTO.getStartDate());
                     journey_model.setEndDate(journeyDTO.getEndDate());
+
                     touchpointData.add(journey_model);
                 }
                 return journeyListDTO;
@@ -229,6 +227,7 @@ public class JourneyListActivity extends AppCompatActivity {
             recyclerView.setLayoutManager(llm);
             recyclerView.setAdapter(recyclerViewadapter);
             recyclerViewadapter.notifyDataSetChanged();
+
 
 
            /* journeyAdapter = new ArrayAdapter(JourneyListActivity.this, android.R.layout.simple_list_item_1, journeyList);
