@@ -43,6 +43,7 @@ public class TouchpointDetails extends AppCompatActivity implements View.OnClick
     private static final String COMPLETE_URL = APIUrl.API_MARK_JOURNEY_COMPLETED;
     private static final String completed = "Please informed that you have completed work for all Touch Points";
     private static final String completed_confirmation = "Journey has been marked as Completed";
+    private static final int take_photo_request_code =1;
     EditText touchpointName_edit, channelDescription_edit, channel_edit, action_edit, comment_edit, reaction_edit;
     RatingBar ratingBar;
     TextView image;
@@ -129,13 +130,13 @@ public class TouchpointDetails extends AppCompatActivity implements View.OnClick
             comment_edit.setText("");
 
         } else if (v == photo) {
-            int permissionCheck = ContextCompat.checkSelfPermission(TouchpointDetails.this,
-                    Manifest.permission.CAMERA);
-            ActivityCompat.requestPermissions(TouchpointDetails.this,
-                    new String[]{Manifest.permission.CAMERA},
-                    1);
-            Intent i = new Intent(TouchpointDetails.this, SelectPhoto.class);
-            startActivity(i);
+            if (ContextCompat.checkSelfPermission(TouchpointDetails.this, Manifest.permission.CAMERA)
+                    != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(TouchpointDetails.this, new String[]{Manifest.permission.CAMERA}, take_photo_request_code);
+            } else {
+                Intent i = new Intent(TouchpointDetails.this, SelectPhoto.class);
+                startActivity(i);
+            }
         }
     }
 
@@ -143,11 +144,11 @@ public class TouchpointDetails extends AppCompatActivity implements View.OnClick
     public void onRequestPermissionsResult(int requestCode,
                                            String permissions[], int[] grantResults) {
         switch (requestCode) {
-            case 1: {
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            case take_photo_request_code: {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Intent i = new Intent(TouchpointDetails.this, SelectPhoto.class);
+                    startActivity(i);
                 } else {
-
                     Toast.makeText(TouchpointDetails.this, "Permission denied to read your CAMERA", Toast.LENGTH_SHORT).show();
                 }
                 return;
