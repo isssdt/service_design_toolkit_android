@@ -1,9 +1,13 @@
 package journey.activity;
 
+import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -41,7 +45,9 @@ import journeyVisualization.Journey_Visualization;
 import journeyemotion.emotionMeter;
 import poc.servicedesigntoolkit.getpost.AppController;
 import poc.servicedesigntoolkit.getpost.R;
+import poc.servicedesigntoolkit.getpost.SelectPhoto;
 import poc.servicedesigntoolkit.getpost.Touchpoint.RecyclerTouchListener;
+import poc.servicedesigntoolkit.getpost.TouchpointDetails;
 import poc.servicedesigntoolkit.getpost.journey.view.JourneyDTO;
 import poc.servicedesigntoolkit.getpost.journey.view.Journey_model;
 import poc.servicedesigntoolkit.getpost.journey.view.Journey_recycle_adapter;
@@ -55,6 +61,7 @@ public class JourneyListActivity extends AppCompatActivity {
     private static final String REGISTER_URL = APIUrl.API_REGISTER_FIELD_RESEARCHER_WITH_JOURNEY;
     private static final String TAG_JOURNEYLIST = "journeyDTOList";
     private static final String TAG_JOURNEYNAME = "journeyName";
+    private static final int share_location_request_code = 2;
     //ListView listView;
     String Username;
     List<Journey_model> touchpointData;
@@ -111,7 +118,13 @@ public class JourneyListActivity extends AppCompatActivity {
                     adb.setPositiveButton("Sign Up", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            registeruser(model.getJourneyName());
+                            if (ContextCompat.checkSelfPermission(JourneyListActivity.this, Manifest.permission.ACCESS_FINE_LOCATION)
+                                    != PackageManager.PERMISSION_GRANTED) {
+                                ActivityCompat.requestPermissions(JourneyListActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, share_location_request_code);
+                            } else {
+                                registeruser(model.getJourneyName());
+                            }
+
                         }
                     });
                     adb.setNegativeButton("Cancel", null);
@@ -125,6 +138,21 @@ public class JourneyListActivity extends AppCompatActivity {
 
             }
         }));
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case share_location_request_code: {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    //registeruser(model.getJourneyName());
+                } else {
+                    Toast.makeText(JourneyListActivity.this, "Permission denied to get your LOCATION", Toast.LENGTH_SHORT).show();
+                }
+                return;
+            }
+        }
     }
 
     public void registeruser(String journey) {
