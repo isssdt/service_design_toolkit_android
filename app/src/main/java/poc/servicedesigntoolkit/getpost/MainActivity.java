@@ -22,11 +22,14 @@ public class MainActivity extends AppCompatActivity {
     public void onBackPressed() {
         AlertDialog.Builder exit = new AlertDialog.Builder(
                 MainActivity.this);
-        exit.setMessage(" Thank you for your participation. See you soon");
-        exit.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            exit.setMessage(" Thank you for your participation. See you soon");
+            exit.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                finish();
+                Intent intent = new Intent(Intent.ACTION_MAIN);
+                intent.addCategory(Intent.CATEGORY_HOME);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
             }
         });
         exit.setNegativeButton("No", null);

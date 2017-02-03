@@ -25,8 +25,10 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        android:screenOrientation="portrait">
         <activity android:name=".MainActivity"
+            android:screenOrientation="portrait"
             android:label="Service Design Toolkit">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -44,28 +46,35 @@
 
         <activity
             android:name=".journey.view.Journey_recycle"
-            android:label="@string/title_journey_list" />
+            android:label="@string/title_journey_list"
+            android:screenOrientation="portrait"/>
 
         <activity
             android:name="journeyVisualization.Journey_Visualization"
-            android:label="@string/title_activity_touchpoint" />
+            android:label="@string/title_activity_touchpoint"
+            android:screenOrientation="portrait"/>
 
         <activity
             android:name="journey.activity.JourneyListActivity"
-            android:label="@string/title_journey_list" />
+            android:label="@string/title_journey_list"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".TouchpointDetails"
-            android:label="@string/title_touchpoint_details" />
+            android:label="@string/title_touchpoint_details"
+            android:screenOrientation="portrait"/>
         <activity
             android:name="touchpoint.activity.TouchPointListActivity"
-            android:label="@string/title_touchpoint_list" />
+            android:label="@string/title_touchpoint_list"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".SelectPhoto"
-            android:label="@string/title_select_photo" />
+            android:label="@string/title_select_photo"
+            android:screenOrientation="portrait"/>
 
         <activity
             android:name="journeyemotion.emotionMeter"
-            android:label="My Journey" />
+            android:label="My Journey"
+            android:screenOrientation="portrait"/>
 
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.

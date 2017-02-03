@@ -53,8 +53,11 @@ public visualization_adapter(Context context, List<Touchpoint_model> objects) {
         viewHolder.timeline.setTimelineType(TimelineView.TYPE_MIDDLE);
 
 
-    viewHolder.timeline.setTimelineAlignment(TimelineView.ALIGNMENT_DEFAULT);
-
+        viewHolder.timeline.setTimelineAlignment(TimelineView.ALIGNMENT_DEFAULT);
+    Log.d("Status",data.getStatus());
+        if("DONE".equals(data.getStatus())){
+            viewHolder.text.setTextColor(Color.GREEN);
+        }
         return convertView;
         }
 

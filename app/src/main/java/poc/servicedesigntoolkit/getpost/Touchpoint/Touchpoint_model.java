@@ -31,6 +31,10 @@ public class Touchpoint_model {
         this.channel = channel;
     }
 
+    public Touchpoint_model() {
+
+    }
+
     public String getAction() {
         return action;
     }

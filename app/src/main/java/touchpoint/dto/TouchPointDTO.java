@@ -3,6 +3,10 @@ package touchpoint.dto;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
+import java.math.BigDecimal;
+
+import poc.servicedesigntoolkit.getpost.journey.view.JourneyDTO;
+
 /**
  * Created by longnguyen on 11/6/16.
  */
@@ -17,7 +21,69 @@ public class TouchPointDTO {
     private String radius;
     private String action;
     private String channelDescription;
+    private BigDecimal duration;
     private ChannelDTO channelDTO;
+    private JourneyDTO journeyDTO;
+    private Integer no_like;
+    private Integer no_dislike;
+    private Integer no_neutral;
+
+    public TouchPointDTO() {
+
+    }
+
+    public TouchPointDTO(Integer id, String touchPointDesc, String latitude, String longitude, String radius,
+                         String action, String channelDescription, ChannelDTO channelDTO, JourneyDTO journeyDTO) {
+        this.id = id;
+        this.touchPointDesc = touchPointDesc;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.radius = radius;
+        this.action = action;
+        this.channelDescription = channelDescription;
+        this.channelDTO = channelDTO;
+        this.journeyDTO = journeyDTO;
+    }
+
+    public Integer getNo_like() {
+        return no_like;
+    }
+
+    public void setNo_like(Integer no_like) {
+        this.no_like = no_like;
+    }
+
+    public Integer getNo_dislike() {
+        return no_dislike;
+    }
+
+    public void setNo_dislike(Integer no_dislike) {
+        this.no_dislike = no_dislike;
+    }
+
+    public Integer getNo_neutral() {
+        return no_neutral;
+    }
+
+    public void setNo_neutral(Integer no_neutral) {
+        this.no_neutral = no_neutral;
+    }
+
+    public BigDecimal getDuration() {
+        return duration;
+    }
+
+    public void setDuration(BigDecimal duration) {
+        this.duration = duration;
+    }
+
+    public JourneyDTO getJourneyDTO() {
+        return journeyDTO;
+    }
+
+    public void setJourneyDTO(JourneyDTO journeyDTO) {
+        this.journeyDTO = journeyDTO;
+    }
 
     public Integer getId() {
         return id;
@@ -83,4 +149,5 @@ public class TouchPointDTO {
     public void setChannelDescription(String channelDescription) {
         this.channelDescription = channelDescription;
     }
+
 }

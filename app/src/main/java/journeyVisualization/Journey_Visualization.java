@@ -76,7 +76,6 @@ public class Journey_Visualization extends AppCompatActivity {
         new HttpRequestTask().execute();
 
         journeyName.setText(JourneyName);
-
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick (AdapterView < ? > adapter, View view, int position, long arg){

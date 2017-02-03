@@ -28,6 +28,7 @@ public class TouchPointFieldResearcherDTO {
         this.fieldResearcherDTO = fieldResearcherDTO;
     }
 
+
     public TouchPointDTO getTouchpointDTO() {
         return touchpointDTO;
     }

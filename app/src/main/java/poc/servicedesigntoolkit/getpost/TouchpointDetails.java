@@ -1,8 +1,13 @@
 package poc.servicedesigntoolkit.getpost;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Criteria;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
@@ -32,18 +37,20 @@ import touchpoint.dto.TouchPointDTO;
 import touchpoint.dto.TouchPointFieldResearcherDTO;
 import user.dto.FieldResearcherDTO;
 import user.dto.SdtUserDTO;
+import user.dto.locationDTO;
 
 /**
  * Created by Gunjan Pathak on 06-Oct-16.
  */
 
-public class TouchpointDetails extends AppCompatActivity implements View.OnClickListener {
+public class TouchpointDetails extends AppCompatActivity implements View.OnClickListener,LocationListener {
 
     private static final String touchpoint_complete = "Please informed that you have completed work for all Touch Points";
     private static final String COMPLETE_URL = APIUrl.API_MARK_JOURNEY_COMPLETED;
     private static final String completed = "Please informed that you have completed work for all Touch Points";
     private static final String completed_confirmation = "Journey has been marked as Completed";
     private static final int take_photo_request_code =1;
+    private static final int share_location_request_code = 2;
     EditText touchpointName_edit, channelDescription_edit, channel_edit, action_edit, comment_edit, reaction_edit;
     RatingBar ratingBar;
     TextView image;
@@ -51,12 +58,13 @@ public class TouchpointDetails extends AppCompatActivity implements View.OnClick
     ImageButton photo;
     String touchpoint, username, Reaction, Comment, JourneyName, reaction_string, comment_string;
     String name, action, channel_desc, channel;
-    String Rating;
+    double lat,lng;
     Integer id;
     String id_String, rating_string;
     String rating_intent,reaction_intent,comment_intent;
     int rating;
-    String message = "";
+    private LocationManager locationManager;
+    String message = "",provider;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -95,6 +103,10 @@ public class TouchpointDetails extends AppCompatActivity implements View.OnClick
         reset.setOnClickListener(this);
         photo.setOnClickListener(this);
 
+        Criteria criteria = new Criteria();
+        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        provider = locationManager.getBestProvider(criteria, false);
+
         setText();
 
     }
@@ -119,6 +131,7 @@ public class TouchpointDetails extends AppCompatActivity implements View.OnClick
         if (v == submit) {
             if (validate()) {
                 getdetails();
+                locationUpdate();
                 new HttpRequestTask().execute();
                 if(message.equals(completed_confirmation)){
                     Toast.makeText(this, "Your Journey is Completed.", Toast.LENGTH_SHORT).show();
@@ -153,6 +166,15 @@ public class TouchpointDetails extends AppCompatActivity implements View.OnClick
                 }
                 return;
             }
+            case share_location_request_code: {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+
+                } else {
+                    Toast.makeText(TouchpointDetails.this, "Permission denied to get your LOCATION", Toast.LENGTH_SHORT).show();
+                }
+                return;
+            }
         }
     }
 
@@ -169,12 +191,49 @@ public class TouchpointDetails extends AppCompatActivity implements View.OnClick
         }
         return true;
     }
-
+    private void locationUpdate(){
+        if (ContextCompat.checkSelfPermission(TouchpointDetails.this, Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(TouchpointDetails.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, share_location_request_code);
+        } else {
+            Location location = locationManager.getLastKnownLocation(provider);
+            if (location != null) {
+                onLocationChanged(location);
+            } else {
+                Toast.makeText(getApplicationContext(),"Location not available",Toast.LENGTH_SHORT );
+            }
+        }
+    }
     private void getdetails() {
         reaction_string = reaction_edit.getText().toString();
         comment_string = comment_edit.getText().toString();
         rating = (int) ratingBar.getRating();
         rating_string = Integer.toString(rating);
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        lat = location.getLatitude();
+        lng = location.getLongitude();
+        Toast.makeText(this, "Lat : "+lat + " lon : " +lng , Toast.LENGTH_SHORT).show();
+        new LocationUpdate().execute();
+    }
+
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) {
+
+    }
+
+    @Override
+    public void onProviderEnabled(String provider) {
+        Toast.makeText(this, "Enabled new provider " + provider,
+                Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onProviderDisabled(String provider) {
+        Toast.makeText(this, "Disabled provider " + provider,
+                Toast.LENGTH_SHORT).show();
     }
 
 
@@ -244,5 +303,44 @@ public class TouchpointDetails extends AppCompatActivity implements View.OnClick
         }
     }
 
+    private class LocationUpdate extends AsyncTask<Void, Void, RESTResponse> {
+
+        @Override
+        protected RESTResponse doInBackground(Void... params) {
+        try{
+            final String url = APIUrl.API_UDPDATE_FIELD_RESEARCHER_CURRENT_LOCATION;
+            RestTemplate restTemplate = new RestTemplate();
+            restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
+
+            SdtUserDTO sdtUserDTO = new SdtUserDTO();
+            sdtUserDTO.setUsername(username);
+
+            FieldResearcherDTO fieldResearcherDTO = new FieldResearcherDTO();
+            fieldResearcherDTO.setSdtUserDTO(sdtUserDTO);
+            fieldResearcherDTO.setCurrentLatitude(String.valueOf(lat));
+            fieldResearcherDTO.setCurrentLongitude(String.valueOf(lng));
+
+            RESTResponse response =
+                    restTemplate.postForObject(url,fieldResearcherDTO , RESTResponse.class);
+            String locationmessage = response.getMessage();
+            Log.d("Location : ", locationmessage);
+            Log.d("Location : ", fieldResearcherDTO.toString());
+
+        }catch (Exception e){
+        Log.d("Location ","In Exception ");
+        }
+            return null;
+        }
+
+        @Override
+        protected void onPreExecute() {
+
+        }
+
+        @Override
+        protected void onPostExecute(RESTResponse response) {
+
+        }
+    }
 
 }
