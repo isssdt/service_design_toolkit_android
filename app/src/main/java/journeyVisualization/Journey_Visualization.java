@@ -46,12 +46,12 @@ import static poc.servicedesigntoolkit.getpost.R.id.submitJourney;
 
 public class Journey_Visualization extends AppCompatActivity {
 
-    String Username, JourneyName, Message;
+    String Username, JourneyName,JourneyDesc, Message,Expected_time;
     String TOUCHPOINTLIST_URL = APIUrl.API_GET_TOUCH_POINT_LIST_OF_REGISTERED_JOURNEY;
     private static final String COMPLETE_URL = APIUrl.API_MARK_JOURNEY_COMPLETED;
     ArrayList<Touchpoint_model> touchpointData;
     ListView list;
-    TextView journeyName,journeydesc;
+    TextView journeyName,journeyDesc;
     Button submitJourney;
 
     @Override
@@ -61,9 +61,9 @@ public class Journey_Visualization extends AppCompatActivity {
 
         Bundle extras = getIntent().getExtras();
         JourneyFieldResearcherDTO journeyFieldResearcherDTO = (JourneyFieldResearcherDTO) extras.get(ConstantValues.BUNDLE_KEY_JOURNEY_FIELD_RESEARCHER_DTO);
-        if (null != journeyFieldResearcherDTO.getJourneyDTO()) {
+        /*if (null != journeyFieldResearcherDTO.getJourneyDTO().getJourneyName()) {
             JourneyName = journeyFieldResearcherDTO.getJourneyDTO().getJourneyName();
-        }
+        }*/
         Username = ((JourneyFieldResearcherDTO) extras.get(ConstantValues.BUNDLE_KEY_JOURNEY_FIELD_RESEARCHER_DTO)).getFieldResearcherDTO().getSdtUserDTO().getUsername();
         Message = (String) extras.get("Message");
 
@@ -72,14 +72,17 @@ public class Journey_Visualization extends AppCompatActivity {
         submitJourney = (Button) findViewById(R.id.submitJourney1);
         list = (ListView) findViewById(R.id.list);
         journeyName = (TextView) findViewById(R.id.displayJourneyName);
-        journeydesc = (TextView) findViewById(R.id.displayJourneyDesc);
+        journeyDesc = (TextView) findViewById(R.id.displayJourneyDesc);
         new HttpRequestTask().execute();
 
-        journeyName.setText(JourneyName);
+
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick (AdapterView < ? > adapter, View view, int position, long arg){
                     Touchpoint_model model = touchpointData.get(position);
+
+                    Log.d("Expected",model.getDuration().toString());
+
                     Intent i = new Intent(Journey_Visualization.this, TouchpointDetails.class);
                     i.putExtra("Action", model.getAction());
                     i.putExtra("Channel", model.getChannel());
@@ -88,6 +91,7 @@ public class Journey_Visualization extends AppCompatActivity {
                     i.putExtra("Id", model.getId());
                     i.putExtra("Username", Username);
                     i.putExtra("JourneyName", JourneyName);
+                    i.putExtra("Expected_time",model.getDuration());
                     if (null != model.getRating()){
                         i.putExtra("rating",model.getRating());
                         i.putExtra("comment",model.getComment());
@@ -163,11 +167,13 @@ public class Journey_Visualization extends AppCompatActivity {
                     }
 
                     touchpointData.add(model);
-
+                    model.setDuration(touchPointFieldResearcherDTO.getTouchpointDTO().getDuration());
                     model.setId(touchPointFieldResearcherDTO.getTouchpointDTO().getId());
                     model.setChannel_desc(touchPointFieldResearcherDTO.getTouchpointDTO().getChannelDescription());
                     model.setAction(touchPointFieldResearcherDTO.getTouchpointDTO().getAction());
-
+                    JourneyName = touchPointFieldResearcherDTO.getTouchpointDTO().getJourneyDTO().getJourneyName();
+                    JourneyDesc = touchPointFieldResearcherDTO.getTouchpointDTO().getJourneyDTO().getDescription();
+                    //Log.d("JourneyName",touchPointFieldResearcherDTO.getTouchpointDTO().getJourneyDTO().getJourneyName());
                 }
                 return touchPointFieldResearcherListDTO;
             } catch (Exception e) {
@@ -180,7 +186,8 @@ public class Journey_Visualization extends AppCompatActivity {
         @Override
         protected void onPostExecute(TouchPointFieldResearcherListDTO touchPointFieldResearcherListDTO) {
             list.setAdapter(new visualization_adapter(getApplicationContext(),touchpointData));
-
+            journeyName.setText(JourneyName);
+            journeyDesc.setText(JourneyDesc);
             Integer i = 0;
             for (Touchpoint_model touchpoint_model: touchpointData) {
                 if (touchpoint_model.getStatus().equals("DONE")){

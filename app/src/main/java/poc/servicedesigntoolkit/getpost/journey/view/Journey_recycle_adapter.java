@@ -1,6 +1,7 @@
 package poc.servicedesigntoolkit.getpost.journey.view;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -8,9 +9,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.List;
 
+import journeyemotion.emotionMeter;
 import poc.servicedesigntoolkit.getpost.R;
 
 /**
@@ -28,7 +31,6 @@ public class Journey_recycle_adapter extends RecyclerView.Adapter<Journey_recycl
         super();
         this.getDataAdapter = getDataAdapter;
         this.context = context;
-        Log.d("check flow","-->2");
     }
 
     @Override
@@ -39,15 +41,24 @@ public class Journey_recycle_adapter extends RecyclerView.Adapter<Journey_recycl
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
-        Journey_model getDataAdapter1 = getDataAdapter.get(position);
-        Log.d("check flow","-->1");
+    public void onBindViewHolder(final ViewHolder holder, int position) {
+        final Journey_model getDataAdapter1 = getDataAdapter.get(position);
         holder.JourneyTextView.setText(getDataAdapter1.getJourneyName());
         if("DONE".equals(getDataAdapter1.getCompleted())){
-
             Log.d("DONE",getDataAdapter1.getCompleted());
             holder.viewJourney.setText("View");
         }
+        holder.viewJourney.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if("View".equals(holder.viewJourney.getText())){
+                    Intent i =new Intent(v.getContext(), emotionMeter.class);
+                    v.getContext().startActivity(i);
+                }else{
+
+                }
+            }
+        });
     }
 
     @Override

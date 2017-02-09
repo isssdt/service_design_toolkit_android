@@ -19,6 +19,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Toast;
@@ -103,10 +104,18 @@ public class JourneyListActivity extends AppCompatActivity implements LocationLi
         new HttpRequestTask().execute();
         recyclerView.setAdapter(recyclerViewadapter);
         //listView.setAdapter(journeyAdapter);
+        signUp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("try","try" );
+            }
+        });
 
         recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getApplicationContext(), recyclerView, new RecyclerTouchListener.ClickListener() {
             @Override
             public void onClick(View view, int position) {
+
+
                 final Journey_model model =touchpointData.get(position);
 
                 startDate = model.getStartDate();
@@ -122,7 +131,6 @@ public class JourneyListActivity extends AppCompatActivity implements LocationLi
                     i.putExtra("Username", Username);
                     startActivity(i);
                 }else{
-
                     final AlertDialog.Builder adb = new AlertDialog.Builder(JourneyListActivity.this);
                     adb.setTitle("Register");
                     adb.setMessage("Journey Name : " + JourneyName+"\n"+
@@ -143,7 +151,6 @@ public class JourneyListActivity extends AppCompatActivity implements LocationLi
                                 }
                                 registeruser(JourneyName);
                             }
-
                         }
                     });
                     adb.setNegativeButton("Cancel", null);

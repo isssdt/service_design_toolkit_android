@@ -15,15 +15,22 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ListView;
 import android.widget.RatingBar;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
+
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 import common.constants.APIUrl;
 import common.constants.ConstantValues;
@@ -51,15 +58,18 @@ public class TouchpointDetails extends AppCompatActivity implements View.OnClick
     private static final String completed_confirmation = "Journey has been marked as Completed";
     private static final int take_photo_request_code =1;
     private static final int share_location_request_code = 2;
-    EditText touchpointName_edit, channelDescription_edit, channel_edit, action_edit, comment_edit, reaction_edit;
+    EditText touchpointName_edit, channelDescription_edit, channel_edit, action_edit, comment_edit, reaction_edit,expected_edit;
     RatingBar ratingBar;
     TextView image;
     Button submit, reset;
+    Spinner time ;
     ImageButton photo;
     String touchpoint, username, Reaction, Comment, JourneyName, reaction_string, comment_string;
     String name, action, channel_desc, channel;
     double lat,lng;
+    BigDecimal expected_time;
     Integer id;
+    List<String> time_data;
     String id_String, rating_string;
     String rating_intent,reaction_intent,comment_intent;
     int rating;
@@ -68,7 +78,7 @@ public class TouchpointDetails extends AppCompatActivity implements View.OnClick
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_touchpoint_details);
+        setContentView(R.layout.touchpoint_details_1);
 
         Bundle extras = getIntent().getExtras();
 
@@ -77,6 +87,7 @@ public class TouchpointDetails extends AppCompatActivity implements View.OnClick
         JourneyName = (String) extras.get("JourneyName");
         action = (String) extras.get("Action");
         channel = (String) extras.get("Channel");
+        expected_time = (BigDecimal) extras.get("Expected_time");
         channel_desc = (String) extras.get("Channel_Desc");
         name = (String) extras.get("Name");
         id = (Integer) extras.get("Id");
@@ -91,17 +102,20 @@ public class TouchpointDetails extends AppCompatActivity implements View.OnClick
         action_edit = (EditText) findViewById(R.id.action);
         reaction_edit = (EditText) findViewById(R.id.reaction);
         comment_edit = (EditText) findViewById(R.id.comment);
+        expected_edit = (EditText) findViewById(R.id.expected);
 
         image = (TextView) findViewById(R.id.image);
         ratingBar = (RatingBar) findViewById(R.id.ratingBar);
 
         submit = (Button) findViewById(R.id.submit);
-        reset = (Button) findViewById(R.id.reset);
+       // reset = (Button) findViewById(R.id.reset);
         photo = (ImageButton) findViewById(R.id.photo1);
 
+        time = (Spinner) findViewById(R.id.time_unit);
+
         submit.setOnClickListener(this);
-        reset.setOnClickListener(this);
-        photo.setOnClickListener(this);
+//        reset.setOnClickListener(this);
+//        photo.setOnClickListener(this);
 
         Criteria criteria = new Criteria();
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
@@ -113,9 +127,21 @@ public class TouchpointDetails extends AppCompatActivity implements View.OnClick
 
     public void setText() {
 
+        List<String> time_data = new ArrayList<String>();
+        time_data.add("Hours");
+        time_data.add("Days");
+        time_data.add("Months");
+
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, time_data);
+
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        time.setAdapter(dataAdapter);
+
+
         touchpointName_edit.setText(name);
         channel_edit.setText(channel);
         action_edit.setText(action);
+        expected_edit.setText(expected_time.toString() + " Hours" );
         channelDescription_edit.setText(channel_desc);
         if(null != rating_intent){
             ratingBar.setRating(Float.parseFloat(rating_intent));
@@ -137,7 +163,7 @@ public class TouchpointDetails extends AppCompatActivity implements View.OnClick
                     Toast.makeText(this, "Your Journey is Completed.", Toast.LENGTH_SHORT).show();
                 }
             }
-        } else if (v == reset) {
+        }/* else if (v == reset) {
             ratingBar.setRating(0);
             reaction_edit.setText("");
             comment_edit.setText("");
@@ -150,7 +176,7 @@ public class TouchpointDetails extends AppCompatActivity implements View.OnClick
                 Intent i = new Intent(TouchpointDetails.this, SelectPhoto.class);
                 startActivity(i);
             }
-        }
+        }*/
     }
 
     @Override
@@ -199,7 +225,7 @@ public class TouchpointDetails extends AppCompatActivity implements View.OnClick
             Location location = locationManager.getLastKnownLocation(provider);
             if (location != null) {
                 onLocationChanged(location);
-            } else {
+            }else {
                 Toast.makeText(getApplicationContext(),"Location not available",Toast.LENGTH_SHORT );
             }
         }
@@ -215,13 +241,12 @@ public class TouchpointDetails extends AppCompatActivity implements View.OnClick
     public void onLocationChanged(Location location) {
         lat = location.getLatitude();
         lng = location.getLongitude();
-        Toast.makeText(this, "Lat : "+lat + " lon : " +lng , Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, "Lat : "+lat + " lon : " +lng , Toast.LENGTH_SHORT).show();
         new LocationUpdate().execute();
     }
 
     @Override
     public void onStatusChanged(String provider, int status, Bundle extras) {
-
     }
 
     @Override
@@ -279,8 +304,6 @@ public class TouchpointDetails extends AppCompatActivity implements View.OnClick
                     i.putExtra("Username", username);
                     i.putExtra("JourneyName", JourneyName);
                     startActivity(i);
-
-
                 return response;
             } catch (Exception e) {
                 Log.e("MainActivity", e.getMessage(), e);

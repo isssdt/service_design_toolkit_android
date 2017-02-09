@@ -1,5 +1,7 @@
 package poc.servicedesigntoolkit.getpost.Touchpoint;
 
+import java.math.BigDecimal;
+
 /**
  * Created by Gunjan Pathak on 08-Nov-16.
  */
@@ -11,10 +13,12 @@ public class Touchpoint_model {
     String channel;
     String channel_desc;
     Integer id;
+    BigDecimal duration;
     String action;
     String rating;
     String reaction;
     String comment;
+
 
     public Touchpoint_model(String name, String status, String channel, String rating, String reaction, String comment) {
         this.name = name;
@@ -98,4 +102,8 @@ public class Touchpoint_model {
     public void setComment(String comment) {
         this.comment = comment;
     }
+
+    public BigDecimal getDuration() { return duration; }
+
+    public void setDuration(BigDecimal duration) { this.duration = duration; }
 }

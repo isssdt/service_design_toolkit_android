@@ -115,8 +115,7 @@
                     android:layout_alignStart="@+id/textView5"
                     android:layout_below="@+id/Name"
                     android:focusable="false"
-                    android:text="What I need to do"
-                     />
+                    android:text="What I need to do" />
 
                 <TextView
                     android:id="@+id/textView4"
@@ -127,8 +126,7 @@
                     android:layout_alignRight="@+id/touchpoint"
                     android:layout_alignStart="@+id/touchpoint"
                     android:layout_below="@+id/touchpoint_name"
-                    android:text="Using"
-                     />
+                    android:text="Using" />
 
                 <TextView
                     android:id="@+id/textView5"
@@ -139,8 +137,7 @@
                     android:layout_alignRight="@+id/channel"
                     android:layout_alignStart="@+id/textView4"
                     android:layout_below="@+id/channel"
-                    android:text="Description"
-                     />
+                    android:text="Description" />
 
                 <EditText
                     android:id="@+id/action"
@@ -164,8 +161,7 @@
                     android:layout_alignRight="@+id/action"
                     android:layout_alignStart="@+id/action_text"
                     android:layout_below="@+id/action"
-                    android:text="Rating"
-                     />
+                    android:text="Rating" />
 
                 <TextView
                     android:id="@+id/comment_text"

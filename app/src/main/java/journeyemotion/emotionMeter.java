@@ -55,7 +55,7 @@ public class emotionMeter extends AppCompatActivity {
         Username = (String) extras.get("Username");
         JourneyName = (String) extras.get("JourneyName");
         new HttpRequestTask().execute();
-        //updateGraph(graph);
+        updateGraph(graph);
     }
 
     public void updateGraph(GraphView graph) {

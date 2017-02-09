@@ -10,8 +10,8 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import user.dto.FieldResearcherDTO;
 
 
-@JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class TouchPointFieldResearcherDTO {
     private FieldResearcherDTO fieldResearcherDTO;
     private TouchPointDTO touchpointDTO;
@@ -19,6 +19,15 @@ public class TouchPointFieldResearcherDTO {
     private String reaction;
     private RatingDTO ratingDTO;
     private String status;
+    private Integer duration;
+
+    public Integer getDuration() {
+        return duration;
+    }
+
+    public void setDuration(Integer duration) {
+        this.duration = duration;
+    }
 
     public FieldResearcherDTO getFieldResearcherDTO() {
         return fieldResearcherDTO;
@@ -27,7 +36,6 @@ public class TouchPointFieldResearcherDTO {
     public void setFieldResearcherDTO(FieldResearcherDTO fieldResearcherDTO) {
         this.fieldResearcherDTO = fieldResearcherDTO;
     }
-
 
     public TouchPointDTO getTouchpointDTO() {
         return touchpointDTO;
