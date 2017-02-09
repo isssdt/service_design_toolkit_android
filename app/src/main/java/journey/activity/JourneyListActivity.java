@@ -100,17 +100,18 @@ public class JourneyListActivity extends AppCompatActivity implements LocationLi
         new HttpRequestTask().execute();
         recyclerView.setAdapter(recyclerViewadapter);
         //listView.setAdapter(journeyAdapter);
+/*
         signUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.d("try","try" );
             }
         });
+*/
 
         recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getApplicationContext(), recyclerView, new RecyclerTouchListener.ClickListener() {
             @Override
             public void onClick(View view, int position) {
-
 
                 final Journey_model model =touchpointData.get(position);
 

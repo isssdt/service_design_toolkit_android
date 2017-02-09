@@ -48,17 +48,6 @@ public class Journey_recycle_adapter extends RecyclerView.Adapter<Journey_recycl
             Log.d("DONE",getDataAdapter1.getCompleted());
             holder.viewJourney.setText("View");
         }
-        holder.viewJourney.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if("View".equals(holder.viewJourney.getText())){
-                    Intent i =new Intent(v.getContext(), emotionMeter.class);
-                    v.getContext().startActivity(i);
-                }else{
-
-                }
-            }
-        });
     }
 
     @Override

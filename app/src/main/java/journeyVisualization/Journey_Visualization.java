@@ -92,10 +92,13 @@ public class Journey_Visualization extends AppCompatActivity {
                     i.putExtra("Username", Username);
                     i.putExtra("JourneyName", JourneyName);
                     i.putExtra("Expected_time",model.getDuration());
+                    i.putExtra("Expected_unit",model.getExpectedunit());
+
                     if (null != model.getRating()){
                         i.putExtra("rating",model.getRating());
                         i.putExtra("comment",model.getComment());
                         i.putExtra("reaction",model.getReaction());
+                        i.putExtra("Actual_time",model.getActualduration().toString());
                     }
                     startActivity(i);
                 }
@@ -164,9 +167,11 @@ public class Journey_Visualization extends AppCompatActivity {
                         model.setRating(touchPointFieldResearcherDTO.getRatingDTO().getValue());
                         model.setReaction(touchPointFieldResearcherDTO.getReaction());
                         model.setComment(touchPointFieldResearcherDTO.getComments());
+                        model.setActualduration(touchPointFieldResearcherDTO.getDuration());
                     }
 
                     model.setDuration(touchPointFieldResearcherDTO.getTouchpointDTO().getDuration());
+                    model.setExpectedunit(touchPointFieldResearcherDTO.getTouchpointDTO().getMasterDataDTO().getDataValue());
                     model.setId(touchPointFieldResearcherDTO.getTouchpointDTO().getId());
                     model.setChannel_desc(touchPointFieldResearcherDTO.getTouchpointDTO().getChannelDescription());
                     model.setAction(touchPointFieldResearcherDTO.getTouchpointDTO().getAction());

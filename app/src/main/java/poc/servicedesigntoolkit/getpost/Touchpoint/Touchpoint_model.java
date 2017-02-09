@@ -1,5 +1,7 @@
 package poc.servicedesigntoolkit.getpost.Touchpoint;
 
+import android.content.Intent;
+
 import java.math.BigDecimal;
 
 /**
@@ -13,12 +15,23 @@ public class Touchpoint_model {
     String channel;
     String channel_desc;
     Integer id;
-    BigDecimal duration;
+    Integer duration;
+    String expectedunit;
     String action;
     String rating;
     String reaction;
     String comment;
     String unit;
+    Integer actualduration;
+
+    public Integer getActualduration() {
+        return actualduration;
+    }
+
+    public void setActualduration(Integer actualduration) {
+        this.actualduration = actualduration;
+    }
+
 
 
     public Touchpoint_model(String name, String status, String channel, String rating, String reaction, String comment) {
@@ -38,6 +51,14 @@ public class Touchpoint_model {
 
     public Touchpoint_model() {
 
+    }
+
+    public String getExpectedunit() {
+        return expectedunit;
+    }
+
+    public void setExpectedunit(String expectedunit) {
+        this.expectedunit = expectedunit;
     }
 
     public String getUnit() {
@@ -112,7 +133,7 @@ public class Touchpoint_model {
         this.comment = comment;
     }
 
-    public BigDecimal getDuration() { return duration; }
+    public Integer getDuration() { return duration; }
 
-    public void setDuration(BigDecimal duration) { this.duration = duration; }
+    public void setDuration(Integer duration) { this.duration = duration; }
 }

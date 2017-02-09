@@ -3,8 +3,10 @@ package touchpoint.dto;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 
+import common.dto.MasterDataDTO;
 import journey.dto.JourneyDTO;
 
 /**
@@ -13,7 +15,8 @@ import journey.dto.JourneyDTO;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class TouchPointDTO {
+public class TouchPointDTO implements Serializable {
+
     private Integer id;
     private String touchPointDesc;
     private String latitude;
@@ -21,7 +24,8 @@ public class TouchPointDTO {
     private String radius;
     private String action;
     private String channelDescription;
-    private BigDecimal duration;
+    private Integer duration;
+    private MasterDataDTO masterDataDTO;
     private ChannelDTO channelDTO;
     private JourneyDTO journeyDTO;
     private Integer no_like;
@@ -43,6 +47,22 @@ public class TouchPointDTO {
         this.channelDescription = channelDescription;
         this.channelDTO = channelDTO;
         this.journeyDTO = journeyDTO;
+    }
+
+    public Integer getDuration() {
+        return duration;
+    }
+
+    public void setDuration(Integer duration) {
+        this.duration = duration;
+    }
+
+    public MasterDataDTO getMasterDataDTO() {
+        return masterDataDTO;
+    }
+
+    public void setMasterDataDTO(MasterDataDTO masterDataDTO) {
+        this.masterDataDTO = masterDataDTO;
     }
 
     public Integer getNo_like() {
@@ -67,14 +87,6 @@ public class TouchPointDTO {
 
     public void setNo_neutral(Integer no_neutral) {
         this.no_neutral = no_neutral;
-    }
-
-    public BigDecimal getDuration() {
-        return duration;
-    }
-
-    public void setDuration(BigDecimal duration) {
-        this.duration = duration;
     }
 
     public JourneyDTO getJourneyDTO() {

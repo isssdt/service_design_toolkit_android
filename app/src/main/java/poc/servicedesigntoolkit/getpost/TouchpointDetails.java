@@ -49,26 +49,23 @@ import user.dto.SdtUserDTO;
 
 public class TouchpointDetails extends AppCompatActivity implements View.OnClickListener,LocationListener {
 
-    private static final String touchpoint_complete = "Please informed that you have completed work for all Touch Points";
-    private static final String COMPLETE_URL = APIUrl.API_MARK_JOURNEY_COMPLETED;
-    private static final String completed = "Please informed that you have completed work for all Touch Points";
     private static final String completed_confirmation = "Journey has been marked as Completed";
     private static final int take_photo_request_code =1;
     private static final int share_location_request_code = 2;
-    EditText touchpointName_edit, channelDescription_edit, channel_edit, action_edit, comment_edit, reaction_edit,expected_edit;
+    EditText touchpointName_edit, channelDescription_edit, channel_edit, action_edit, comment_edit, reaction_edit,expected_edit,actual_edit;
     RatingBar ratingBar;
     TextView image;
     Button submit, reset;
     Spinner time ;
     ImageButton photo;
-    String touchpoint, username, Reaction, Comment, JourneyName, reaction_string, comment_string;
-    String name, action, channel_desc, channel;
+    String touchpoint, username, actual_time, JourneyName, reaction_string, comment_string;
+    String name, action, channel_desc, channel,expected_unit;
     double lat,lng;
-    BigDecimal expected_time;
+    Integer expected_time;
     Integer id;
     List<String> time_data;
     String id_String, rating_string;
-    String rating_intent,reaction_intent,comment_intent;
+    String rating_intent,reaction_intent,comment_intent, actual_string;
     int rating;
     private LocationManager locationManager;
     String message = "",provider;
@@ -84,7 +81,8 @@ public class TouchpointDetails extends AppCompatActivity implements View.OnClick
         JourneyName = (String) extras.get("JourneyName");
         action = (String) extras.get("Action");
         channel = (String) extras.get("Channel");
-        expected_time = (BigDecimal) extras.get("Expected_time");
+        expected_time = (Integer) extras.get("Expected_time");
+        expected_unit = (String) extras.get("Expected_unit");
         channel_desc = (String) extras.get("Channel_Desc");
         name = (String) extras.get("Name");
         id = (Integer) extras.get("Id");
@@ -92,6 +90,7 @@ public class TouchpointDetails extends AppCompatActivity implements View.OnClick
         rating_intent = (String) extras.get("rating");
         reaction_intent = (String) extras.get("reaction");
         comment_intent = (String) extras.get("comment");
+        actual_time = (String) extras.get("Actual_time");
 
         touchpointName_edit = (EditText) findViewById(R.id.touchpoint_name);
         channel_edit = (EditText) findViewById(R.id.channel);
@@ -100,6 +99,7 @@ public class TouchpointDetails extends AppCompatActivity implements View.OnClick
         reaction_edit = (EditText) findViewById(R.id.reaction);
         comment_edit = (EditText) findViewById(R.id.comment);
         expected_edit = (EditText) findViewById(R.id.expected);
+        actual_edit = (EditText) findViewById(R.id.actual_time);
 
         image = (TextView) findViewById(R.id.image);
         ratingBar = (RatingBar) findViewById(R.id.ratingBar);
@@ -125,9 +125,9 @@ public class TouchpointDetails extends AppCompatActivity implements View.OnClick
     public void setText() {
 
         List<String> time_data = new ArrayList<String>();
-        time_data.add("Hours");
-        time_data.add("Days");
-        time_data.add("Months");
+        time_data.add("Minute");
+        time_data.add("Hour");
+        time_data.add("Day");
 
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, time_data);
 
@@ -138,13 +138,14 @@ public class TouchpointDetails extends AppCompatActivity implements View.OnClick
         touchpointName_edit.setText(name);
         channel_edit.setText(channel);
         action_edit.setText(action);
-        expected_edit.setText(expected_time.toString() );
+        expected_edit.setText(expected_time.toString() + " " + expected_unit );
         channelDescription_edit.setText(channel_desc);
         if(null != rating_intent){
             ratingBar.setRating(Float.parseFloat(rating_intent));
             ratingBar.setIsIndicator(true);
             reaction_edit.setText(reaction_intent);
             comment_edit.setText(comment_intent);
+            actual_edit.setText(actual_time);
         }
     }
 
@@ -232,6 +233,7 @@ public class TouchpointDetails extends AppCompatActivity implements View.OnClick
         comment_string = comment_edit.getText().toString();
         rating = (int) ratingBar.getRating();
         rating_string = Integer.toString(rating);
+        actual_string = actual_edit.getText().toString();
     }
 
     @Override
@@ -280,6 +282,7 @@ public class TouchpointDetails extends AppCompatActivity implements View.OnClick
                 touchPointFieldResearcherDTO.setFieldResearcherDTO(fieldResearcherDTO);
                 touchPointFieldResearcherDTO.setComments(comment_string);
                 touchPointFieldResearcherDTO.setReaction(reaction_string);
+                touchPointFieldResearcherDTO.setDuration(Integer.parseInt(actual_string));
 
                 RatingDTO ratingDTO = new RatingDTO();
                 ratingDTO.setValue(rating_string);
