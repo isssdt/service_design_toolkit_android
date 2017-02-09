@@ -78,7 +78,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/actual_time_text"
             android:ems="10"
-            android:inputType="text"
+            android:inputType="number"
             android:layout_weight="1"
             android:layout_alignLeft="@+id/comment_text"
             android:layout_alignStart="@+id/comment_text" />

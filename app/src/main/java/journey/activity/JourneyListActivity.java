@@ -167,7 +167,7 @@ public class JourneyListActivity extends AppCompatActivity implements LocationLi
     public void onLocationChanged(Location location) {
         double lat = (int) (location.getLatitude());
         double lng = (int) (location.getLongitude());
-        Toast.makeText(this, "Lat : "+lat + " lon : " +lng , Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, "Lat : "+lat + " lon : " +lng , Toast.LENGTH_SHORT).show();
         Log.d("location","lat : "+lat + " lon : "+lng);
     }
 

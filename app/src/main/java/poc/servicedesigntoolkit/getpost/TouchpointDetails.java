@@ -210,9 +210,13 @@ public class TouchpointDetails extends AppCompatActivity implements View.OnClick
             Toast.makeText(TouchpointDetails.this, "Please enter the Rating", Toast.LENGTH_SHORT).show();
             return false;
         } else if (reaction_edit.getText().length() == 0) {
-            Toast.makeText(TouchpointDetails.this, "Please enter the Reaction", Toast.LENGTH_SHORT).show();
+            Toast.makeText(TouchpointDetails.this, "Please enter what did you do", Toast.LENGTH_SHORT).show();
+            return false;
+        } else if (actual_edit.getText().length() == 0) {
+            Toast.makeText(TouchpointDetails.this, "Please enter the Time Taken", Toast.LENGTH_SHORT).show();
             return false;
         }
+
         return true;
     }
     private void locationUpdate(){
