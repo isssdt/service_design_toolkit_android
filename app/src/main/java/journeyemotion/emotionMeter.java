@@ -12,7 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.TextView;
 import common.constants.APIUrl;
-import com.google.android.gms.common.api.GoogleApiClient;
+
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.helper.StaticLabelsFormatter;
 import com.jjoe64.graphview.series.DataPointInterface;
@@ -23,7 +23,7 @@ import com.jjoe64.graphview.series.Series;
 import java.util.ArrayList;
 import poc.servicedesigntoolkit.getpost.R;
 import poc.servicedesigntoolkit.getpost.Touchpoint.Touchpoint_model;
-import poc.servicedesigntoolkit.getpost.journey.view.JourneyDTO;
+import journey.dto.JourneyDTO;
 import touchpoint.dto.TouchPointDTO;
 import touchpoint.dto.TouchPointFieldResearcherDTO;
 import touchpoint.dto.TouchPointFieldResearcherListDTO;

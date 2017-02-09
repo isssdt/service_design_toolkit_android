@@ -2,6 +2,7 @@ package poc.servicedesigntoolkit.getpost.journey.view;
 
 import android.content.res.Resources;
 
+import journey.dto.JourneyDTO;
 import journey.dto.JourneyListDTO;
 
 /**

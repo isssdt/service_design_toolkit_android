@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 
 import java.math.BigDecimal;
 
-import poc.servicedesigntoolkit.getpost.journey.view.JourneyDTO;
+import journey.dto.JourneyDTO;
 
 /**
  * Created by longnguyen on 11/6/16.

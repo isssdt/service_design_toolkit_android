@@ -7,8 +7,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import poc.servicedesigntoolkit.getpost.journey.view.JourneyDTO;
-
 /**
  * Created by longnguyen on 11/6/16.
  */

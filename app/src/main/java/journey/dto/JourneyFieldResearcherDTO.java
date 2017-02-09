@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 
 import java.io.Serializable;
 
-import poc.servicedesigntoolkit.getpost.journey.view.JourneyDTO;
 import user.dto.FieldResearcherDTO;
 
 /**

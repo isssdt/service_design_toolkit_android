@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/reaction_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="What did I do"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="24dp"
+        android:layout_marginRight="19dp"
+        android:layout_marginStart="24dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <EditText
+        android:id="@+id/reaction"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/reaction_text"
+        android:layout_alignLeft="@+id/reaction_text"
+        android:layout_marginRight="19dp"
+        android:layout_alignRight="@+id/reaction_text"
+        android:layout_alignStart="@+id/reaction_text"
+        android:layout_below="@+id/reaction_text"
+        android:ems="10"
+        android:inputType="textMultiLine" />
+
+    <TextView
+        android:id="@+id/comment_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/reaction"
+        android:layout_alignLeft="@+id/reaction_text"
+        android:layout_alignRight="@+id/reaction"
+        android:layout_alignStart="@+id/reaction_text"
+        android:layout_below="@+id/reaction"
+        android:text="How I feel"  />
+
+    <EditText
+        android:id="@+id/comment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/comment_text"
+        android:layout_marginRight="19dp"
+        android:ems="10"
+        android:inputType="textMultiLine"
+        android:layout_alignLeft="@+id/comment_text"
+        android:layout_alignStart="@+id/comment_text" />
+    <TextView
+        android:id="@+id/actual_time_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/reaction"
+        android:layout_alignLeft="@+id/reaction_text"
+        android:layout_alignRight="@+id/reaction"
+        android:layout_alignStart="@+id/reaction_text"
+        android:layout_below="@+id/comment"
+        android:text="Time taken to complete"  />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/actual_time_text"
+        android:layout_alignParentRight="true"
+        android:layout_marginLeft="24dp"
+        android:weightSum="2"
+        android:layout_alignParentEnd="true">
+        <EditText
+            android:id="@+id/actual_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/actual_time_text"
+            android:ems="10"
+            android:inputType="text"
+            android:layout_weight="1"
+            android:layout_alignLeft="@+id/comment_text"
+            android:layout_alignStart="@+id/comment_text" />
+
+        <Spinner
+            android:id="@+id/time_unit"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"/>
+    </LinearLayout>
+
+
+</RelativeLayout>

@@ -1,4 +1,4 @@
-package poc.servicedesigntoolkit.getpost.journey.view;
+package journey.dto;
 
 /**
  * Created by longnguyen on 11/6/16.
@@ -9,12 +9,16 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
+import touchpoint.dto.TouchPointDTO;
+import touchpoint.dto.TouchPointListDTO;
 import user.dto.JourneyFieldResearcherListDTO;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class JourneyDTO implements Serializable {
+
 
     private String journeyName;
     private Integer noOfFieldResearcher;
@@ -24,6 +28,8 @@ public class JourneyDTO implements Serializable {
     private Character canBeRegistered;
     private String description;
     private Character isSequence;
+    private TouchPointListDTO touchPointListDTO;
+    private List<TouchPointDTO> touchPointDTOList = null;
     private JourneyFieldResearcherListDTO journeyFieldResearcherListDTO;
 
     public JourneyDTO() {
@@ -55,6 +61,13 @@ public class JourneyDTO implements Serializable {
         this.journeyFieldResearcherListDTO = journeyFieldResearcherListDTO;
     }
 
+    public TouchPointListDTO getTouchPointListDTO() {
+        return touchPointListDTO;
+    }
+
+    public void setTouchPointListDTO(TouchPointListDTO touchPointListDTO) {
+        this.touchPointListDTO = touchPointListDTO;
+    }
 
     public String getDescription() {
         return description;
@@ -78,6 +91,14 @@ public class JourneyDTO implements Serializable {
 
     public void setStartDate(Date startDate) {
         this.startDate = startDate;
+    }
+
+    public List<TouchPointDTO> getTouchPointDTOList() {
+        return touchPointDTOList;
+    }
+
+    public void setTouchPointDTOList(List<TouchPointDTO> touchPointDTOList) {
+        this.touchPointDTOList = touchPointDTOList;
     }
 
     public String getJourneyName() {

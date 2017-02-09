@@ -166,13 +166,13 @@ public class Journey_Visualization extends AppCompatActivity {
                         model.setComment(touchPointFieldResearcherDTO.getComments());
                     }
 
-                    touchpointData.add(model);
                     model.setDuration(touchPointFieldResearcherDTO.getTouchpointDTO().getDuration());
                     model.setId(touchPointFieldResearcherDTO.getTouchpointDTO().getId());
                     model.setChannel_desc(touchPointFieldResearcherDTO.getTouchpointDTO().getChannelDescription());
                     model.setAction(touchPointFieldResearcherDTO.getTouchpointDTO().getAction());
                     JourneyName = touchPointFieldResearcherDTO.getTouchpointDTO().getJourneyDTO().getJourneyName();
                     JourneyDesc = touchPointFieldResearcherDTO.getTouchpointDTO().getJourneyDTO().getDescription();
+                    touchpointData.add(model);
                     //Log.d("JourneyName",touchPointFieldResearcherDTO.getTouchpointDTO().getJourneyDTO().getJourneyName());
                 }
                 return touchPointFieldResearcherListDTO;

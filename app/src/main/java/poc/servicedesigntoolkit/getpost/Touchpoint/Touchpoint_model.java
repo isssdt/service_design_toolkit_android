@@ -18,6 +18,7 @@ public class Touchpoint_model {
     String rating;
     String reaction;
     String comment;
+    String unit;
 
 
     public Touchpoint_model(String name, String status, String channel, String rating, String reaction, String comment) {
@@ -37,6 +38,14 @@ public class Touchpoint_model {
 
     public Touchpoint_model() {
 
+    }
+
+    public String getUnit() {
+        return unit;
+    }
+
+    public void setUnit(String unit) {
+        this.unit = unit;
     }
 
     public String getAction() {

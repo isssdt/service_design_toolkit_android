@@ -19,7 +19,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ListView;
 import android.widget.RatingBar;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -37,14 +36,12 @@ import common.constants.ConstantValues;
 import common.dto.RESTResponse;
 import journey.dto.JourneyFieldResearcherDTO;
 import journeyVisualization.Journey_Visualization;
-import poc.servicedesigntoolkit.getpost.journey.view.JourneyDTO;
-import touchpoint.activity.TouchPointListActivity;
+import journey.dto.JourneyDTO;
 import touchpoint.dto.RatingDTO;
 import touchpoint.dto.TouchPointDTO;
 import touchpoint.dto.TouchPointFieldResearcherDTO;
 import user.dto.FieldResearcherDTO;
 import user.dto.SdtUserDTO;
-import user.dto.locationDTO;
 
 /**
  * Created by Gunjan Pathak on 06-Oct-16.
@@ -141,7 +138,7 @@ public class TouchpointDetails extends AppCompatActivity implements View.OnClick
         touchpointName_edit.setText(name);
         channel_edit.setText(channel);
         action_edit.setText(action);
-        expected_edit.setText(expected_time.toString() + " Hours" );
+        expected_edit.setText(expected_time.toString() );
         channelDescription_edit.setText(channel_desc);
         if(null != rating_intent){
             ratingBar.setRating(Float.parseFloat(rating_intent));
@@ -241,7 +238,6 @@ public class TouchpointDetails extends AppCompatActivity implements View.OnClick
     public void onLocationChanged(Location location) {
         lat = location.getLatitude();
         lng = location.getLongitude();
-        //Toast.makeText(this, "Lat : "+lat + " lon : " +lng , Toast.LENGTH_SHORT).show();
         new LocationUpdate().execute();
     }
 
