@@ -18,10 +18,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ListView;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -50,6 +54,7 @@ import poc.servicedesigntoolkit.getpost.Touchpoint.RecyclerTouchListener;
 import journey.dto.JourneyDTO;
 import poc.servicedesigntoolkit.getpost.journey.view.Journey_model;
 import poc.servicedesigntoolkit.getpost.journey.view.Journey_recycle_adapter;
+import poc.servicedesigntoolkit.getpost.journey.view.MyAdapter;
 import user.dto.FieldResearcherDTO;
 import user.dto.SdtUserDTO;
 
@@ -99,6 +104,19 @@ public class JourneyListActivity extends AppCompatActivity implements LocationLi
 
         new HttpRequestTask().execute();
         recyclerView.setAdapter(recyclerViewadapter);
+
+//        signUp.setOnClickListener(new View.onClickListener() {
+//
+//            public void onClick(View v) {
+//                String text = signUp.getText().toString();
+//                if()
+//
+//            }
+//        });
+
+//        this.info=(TextView)findViewById(R.id.info);
+//        this.info.setOnTouchListener(new TouchListenerImp());
+    }
         //listView.setAdapter(journeyAdapter);
 /*
         signUp.setOnClickListener(new View.OnClickListener() {
@@ -109,59 +127,50 @@ public class JourneyListActivity extends AppCompatActivity implements LocationLi
         });
 */
 
-        recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getApplicationContext(), recyclerView, new RecyclerTouchListener.ClickListener() {
-            @Override
-            public void onClick(View view, int position) {
+    public void showJourneyDetail(int position) {
+        final Journey_model model =touchpointData.get(position);
 
-                final Journey_model model =touchpointData.get(position);
+        startDate = model.getStartDate();
+        endDate = model.getEndDate();
+        format = new SimpleDateFormat("dd MMM yyyy");
+        start = format.format(startDate);
+        end = format.format(endDate);
+        JourneyName = model.getJourneyName();
 
-                startDate = model.getStartDate();
-                endDate = model.getEndDate();
-                format = new SimpleDateFormat("dd MMM yyyy");
-                start = format.format(startDate);
-                end = format.format(endDate);
-                JourneyName = model.getJourneyName();
-
-                if("DONE".equals(model.getCompleted())){
-                    Intent i = new Intent(JourneyListActivity.this,emotionMeter.class);
-                    i.putExtra("JourneyName", JourneyName);
-                    i.putExtra("Username", Username);
-                    startActivity(i);
-                }else{
-                    final AlertDialog.Builder adb = new AlertDialog.Builder(JourneyListActivity.this);
-                    adb.setTitle("Register");
-                    adb.setMessage("Journey Name : " + JourneyName+"\n"+
+        if("DONE".equals(model.getCompleted())){
+            Intent i = new Intent(JourneyListActivity.this,emotionMeter.class);
+            i.putExtra("JourneyName", JourneyName);
+            i.putExtra("Username", Username);
+            startActivity(i);
+        }else{
+            final AlertDialog.Builder adb = new AlertDialog.Builder(JourneyListActivity.this);
+            adb.setTitle("Register");
+            adb.setMessage("Journey Name : " + JourneyName+"\n"+
                             "Date : "+start+" - "+end);
-                    adb.setPositiveButton("Sign Up", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            if (ContextCompat.checkSelfPermission(JourneyListActivity.this, Manifest.permission.ACCESS_FINE_LOCATION)
-                                    != PackageManager.PERMISSION_GRANTED) {
-                                ActivityCompat.requestPermissions(JourneyListActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, share_location_request_code);
-                            } else {
-                                Location location = locationManager.getLastKnownLocation(provider);
-                                if (location != null) {
-                                    System.out.println("Provider " + provider + " has been selected.");
-                                    onLocationChanged(location);
-                                } else {
-                                    Toast.makeText(getApplicationContext(),"Location not available",Toast.LENGTH_SHORT );
-                                }
-                                registeruser(JourneyName);
-                            }
+            adb.setPositiveButton("Sign Up", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    if (ContextCompat.checkSelfPermission(JourneyListActivity.this, Manifest.permission.ACCESS_FINE_LOCATION)
+                            != PackageManager.PERMISSION_GRANTED) {
+                        ActivityCompat.requestPermissions(JourneyListActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, share_location_request_code);
+                    } else {
+                        Location location = locationManager.getLastKnownLocation(provider);
+                        if (location != null) {
+                            System.out.println("Provider " + provider + " has been selected.");
+                            onLocationChanged(location);
+                        } else {
+                            Toast.makeText(getApplicationContext(),"Location not available",Toast.LENGTH_SHORT );
                         }
-                    });
-                    adb.setNegativeButton("Cancel", null);
-                    adb.show();
-
+                        registeruser(JourneyName);
+                    }
                 }
-            }
-
-            @Override
-            public void onLongClick(View view, int position) {
-
-            }
-        }));
+            });
+            adb.setNegativeButton("Cancel", null);
+            adb.show();
+        }
     }
+
+
 
     @Override
     public void onLocationChanged(Location location) {

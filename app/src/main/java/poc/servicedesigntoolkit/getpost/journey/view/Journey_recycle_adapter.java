@@ -27,10 +27,15 @@ public class Journey_recycle_adapter extends RecyclerView.Adapter<Journey_recycl
     List<Journey_model> getDataAdapter;
     JourneyController journeyController;
 
+    public void getView() {};
+
     public Journey_recycle_adapter(List<Journey_model> getDataAdapter, Context context) {
         super();
         this.getDataAdapter = getDataAdapter;
         this.context = context;
+    }
+
+    public Journey_recycle_adapter() {
     }
 
     @Override
@@ -43,6 +48,7 @@ public class Journey_recycle_adapter extends RecyclerView.Adapter<Journey_recycl
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         final Journey_model getDataAdapter1 = getDataAdapter.get(position);
+        //int position=(int)textView.getTag();
         holder.JourneyTextView.setText(getDataAdapter1.getJourneyName());
         if("DONE".equals(getDataAdapter1.getCompleted())){
             Log.d("DONE",getDataAdapter1.getCompleted());
@@ -67,3 +73,5 @@ public class Journey_recycle_adapter extends RecyclerView.Adapter<Journey_recycl
         }
     }
 }
+
+
