@@ -24,6 +24,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 
@@ -33,6 +35,7 @@ import java.util.List;
 
 import common.constants.APIUrl;
 import common.constants.ConstantValues;
+import common.dto.MasterDataDTO;
 import common.dto.RESTResponse;
 import journey.dto.JourneyFieldResearcherDTO;
 import journeyVisualization.Journey_Visualization;
@@ -58,14 +61,14 @@ public class TouchpointDetails extends AppCompatActivity implements View.OnClick
     Button submit, reset;
     Spinner time ;
     ImageButton photo;
-    String touchpoint, username, actual_time, JourneyName, reaction_string, comment_string;
+    String touchpoint, username, actual_time,actual_unit, JourneyName, reaction_string, comment_string;
     String name, action, channel_desc, channel,expected_unit;
     double lat,lng;
     Integer expected_time;
     Integer id;
     List<String> time_data;
     String id_String, rating_string;
-    String rating_intent,reaction_intent,comment_intent, actual_string;
+    String rating_intent,reaction_intent,comment_intent, actual_string,actual_time_unit;
     int rating;
     private LocationManager locationManager;
     String message = "",provider;
@@ -91,6 +94,7 @@ public class TouchpointDetails extends AppCompatActivity implements View.OnClick
         reaction_intent = (String) extras.get("reaction");
         comment_intent = (String) extras.get("comment");
         actual_time = (String) extras.get("Actual_time");
+        actual_unit = (String) extras.get("Actual_unit");
 
         touchpointName_edit = (EditText) findViewById(R.id.touchpoint_name);
         channel_edit = (EditText) findViewById(R.id.channel);
@@ -134,7 +138,8 @@ public class TouchpointDetails extends AppCompatActivity implements View.OnClick
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         time.setAdapter(dataAdapter);
 
-
+        int position = time_data.indexOf(actual_unit);
+        Log.d("Position", ""+position);
         touchpointName_edit.setText(name);
         channel_edit.setText(channel);
         action_edit.setText(action);
@@ -146,6 +151,7 @@ public class TouchpointDetails extends AppCompatActivity implements View.OnClick
             reaction_edit.setText(reaction_intent);
             comment_edit.setText(comment_intent);
             actual_edit.setText(actual_time);
+            time.setSelection(position);
         }
     }
 
@@ -156,7 +162,13 @@ public class TouchpointDetails extends AppCompatActivity implements View.OnClick
             if (validate()) {
                 getdetails();
                 locationUpdate();
-                new HttpRequestTask().execute();
+                if(time.getSelectedItem().equals("Minute") && (Integer.parseInt(String.valueOf(actual_edit.getText())) > 60)){
+                    Toast.makeText(this, "Minutes cannot be greater then 60", Toast.LENGTH_SHORT).show();
+                }else if(time.getSelectedItem().equals("Hour") && (Integer.parseInt(String.valueOf(actual_edit.getText())) > 24)){
+                    Toast.makeText(this, "Hours cannot be greater then 24", Toast.LENGTH_SHORT).show();
+                }else{
+                    new HttpRequestTask().execute();
+                }
                 if(message.equals(completed_confirmation)){
                     Toast.makeText(this, "Your Journey is Completed.", Toast.LENGTH_SHORT).show();
                 }
@@ -238,6 +250,8 @@ public class TouchpointDetails extends AppCompatActivity implements View.OnClick
         rating = (int) ratingBar.getRating();
         rating_string = Integer.toString(rating);
         actual_string = actual_edit.getText().toString();
+        actual_time_unit = time.getSelectedItem().toString();
+        Log.d("actual_time_unit",time.getSelectedItem().toString());
     }
 
     @Override
@@ -272,18 +286,20 @@ public class TouchpointDetails extends AppCompatActivity implements View.OnClick
                 RestTemplate restTemplate = new RestTemplate();
                 restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
 
-                SdtUserDTO sdtUserDTO = new SdtUserDTO();
-                sdtUserDTO.setUsername(username);
 
                 FieldResearcherDTO fieldResearcherDTO = new FieldResearcherDTO();
+
+
+                SdtUserDTO sdtUserDTO = new SdtUserDTO();
+                sdtUserDTO.setUsername(username);
                 fieldResearcherDTO.setSdtUserDTO(sdtUserDTO);
 
                 TouchPointDTO touchPointDTO = new TouchPointDTO();
                 touchPointDTO.setId(Integer.parseInt(id_String));
 
                 TouchPointFieldResearcherDTO touchPointFieldResearcherDTO = new TouchPointFieldResearcherDTO();
-                touchPointFieldResearcherDTO.setTouchpointDTO(touchPointDTO);
                 touchPointFieldResearcherDTO.setFieldResearcherDTO(fieldResearcherDTO);
+                touchPointFieldResearcherDTO.setTouchpointDTO(touchPointDTO);
                 touchPointFieldResearcherDTO.setComments(comment_string);
                 touchPointFieldResearcherDTO.setReaction(reaction_string);
                 touchPointFieldResearcherDTO.setDuration(Integer.parseInt(actual_string));
@@ -292,10 +308,20 @@ public class TouchpointDetails extends AppCompatActivity implements View.OnClick
                 ratingDTO.setValue(rating_string);
                 touchPointFieldResearcherDTO.setRatingDTO(ratingDTO);
 
+
+                MasterDataDTO masterDataDTO = new MasterDataDTO();
+                masterDataDTO.setDataValue(actual_time_unit);
+                touchPointFieldResearcherDTO.setDurationUnitDTO(masterDataDTO);
+
+                Gson gson = new Gson();
+                String json = gson.toJson(touchPointFieldResearcherDTO);
+
+                Log.d("DATA",json);
+
                 RESTResponse response =
                         restTemplate.postForObject(url, touchPointFieldResearcherDTO, RESTResponse.class);
                 message = response.getMessage();
-
+                Log.d("message",message);
                 Intent i = new Intent(TouchpointDetails.this, Journey_Visualization.class);
                 JourneyFieldResearcherDTO journeyFieldResearcherDTO = new JourneyFieldResearcherDTO();
                 journeyFieldResearcherDTO.setJourneyDTO(new JourneyDTO());
@@ -325,7 +351,6 @@ public class TouchpointDetails extends AppCompatActivity implements View.OnClick
 
         @Override
         protected void onPostExecute(RESTResponse response) {
-
         }
     }
 

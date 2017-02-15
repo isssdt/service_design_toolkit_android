@@ -23,6 +23,7 @@ public class Touchpoint_model {
     String comment;
     String unit;
     Integer actualduration;
+    String actual_unit;
 
     public Integer getActualduration() {
         return actualduration;
@@ -32,7 +33,13 @@ public class Touchpoint_model {
         this.actualduration = actualduration;
     }
 
+    public String getActual_unit() {
+        return actual_unit;
+    }
 
+    public void setActual_unit(String actual_unit) {
+        this.actual_unit = actual_unit;
+    }
 
     public Touchpoint_model(String name, String status, String channel, String rating, String reaction, String comment) {
         this.name = name;

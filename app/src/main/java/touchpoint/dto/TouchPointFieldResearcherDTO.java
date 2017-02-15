@@ -7,6 +7,9 @@ package touchpoint.dto;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
+import java.util.Date;
+
+import common.dto.MasterDataDTO;
 import user.dto.FieldResearcherDTO;
 
 
@@ -20,6 +23,34 @@ public class TouchPointFieldResearcherDTO {
     private RatingDTO ratingDTO;
     private String status;
     private Integer duration;
+    private String photoLocation;
+    private Date actionTime;
+
+    private MasterDataDTO durationUnitDTO;
+
+    public String getPhotoLocation() {
+        return photoLocation;
+    }
+
+    public void setPhotoLocation(String photoLocation) {
+        this.photoLocation = photoLocation;
+    }
+
+    public Date getActionTime() {
+        return actionTime;
+    }
+
+    public void setActionTime(Date actionTime) {
+        this.actionTime = actionTime;
+    }
+
+    public MasterDataDTO getDurationUnitDTO() {
+        return durationUnitDTO;
+    }
+
+    public void setDurationUnitDTO(MasterDataDTO durationUnitDTO) {
+        this.durationUnitDTO = durationUnitDTO;
+    }
 
     public Integer getDuration() {
         return duration;

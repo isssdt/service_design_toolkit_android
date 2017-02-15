@@ -99,6 +99,7 @@ public class Journey_Visualization extends AppCompatActivity {
                         i.putExtra("comment",model.getComment());
                         i.putExtra("reaction",model.getReaction());
                         i.putExtra("Actual_time",model.getActualduration().toString());
+                        i.putExtra("Actual_unit",model.getActual_unit());
                     }
                     startActivity(i);
                 }
@@ -168,6 +169,7 @@ public class Journey_Visualization extends AppCompatActivity {
                         model.setReaction(touchPointFieldResearcherDTO.getReaction());
                         model.setComment(touchPointFieldResearcherDTO.getComments());
                         model.setActualduration(touchPointFieldResearcherDTO.getDuration());
+                        model.setActual_unit(touchPointFieldResearcherDTO.getDurationUnitDTO().getDataValue());
                     }
 
                     model.setDuration(touchPointFieldResearcherDTO.getTouchpointDTO().getDuration());
@@ -178,7 +180,6 @@ public class Journey_Visualization extends AppCompatActivity {
                     JourneyName = touchPointFieldResearcherDTO.getTouchpointDTO().getJourneyDTO().getJourneyName();
                     JourneyDesc = touchPointFieldResearcherDTO.getTouchpointDTO().getJourneyDTO().getDescription();
                     touchpointData.add(model);
-                    //Log.d("JourneyName",touchPointFieldResearcherDTO.getTouchpointDTO().getJourneyDTO().getJourneyName());
                 }
                 return touchPointFieldResearcherListDTO;
             } catch (Exception e) {

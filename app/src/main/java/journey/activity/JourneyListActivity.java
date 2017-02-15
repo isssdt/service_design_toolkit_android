@@ -264,7 +264,6 @@ public class JourneyListActivity extends AppCompatActivity implements LocationLi
                         for (JourneyFieldResearcherDTO t:frList)
                         {
                                 journey_model.setCompleted(t.getStatus());
-                                Log.d("t.getStatus",t.getStatus());
                         }
                    }
                     touchpointData.add(journey_model);
