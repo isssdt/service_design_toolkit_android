@@ -28,6 +28,7 @@ public class JourneyDTO implements Serializable {
     private Character canBeRegistered;
     private String description;
     private Character isSequence;
+    private Character isGeo;
     private TouchPointListDTO touchPointListDTO;
     private List<TouchPointDTO> touchPointDTOList = null;
     private JourneyFieldResearcherListDTO journeyFieldResearcherListDTO;
@@ -43,6 +44,14 @@ public class JourneyDTO implements Serializable {
         this.endDate = endDate;
         this.canBeRegistered = canBeRegistered;
         this.description = description;
+    }
+
+    public Character getIsGeo() {
+        return isGeo;
+    }
+
+    public void setIsGeo(Character isGeo) {
+        this.isGeo = isGeo;
     }
 
     public Character getIsSequence() {

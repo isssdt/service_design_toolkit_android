@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import java.util.List;
 
+import journey.activity.JourneyListActivity;
 import journeyemotion.emotionMeter;
 import poc.servicedesigntoolkit.getpost.R;
 
@@ -25,7 +26,7 @@ public class Journey_recycle_adapter extends RecyclerView.Adapter<Journey_recycl
     Context context;
 
     List<Journey_model> getDataAdapter;
-    JourneyController journeyController;
+    JourneyListActivity journeyListActivity;
 
     public Journey_recycle_adapter(List<Journey_model> getDataAdapter, Context context) {
         super();
@@ -35,19 +36,31 @@ public class Journey_recycle_adapter extends RecyclerView.Adapter<Journey_recycl
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        journeyListActivity = new JourneyListActivity();
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.journey_recycle_item, parent, false);
         ViewHolder viewHolder = new ViewHolder(v);
         return viewHolder;
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolder holder, int position) {
+    public void onBindViewHolder(final ViewHolder holder,final int position) {
         final Journey_model getDataAdapter1 = getDataAdapter.get(position);
         holder.JourneyTextView.setText(getDataAdapter1.getJourneyName());
-        if("DONE".equals(getDataAdapter1.getCompleted())){
-            Log.d("DONE",getDataAdapter1.getCompleted());
+        if("DONE".equals(getDataAdapter1.getCompleted())) {
             holder.viewJourney.setText("View");
         }
+        holder.viewJourney.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view){
+                Log.d("position",""+holder.viewJourney.getText());
+                if ("View".equals(holder.viewJourney.getText())){
+                    ((JourneyListActivity) context).ButtonAction("View",getDataAdapter1.getJourneyName(),getDataAdapter1.getStartDate(),getDataAdapter1.getEndDate());
+                }else if ("Sign Up".equals(holder.viewJourney.getText())){
+                    ((JourneyListActivity) context).ButtonAction("Sign up",getDataAdapter1.getJourneyName(),getDataAdapter1.getStartDate(),getDataAdapter1.getEndDate());
+                }
+            }
+        });
+
     }
 
     @Override

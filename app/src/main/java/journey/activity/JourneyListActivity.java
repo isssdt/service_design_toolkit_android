@@ -28,6 +28,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.google.android.gms.location.LocationServices;
 
 import org.json.JSONObject;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
@@ -44,11 +45,13 @@ import journey.dto.JourneyFieldResearcherDTO;
 import journey.dto.JourneyListDTO;
 import journeyVisualization.Journey_Visualization;
 import journeyemotion.emotionMeter;
+import location.LocationService;
 import poc.servicedesigntoolkit.getpost.AppController;
 import poc.servicedesigntoolkit.getpost.R;
 import poc.servicedesigntoolkit.getpost.Touchpoint.RecyclerTouchListener;
 import journey.dto.JourneyDTO;
 import poc.servicedesigntoolkit.getpost.journey.view.Journey_model;
+import poc.servicedesigntoolkit.getpost.journey.view.Journey_recycle;
 import poc.servicedesigntoolkit.getpost.journey.view.Journey_recycle_adapter;
 import user.dto.FieldResearcherDTO;
 import user.dto.SdtUserDTO;
@@ -57,25 +60,18 @@ public class JourneyListActivity extends AppCompatActivity implements LocationLi
 
     private static final String JOURNEYLIST_URL = APIUrl.API_GET_JOURNEY_LIST_FOR_REGISTER;
     private static final String REGISTER_URL = APIUrl.API_REGISTER_FIELD_RESEARCHER_WITH_JOURNEY;
-    private static final String TAG_JOURNEYLIST = "journeyDTOList";
-    private static final String TAG_JOURNEYNAME = "journeyName";
     private LocationManager locationManager;
     private static final int share_location_request_code = 2;
     //ListView listView;
     String Username;
     List<Journey_model> touchpointData;
-    ArrayList<Journey_model> journeyList;
 
     RecyclerView recyclerView;
     RecyclerView.Adapter recyclerViewadapter;
     Button signUp;
-    ArrayAdapter journeyAdapter;
     String seljourney,JourneyName;
+    String provider;
     SimpleDateFormat format;
-    Date startDate;
-    Date endDate;
-    String start;
-    String end,provider;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,83 +87,58 @@ public class JourneyListActivity extends AppCompatActivity implements LocationLi
         recyclerView.setHasFixedSize(true);
 
         touchpointData = new ArrayList<Journey_model>();
-
+        format = new SimpleDateFormat("dd MMM yyyy");
         Criteria criteria = new Criteria();
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         provider = locationManager.getBestProvider(criteria, false);
-
-
         new HttpRequestTask().execute();
         recyclerView.setAdapter(recyclerViewadapter);
-        //listView.setAdapter(journeyAdapter);
-/*
-        signUp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d("try","try" );
-            }
-        });
-*/
 
-        recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getApplicationContext(), recyclerView, new RecyclerTouchListener.ClickListener() {
-            @Override
-            public void onClick(View view, int position) {
+    }
 
-                final Journey_model model =touchpointData.get(position);
+    public void ButtonAction(String button,String Journey,Date startDate,Date endDate){
+        JourneyName = Journey ;
+        Log.d("Back", button + Journey+startDate+endDate+"");
+        if(button.equals("View")){
+            Intent i = new Intent(JourneyListActivity.this,emotionMeter.class);
+            i.putExtra("JourneyName", JourneyName);
+            i.putExtra("Username", Username);
+            startActivity(i);
 
-                startDate = model.getStartDate();
-                endDate = model.getEndDate();
-                format = new SimpleDateFormat("dd MMM yyyy");
-                start = format.format(startDate);
-                end = format.format(endDate);
-                JourneyName = model.getJourneyName();
+        }else if(button.equals("Sign up")){
+            Log.d("Inside","yeah");
+            final AlertDialog.Builder adb = new AlertDialog.Builder(JourneyListActivity.this);
+            adb.setTitle("Register");
+            adb.setMessage("Journey Name : " + JourneyName+"\n"+
+                    "Date : "+format.format(startDate)+" - "+format.format(endDate));
+            adb.setPositiveButton("Sign Up", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
 
-                if("DONE".equals(model.getCompleted())){
-                    Intent i = new Intent(JourneyListActivity.this,emotionMeter.class);
-                    i.putExtra("JourneyName", JourneyName);
-                    i.putExtra("Username", Username);
-                    startActivity(i);
-                }else{
-                    final AlertDialog.Builder adb = new AlertDialog.Builder(JourneyListActivity.this);
-                    adb.setTitle("Register");
-                    adb.setMessage("Journey Name : " + JourneyName+"\n"+
-                            "Date : "+start+" - "+end);
-                    adb.setPositiveButton("Sign Up", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            if (ContextCompat.checkSelfPermission(JourneyListActivity.this, Manifest.permission.ACCESS_FINE_LOCATION)
-                                    != PackageManager.PERMISSION_GRANTED) {
-                                ActivityCompat.requestPermissions(JourneyListActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, share_location_request_code);
-                            } else {
-                                Location location = locationManager.getLastKnownLocation(provider);
-                                if (location != null) {
-                                    System.out.println("Provider " + provider + " has been selected.");
-                                    onLocationChanged(location);
-                                } else {
-                                    Toast.makeText(getApplicationContext(),"Location not available",Toast.LENGTH_SHORT );
-                                }
-                                registeruser(JourneyName);
-                            }
+                    if (ContextCompat.checkSelfPermission(JourneyListActivity.this, Manifest.permission.ACCESS_FINE_LOCATION)
+                            != PackageManager.PERMISSION_GRANTED) {
+                        ActivityCompat.requestPermissions(JourneyListActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, share_location_request_code);
+                    } else {
+                        Location location = locationManager.getLastKnownLocation(provider);
+                        if (location != null) {
+                            System.out.println("Provider " + provider + " has been selected.");
+                            onLocationChanged(location);
+                        } else {
+                            Toast.makeText(getApplicationContext(),"Location not available",Toast.LENGTH_SHORT );
                         }
-                    });
-                    adb.setNegativeButton("Cancel", null);
-                    adb.show();
-
+                        registeruser(JourneyName);
+                    }
                 }
-            }
-
-            @Override
-            public void onLongClick(View view, int position) {
-
-            }
-        }));
+            });
+            adb.setNegativeButton("Cancel", null);
+            adb.show();
+        }
     }
 
     @Override
     public void onLocationChanged(Location location) {
         double lat = (int) (location.getLatitude());
         double lng = (int) (location.getLongitude());
-        //Toast.makeText(this, "Lat : "+lat + " lon : " +lng , Toast.LENGTH_SHORT).show();
         Log.d("location","lat : "+lat + " lon : "+lng);
     }
 
@@ -189,13 +160,12 @@ public class JourneyListActivity extends AppCompatActivity implements LocationLi
     }
 
     public void registeruser(String journey) {
-        seljourney = journey;
         final JSONObject request = new JSONObject();
         try {
             final JSONObject journeyDTO = new JSONObject();
 
             request.put("journeyDTO", journeyDTO);
-            journeyDTO.put("journeyName", seljourney);
+            journeyDTO.put("journeyName", journey);
 
             JSONObject fieldResearcherDTO = new JSONObject();
             request.put("fieldResearcherDTO", fieldResearcherDTO);

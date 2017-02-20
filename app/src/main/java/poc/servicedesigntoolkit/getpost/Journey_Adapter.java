@@ -9,11 +9,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.List;
 
 import poc.servicedesigntoolkit.getpost.R;
 import poc.servicedesigntoolkit.getpost.journey.view.Journey_model;
+
+import static poc.servicedesigntoolkit.getpost.R.id.signup;
 
 /**
  * Created by Gunjan Pathak on 02-Jan-17.
@@ -41,9 +44,17 @@ public class Journey_Adapter extends RecyclerView.Adapter<Journey_Adapter.ViewHo
     }
 
     @Override
-    public void onBindViewHolder(Journey_Adapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(final Journey_Adapter.ViewHolder holder, final int position) {
         Journey_model getDataAdapter1 = getDataAdapter.get(position);
         holder.journeyname.setText(getDataAdapter1.getJourneyName());
+
+        holder.signup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view){
+                Log.d("position",""+position);
+                Toast.makeText(context,"Toast pressed " ,Toast.LENGTH_SHORT);
+            }
+        });
     }
 
     @Override
