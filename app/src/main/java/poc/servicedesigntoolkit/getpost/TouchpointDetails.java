@@ -154,8 +154,8 @@ public class TouchpointDetails extends AppCompatActivity implements View.OnClick
             time.setSelection(position);
         }
         if (null != imagepath){
-            if (0 == ratingBar.getRating()){
-                ratingBar.setEnabled(true);
+            if ("0".equals(rating_intent)){
+                ratingBar.setIsIndicator(false);
             }
             ratingBar.setEnabled(true);
             image.setVisibility(View.VISIBLE);
@@ -226,6 +226,25 @@ public class TouchpointDetails extends AppCompatActivity implements View.OnClick
             case take_photo_request_code: {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     Intent i = new Intent(TouchpointDetails.this, SelectPhoto.class);
+                    i.putExtra("Touchpoint",touchpoint);
+                    i.putExtra("Username",username);
+                    i.putExtra("JourneyName", JourneyName);
+
+                    i.putExtra("Action", action);
+                    i.putExtra("Channel", channel);
+                    i.putExtra("Channel_Desc",channel_desc );
+                    i.putExtra("Id", id);
+                    i.putExtra("Expected_time",expected_time);
+                    i.putExtra("Expected_unit",expected_unit);
+
+                    if (null != String.valueOf(ratingBar.getRating())){
+                        i.putExtra("rating",rating_string);
+                        i.putExtra("comment",comment_string);
+                        i.putExtra("reaction",reaction_string);
+                        i.putExtra("Actual_time",actual_string);
+                        i.putExtra("Actual_unit",actual_time_unit);
+                    }
+
                     startActivity(i);
                 } else {
                     Toast.makeText(TouchpointDetails.this, "Permission denied to read your CAMERA", Toast.LENGTH_SHORT).show();
@@ -234,8 +253,6 @@ public class TouchpointDetails extends AppCompatActivity implements View.OnClick
             }
             case share_location_request_code: {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-
-
                 } else {
                     Toast.makeText(TouchpointDetails.this, "Permission denied to get your LOCATION", Toast.LENGTH_SHORT).show();
                 }
