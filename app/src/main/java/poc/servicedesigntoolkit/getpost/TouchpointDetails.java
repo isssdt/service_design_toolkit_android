@@ -29,7 +29,6 @@ import com.google.gson.Gson;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,6 +39,7 @@ import common.dto.RESTResponse;
 import journey.dto.JourneyFieldResearcherDTO;
 import journeyVisualization.Journey_Visualization;
 import journey.dto.JourneyDTO;
+import photo.SelectPhoto;
 import touchpoint.dto.RatingDTO;
 import touchpoint.dto.TouchPointDTO;
 import touchpoint.dto.TouchPointFieldResearcherDTO;
@@ -55,7 +55,7 @@ public class TouchpointDetails extends AppCompatActivity implements View.OnClick
     private static final String completed_confirmation = "Journey has been marked as Completed";
     private static final int take_photo_request_code =1;
     private static final int share_location_request_code = 2;
-    EditText touchpointName_edit, channelDescription_edit, channel_edit, action_edit, comment_edit, reaction_edit,expected_edit,actual_edit;
+    EditText touchpointName_edit,imagepathEdit, channelDescription_edit, channel_edit, action_edit, comment_edit, reaction_edit,expected_edit,actual_edit;
     RatingBar ratingBar;
     TextView image;
     Button submit, reset;
@@ -68,7 +68,7 @@ public class TouchpointDetails extends AppCompatActivity implements View.OnClick
     Integer id;
     List<String> time_data;
     String id_String, rating_string;
-    String rating_intent,reaction_intent,comment_intent, actual_string,actual_time_unit;
+    String rating_intent,reaction_intent,comment_intent, actual_string,actual_time_unit,imagepath;
     int rating;
     private LocationManager locationManager;
     String message = "",provider;
@@ -78,7 +78,6 @@ public class TouchpointDetails extends AppCompatActivity implements View.OnClick
         setContentView(R.layout.touchpoint_details_1);
 
         Bundle extras = getIntent().getExtras();
-
         touchpoint = (String) extras.get("Touchpoint");
         username = (String) extras.get("Username");
         JourneyName = (String) extras.get("JourneyName");
@@ -87,7 +86,6 @@ public class TouchpointDetails extends AppCompatActivity implements View.OnClick
         expected_time = (Integer) extras.get("Expected_time");
         expected_unit = (String) extras.get("Expected_unit");
         channel_desc = (String) extras.get("Channel_Desc");
-        name = (String) extras.get("Name");
         id = (Integer) extras.get("Id");
         id_String = id.toString();
         rating_intent = (String) extras.get("rating");
@@ -95,6 +93,7 @@ public class TouchpointDetails extends AppCompatActivity implements View.OnClick
         comment_intent = (String) extras.get("comment");
         actual_time = (String) extras.get("Actual_time");
         actual_unit = (String) extras.get("Actual_unit");
+        imagepath = (String) extras.get("image");
 
         touchpointName_edit = (EditText) findViewById(R.id.touchpoint_name);
         channel_edit = (EditText) findViewById(R.id.channel);
@@ -105,18 +104,19 @@ public class TouchpointDetails extends AppCompatActivity implements View.OnClick
         expected_edit = (EditText) findViewById(R.id.expected);
         actual_edit = (EditText) findViewById(R.id.actual_time);
 
-        image = (TextView) findViewById(R.id.image);
+        image = (TextView) findViewById(R.id.imagelabel);
+        imagepathEdit = (EditText) findViewById(R.id.imagePathEdit);
         ratingBar = (RatingBar) findViewById(R.id.ratingBar);
 
         submit = (Button) findViewById(R.id.submit);
        // reset = (Button) findViewById(R.id.reset);
-        photo = (ImageButton) findViewById(R.id.photo1);
+        photo = (ImageButton) findViewById(R.id.photo);
 
         time = (Spinner) findViewById(R.id.time_unit);
 
         submit.setOnClickListener(this);
 //        reset.setOnClickListener(this);
-//        photo.setOnClickListener(this);
+        photo.setOnClickListener(this);
 
         Criteria criteria = new Criteria();
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
@@ -140,7 +140,7 @@ public class TouchpointDetails extends AppCompatActivity implements View.OnClick
 
         int position = time_data.indexOf(actual_unit);
         Log.d("Position", ""+position);
-        touchpointName_edit.setText(name);
+        touchpointName_edit.setText(touchpoint);
         channel_edit.setText(channel);
         action_edit.setText(action);
         expected_edit.setText(expected_time.toString() + " " + expected_unit );
@@ -152,6 +152,16 @@ public class TouchpointDetails extends AppCompatActivity implements View.OnClick
             comment_edit.setText(comment_intent);
             actual_edit.setText(actual_time);
             time.setSelection(position);
+        }
+        if (null != imagepath){
+            if (0 == ratingBar.getRating()){
+                ratingBar.setEnabled(true);
+            }
+            ratingBar.setEnabled(true);
+            image.setVisibility(View.VISIBLE);
+            imagepathEdit.setVisibility(View.VISIBLE);
+            imagepathEdit.setEnabled(false);
+            imagepathEdit.setText(imagepath);
         }
     }
 
@@ -178,15 +188,35 @@ public class TouchpointDetails extends AppCompatActivity implements View.OnClick
             reaction_edit.setText("");
             comment_edit.setText("");
 
-        } else if (v == photo) {
+        }*/ else if (v == photo) {
             if (ContextCompat.checkSelfPermission(TouchpointDetails.this, Manifest.permission.CAMERA)
                     != PackageManager.PERMISSION_GRANTED) {
                 ActivityCompat.requestPermissions(TouchpointDetails.this, new String[]{Manifest.permission.CAMERA}, take_photo_request_code);
             } else {
+                getdetails();
                 Intent i = new Intent(TouchpointDetails.this, SelectPhoto.class);
+                i.putExtra("Touchpoint",touchpoint);
+                i.putExtra("Username",username);
+                i.putExtra("JourneyName", JourneyName);
+
+                i.putExtra("Action", action);
+                i.putExtra("Channel", channel);
+                i.putExtra("Channel_Desc",channel_desc );
+                i.putExtra("Id", id);
+                i.putExtra("Expected_time",expected_time);
+                i.putExtra("Expected_unit",expected_unit);
+
+                if (null != String.valueOf(ratingBar.getRating())){
+                    i.putExtra("rating",rating_string);
+                    i.putExtra("comment",comment_string);
+                    i.putExtra("reaction",reaction_string);
+                    i.putExtra("Actual_time",actual_string);
+                    i.putExtra("Actual_unit",actual_time_unit);
+                }
+
                 startActivity(i);
             }
-        }*/
+        }
     }
 
     @Override
@@ -277,6 +307,10 @@ public class TouchpointDetails extends AppCompatActivity implements View.OnClick
                 Toast.LENGTH_SHORT).show();
     }
 
+    @Override
+    public void onBackPressed(){
+    }
+
 
     private class HttpRequestTask extends AsyncTask<Void, Void, RESTResponse> {
         @Override
@@ -291,6 +325,7 @@ public class TouchpointDetails extends AppCompatActivity implements View.OnClick
 
 
                 SdtUserDTO sdtUserDTO = new SdtUserDTO();
+                Log.d("username",username);
                 sdtUserDTO.setUsername(username);
                 fieldResearcherDTO.setSdtUserDTO(sdtUserDTO);
 
@@ -303,6 +338,7 @@ public class TouchpointDetails extends AppCompatActivity implements View.OnClick
                 touchPointFieldResearcherDTO.setComments(comment_string);
                 touchPointFieldResearcherDTO.setReaction(reaction_string);
                 touchPointFieldResearcherDTO.setDuration(Integer.parseInt(actual_string));
+                touchPointFieldResearcherDTO.setPhotoLocation(imagepath);
 
                 RatingDTO ratingDTO = new RatingDTO();
                 ratingDTO.setValue(rating_string);

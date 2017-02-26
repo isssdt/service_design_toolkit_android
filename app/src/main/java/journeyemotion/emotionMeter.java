@@ -6,10 +6,14 @@ package journeyemotion;
 
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
+
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.widget.ImageView;
 import android.widget.TextView;
 import common.constants.APIUrl;
 
@@ -20,6 +24,8 @@ import com.jjoe64.graphview.series.LineGraphSeries;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.OnDataPointTapListener;
 import com.jjoe64.graphview.series.Series;
+
+import java.io.File;
 import java.util.ArrayList;
 import poc.servicedesigntoolkit.getpost.R;
 import poc.servicedesigntoolkit.getpost.Touchpoint.Touchpoint_model;
@@ -39,17 +45,20 @@ public class emotionMeter extends AppCompatActivity {
     GraphView graph;
     LineGraphSeries<DataPoint> series;
     TextView touchpointname, action, reaction;
-
+    ImageView imageView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.visualization_emotion);
-        touchpointData = new ArrayList<Touchpoint_model>();
-        graph = (GraphView) findViewById(R.id.graph);
 
+
+        touchpointData = new ArrayList<Touchpoint_model>();
+
+        graph = (GraphView) findViewById(R.id.graph);
         touchpointname = (TextView) findViewById(R.id.touchpointname);
         action = (TextView) findViewById(R.id.action);
         reaction = (TextView) findViewById(R.id.reaction);
+        imageView = (ImageView) findViewById(R.id.imageView);
 
         Bundle extras = getIntent().getExtras();
         Username = (String) extras.get("Username");
@@ -84,6 +93,13 @@ public class emotionMeter extends AppCompatActivity {
                     touchpointname.setText(touchpointData.get(i).getName());
                     action.setText(touchpointData.get(i).getAction());
                     reaction.setText(touchpointData.get(i).getReaction());
+                    File imgFile = new File(touchpointData.get(i).getPhotoLocation());
+                    if(imgFile.exists()){
+
+                        Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+                        imageView.setImageBitmap(myBitmap);
+
+                    }
                 }
             }
             }
@@ -134,7 +150,6 @@ public class emotionMeter extends AppCompatActivity {
     }
 
 
-
     private class HttpRequestTask extends AsyncTask<Void, Void, TouchPointFieldResearcherListDTO> {
         @Override
         protected TouchPointFieldResearcherListDTO doInBackground(Void... params) {
@@ -175,6 +190,7 @@ public class emotionMeter extends AppCompatActivity {
                     model.setChannel_desc(touchPointFieldResearcherDTO.getTouchpointDTO().getChannelDescription());
                     model.setAction(touchPointFieldResearcherDTO.getTouchpointDTO().getAction());
                     model.setName(touchPointFieldResearcherDTO.getTouchpointDTO().getTouchPointDesc());
+                    model.setPhotoLocation(touchPointFieldResearcherDTO.getPhotoLocation());
                     touchpointData.add(model);
 
 

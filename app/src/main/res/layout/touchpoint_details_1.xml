@@ -168,6 +168,15 @@
         android:layout_below="@+id/expected"
         android:text="Rate the Experience" />
 
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@android:drawable/ic_menu_camera"
+        android:id="@+id/photo"
+        android:layout_below="@+id/rating_text"
+        android:layout_alignRight="@+id/rating_text"
+        android:layout_alignEnd="@+id/rating_text" />
+
     <RatingBar
         android:id="@+id/ratingBar"
         android:layout_width="wrap_content"
@@ -175,11 +184,9 @@
         android:numStars="5"
         android:rating="0.0"
         android:stepSize="1.0"
-        android:layout_marginRight="44dp"
-        android:layout_marginEnd="44dp"
-        android:layout_below="@+id/rating_text"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentBottom="true"
+        android:layout_alignLeft="@+id/rating_text"
+        android:layout_alignStart="@+id/rating_text" />
 
 
 </RelativeLayout>

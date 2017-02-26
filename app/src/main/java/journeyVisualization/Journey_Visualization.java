@@ -73,7 +73,7 @@ public class Journey_Visualization extends AppCompatActivity {
         list = (ListView) findViewById(R.id.list);
         journeyName = (TextView) findViewById(R.id.displayJourneyName);
         journeyDesc = (TextView) findViewById(R.id.displayJourneyDesc);
-        new HttpRequestTask().execute();
+        new TouchpointList().execute();
 
 
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -87,7 +87,7 @@ public class Journey_Visualization extends AppCompatActivity {
                     i.putExtra("Action", model.getAction());
                     i.putExtra("Channel", model.getChannel());
                     i.putExtra("Channel_Desc", model.getChannel_desc());
-                    i.putExtra("Name", model.getName());
+                    i.putExtra("Touchpoint", model.getName());
                     i.putExtra("Id", model.getId());
                     i.putExtra("Username", Username);
                     i.putExtra("JourneyName", JourneyName);
@@ -143,7 +143,7 @@ public class Journey_Visualization extends AppCompatActivity {
         exit.show();
     }
 
-    private class HttpRequestTask extends AsyncTask<Void, Void, TouchPointFieldResearcherListDTO> {
+    private class TouchpointList extends AsyncTask<Void, Void, TouchPointFieldResearcherListDTO> {
         @Override
         protected TouchPointFieldResearcherListDTO doInBackground(Void... params) {
             try {
@@ -155,10 +155,8 @@ public class Journey_Visualization extends AppCompatActivity {
                 TouchPointFieldResearcherListDTO touchPointFieldResearcherListDTO =
                         restTemplate.postForObject(TOUCHPOINTLIST_URL, sdtUserDTO, TouchPointFieldResearcherListDTO.class);
 
-
                 for (TouchPointFieldResearcherDTO touchPointFieldResearcherDTO :
                         touchPointFieldResearcherListDTO.getTouchPointFieldResearcherDTOList()) {
-
                     Touchpoint_model model = new Touchpoint_model(
                             touchPointFieldResearcherDTO.getTouchpointDTO().getTouchPointDesc(),
                             touchPointFieldResearcherDTO.getStatus(),

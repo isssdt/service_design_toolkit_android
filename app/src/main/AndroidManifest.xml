@@ -68,7 +68,7 @@
             android:label="@string/title_touchpoint_list"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".SelectPhoto"
+            android:name="photo.SelectPhoto"
             android:label="@string/title_select_photo"
             android:screenOrientation="portrait"/>
 
@@ -77,6 +77,10 @@
             android:label="My Journey"
             android:screenOrientation="portrait"/>
 
+        <activity
+            android:name="photo.UploadPhoto"
+            android:label="My Photo"
+            android:screenOrientation="portrait"/>
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").

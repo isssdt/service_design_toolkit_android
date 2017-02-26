@@ -24,6 +24,15 @@ public class Touchpoint_model {
     String unit;
     Integer actualduration;
     String actual_unit;
+    String photoLocation;
+
+    public String getPhotoLocation() {
+        return photoLocation;
+    }
+
+    public void setPhotoLocation(String photoLocation) {
+        this.photoLocation = photoLocation;
+    }
 
     public Integer getActualduration() {
         return actualduration;
