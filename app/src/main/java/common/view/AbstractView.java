@@ -16,8 +16,10 @@ import common.controller.CentralController;
 public abstract class AbstractView implements View.OnClickListener {
     private Activity context;
     protected Map<String, View> componentMap;
+    private CentralController controller;
 
     public AbstractView(Activity context) {
+        controller = new CentralController(this);
         this.context = context;
         componentMap = new HashMap<>();
         init();
@@ -40,6 +42,10 @@ public abstract class AbstractView implements View.OnClickListener {
 
     @Override
     public void onClick(View view) {
-        new CentralController(this).actionHandler(view);
+        controller.actionHandler(view);
+    }
+
+    public void handleBackButton() {
+        controller.handleBackButton();
     }
 }

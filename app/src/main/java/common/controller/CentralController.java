@@ -23,4 +23,8 @@ public class CentralController {
             actionHandler.execute(abstractView, view);
         }
     }
+
+    public void handleBackButton() {
+        ActionFactory.initActionHandlerForBack(abstractView).execute(abstractView, null);
+    }
 }

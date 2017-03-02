@@ -10,6 +10,5 @@ import common.view.AbstractView;
 
 public interface ActionHandler {
     public void execute(AbstractView abstractView, View view);
-
     public boolean validation(AbstractView abstractView, View view);
 }

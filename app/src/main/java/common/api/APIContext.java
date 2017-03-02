@@ -7,7 +7,6 @@ import common.controller.AbstractController;
 import common.dto.RESTResponse;
 import journey.dto.JourneyFieldResearcherDTO;
 import journey.dto.JourneyListDTO;
-import main.datahandler.DHFieldResearcherSignIn;
 import touchpoint.dto.TouchPointFieldResearcherDTO;
 import touchpoint.dto.TouchPointFieldResearcherListDTO;
 import user.dto.SdtUserDTO;
@@ -31,11 +30,6 @@ public class APIContext extends Observable implements APICaller {
     public void onAPICallSucceeded(Object outputData) {
         setChanged();
         notifyObservers(outputData);
-    }
-
-    public void registerFieldResearcher(SdtUserDTO sdtUserDTO) {
-        addObserver(new DHFieldResearcherSignIn());
-        new APIGateway(this, APIUrl.API_FIELD_RESEARCHER_REGISTER, RESTResponse.class, sdtUserDTO, APIUrl.METHOD_POST).execute();
     }
 
     public void getJourneyList() {
