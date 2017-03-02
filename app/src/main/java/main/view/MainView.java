@@ -6,7 +6,6 @@ import android.widget.Button;
 import common.constants.ConstantValues;
 import common.controller.AbstractController;
 import common.view.AbstractView;
-import main.controller.MainController;
 import poc.servicedesigntoolkit.getpost.R;
 
 /**
@@ -20,7 +19,12 @@ public class MainView extends AbstractView {
 
     @Override
     public void bind(AbstractController abstractController) {
-        ((Button) componentMap.get(ConstantValues.COMPONENT_MAIN_VIEW_BUTTON_RESEARCH_LIST)).setOnClickListener((MainController) abstractController);
+
+    }
+
+    @Override
+    protected void setUpListener() {
+        ((Button) componentMap.get(ConstantValues.COMPONENT_MAIN_VIEW_BUTTON_RESEARCH_LIST)).setOnClickListener(this);
     }
 
     @Override

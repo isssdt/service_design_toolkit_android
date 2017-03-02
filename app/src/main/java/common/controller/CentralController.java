@@ -1,5 +1,9 @@
 package common.controller;
 
+import android.view.View;
+
+import common.action.ActionFactory;
+import common.action.ActionHandler;
 import common.view.AbstractView;
 
 /**
@@ -13,7 +17,10 @@ public class CentralController {
         this.abstractView = abstractView;
     }
 
-    public AbstractView getAbstractView() {
-        return abstractView;
+    public void actionHandler(View view) {
+        ActionHandler actionHandler = ActionFactory.initActionHandler(view);
+        if (actionHandler.validation(abstractView, view)) {
+            actionHandler.execute(abstractView, view);
+        }
     }
 }

@@ -7,7 +7,6 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 
 import common.constants.ConstantValues;
-import main.controller.MainController;
 import main.view.MainView;
 
 
@@ -17,7 +16,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        new MainController(new MainView(this));
+        new MainView(this);
     }
     @Override
     public void onBackPressed() {

@@ -7,12 +7,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 import common.controller.AbstractController;
+import common.controller.CentralController;
 
 /**
  * Created by longnguyen on 1/4/17.
  */
 
-public abstract class AbstractView {
+public abstract class AbstractView implements View.OnClickListener {
     private Activity context;
     protected Map<String, View> componentMap;
 
@@ -20,6 +21,7 @@ public abstract class AbstractView {
         this.context = context;
         componentMap = new HashMap<>();
         init();
+        setUpListener();
     }
 
     public Activity getContext() {
@@ -32,5 +34,12 @@ public abstract class AbstractView {
 
     public abstract void bind(AbstractController abstractController);
 
+    protected abstract void setUpListener();
+
     protected abstract void init();
+
+    @Override
+    public void onClick(View view) {
+        new CentralController(this).actionHandler(view);
+    }
 }
