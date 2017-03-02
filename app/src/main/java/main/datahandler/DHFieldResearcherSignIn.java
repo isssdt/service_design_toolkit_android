@@ -12,7 +12,6 @@ import journey.activity.JourneyListActivity;
 import journey.dto.JourneyFieldResearcherDTO;
 import journeyVisualization.Journey_Visualization;
 import main.view.MainView;
-import touchpoint.activity.TouchPointListActivity;
 import user.dto.FieldResearcherDTO;
 import user.dto.SdtUserDTO;
 
