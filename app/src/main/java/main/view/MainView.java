@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.widget.Button;
 
 import common.constants.ConstantValues;
-import common.controller.AbstractController;
 import common.view.AbstractView;
 import poc.servicedesigntoolkit.getpost.R;
 
@@ -15,11 +14,6 @@ import poc.servicedesigntoolkit.getpost.R;
 public class MainView extends AbstractView {
     public MainView(Activity context) {
         super(context);
-    }
-
-    @Override
-    public void bind(AbstractController abstractController) {
-
     }
 
     @Override

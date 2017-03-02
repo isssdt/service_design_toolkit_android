@@ -28,5 +28,9 @@ public class ConstantValues {
 
     public static final String COMPONENT_MAIN_VIEW_EDIT_TEXT_USERNAME = "COMPONENT_MAIN_VIEW_EDIT_TEXT_USERNAME";
 
+    public static final String COMPONENT_JOURNEY_LIST_VIEW_BUTTON_SIGN_UP = "COMPONENT_JOURNEY_LIST_VIEW_BUTTON_SIGN_UP";
+
+    public static final String COMPONENT_JOURNEY_LIST_VIEW_RECYCLE_VIEW = "COMPONENT_JOURNEY_LIST_VIEW_RECYCLE_VIEW";
+
     public static final String ALERT_MESSAGE_QUIT_CONFIRMATION = "Are you sure you want to quit?";
 }

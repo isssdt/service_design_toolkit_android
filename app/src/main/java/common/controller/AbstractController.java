@@ -20,16 +20,11 @@ public abstract class AbstractController extends Observable {
 
     public AbstractController(AbstractView abstractView) {
         this.abstractView = abstractView;
-        bindControllerOnView();
         addObservers();
     }
 
     public AbstractView getAbstractView() {
         return abstractView;
-    }
-
-    protected void bindControllerOnView() {
-        abstractView.bind(this);
     }
 
     protected abstract void addObservers();

@@ -6,7 +6,6 @@ import android.view.View;
 import java.util.HashMap;
 import java.util.Map;
 
-import common.controller.AbstractController;
 import common.controller.CentralController;
 
 /**
@@ -33,8 +32,6 @@ public abstract class AbstractView implements View.OnClickListener {
     public View getComponent(String component) {
         return componentMap.get(component);
     }
-
-    public abstract void bind(AbstractController abstractController);
 
     protected abstract void setUpListener();
 
