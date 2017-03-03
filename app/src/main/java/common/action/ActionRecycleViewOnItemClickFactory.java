@@ -3,7 +3,7 @@ package common.action;
 import android.view.View;
 
 import common.view.AbstractView;
-import journey.ACTION_BUTTON_RECYCLE_JOURNEY_LIST_VIEW_SIGN_UP;
+import journey.action.ACTION_BUTTON_RECYCLE_JOURNEY_LIST_VIEW_SIGN_UP;
 import poc.servicedesigntoolkit.getpost.R;
 
 /**

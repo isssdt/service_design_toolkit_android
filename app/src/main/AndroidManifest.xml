@@ -46,11 +46,6 @@
         </activity>
 
         <activity
-            android:name=".journey.view.Journey_recycle"
-            android:label="@string/title_journey_list"
-            android:screenOrientation="portrait"/>
-
-        <activity
             android:name="journeyVisualization.Journey_Visualization"
             android:label="@string/title_activity_touchpoint"
             android:screenOrientation="portrait"/>
