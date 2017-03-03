@@ -5,7 +5,8 @@ import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
 
-import common.action.ActionHandler;
+import common.action.ActionOnBackClick;
+import common.action.BaseAction;
 import common.constants.ConstantValues;
 import common.view.AbstractView;
 import main.view.MainView;
@@ -14,9 +15,13 @@ import main.view.MainView;
  * Created by longnguyen on 3/3/17.
  */
 
-public class ACTION_BACK_MAIN implements ActionHandler {
+public class ACTION_BACK_MAIN extends BaseAction implements ActionOnBackClick {
+    public ACTION_BACK_MAIN(AbstractView abstractView) {
+        super(abstractView);
+    }
+
     @Override
-    public void execute(AbstractView abstractView, View view) {
+    public void onBackClick() {
         final MainView mainView = (MainView) abstractView;
         AlertDialog.Builder exit = new AlertDialog.Builder(mainView.getContext());
         exit.setMessage(ConstantValues.ALERT_MESSAGE_QUIT_CONFIRMATION);
@@ -34,7 +39,7 @@ public class ACTION_BACK_MAIN implements ActionHandler {
     }
 
     @Override
-    public boolean validation(AbstractView abstractView, View view) {
+    public boolean validation(View view) {
         return false;
     }
 }

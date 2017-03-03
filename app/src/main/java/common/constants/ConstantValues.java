@@ -12,6 +12,8 @@ public class ConstantValues {
 
     public static final String ALERT_MESSAGE_NO_USERNAME_ENTERED = "Please enter your name";
 
+    public static final String ALERT_MESSAGE_QUIT_CONFIRMATION = "Are you sure you want to quit?";
+
     public static final String BUNDLE_KEY_JOURNEY_FIELD_RESEARCHER_DTO = "BUNDLE_KEY_JOURNEY_FIELD_RESEARCHER_DTO";
 
     public static final String BUNDLE_KEY_TOUCH_POINT_FIELD_RESEARCHER_DTO = "BUNDLE_KEY_TOUCH_POINT_FIELD_RESEARCHER_DTO";
@@ -32,5 +34,9 @@ public class ConstantValues {
 
     public static final String COMPONENT_JOURNEY_LIST_VIEW_RECYCLE_VIEW = "COMPONENT_JOURNEY_LIST_VIEW_RECYCLE_VIEW";
 
-    public static final String ALERT_MESSAGE_QUIT_CONFIRMATION = "Are you sure you want to quit?";
+    public static final String COMPONENT_JOURNEY_LIST_VIEW_BUTTON_LABEL_SIGN_UP = "Sign Up";
+
+    public static final String COMPONENT_JOURNEY_LIST_VIEW_BUTTON_LABEL_VIEW = "View";
+
+    public static final String OTHERS_JOURNEY_COMPLETED_STATUS = "DONE";
 }

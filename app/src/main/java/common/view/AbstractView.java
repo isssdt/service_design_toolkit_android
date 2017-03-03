@@ -12,7 +12,7 @@ import common.controller.CentralController;
  * Created by longnguyen on 1/4/17.
  */
 
-public abstract class AbstractView implements View.OnClickListener {
+public abstract class AbstractView {
     private Activity context;
     protected Map<String, View> componentMap;
     private CentralController controller;
@@ -36,13 +36,4 @@ public abstract class AbstractView implements View.OnClickListener {
     protected abstract void setUpListener();
 
     protected abstract void init();
-
-    @Override
-    public void onClick(View view) {
-        controller.actionHandler(view);
-    }
-
-    public void handleBackButton() {
-        controller.handleBackButton();
-    }
 }

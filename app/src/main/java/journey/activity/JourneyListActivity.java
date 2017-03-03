@@ -9,17 +9,13 @@ import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -28,31 +24,27 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.google.android.gms.location.LocationServices;
 
 import org.json.JSONObject;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.web.client.RestTemplate;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import common.api.APIGetJourneyListForRegister;
 import common.constants.APIUrl;
 import common.constants.ConstantValues;
+import journey.dto.JourneyDTO;
 import journey.dto.JourneyFieldResearcherDTO;
-import journey.dto.JourneyListDTO;
+import journey.view.JourneyListView;
 import journeyVisualization.Journey_Visualization;
 import journeyemotion.emotionMeter;
-import location.LocationService;
 import poc.servicedesigntoolkit.getpost.AppController;
 import poc.servicedesigntoolkit.getpost.R;
-import poc.servicedesigntoolkit.getpost.Touchpoint.RecyclerTouchListener;
-import journey.dto.JourneyDTO;
 import poc.servicedesigntoolkit.getpost.journey.view.Journey_model;
-import poc.servicedesigntoolkit.getpost.journey.view.Journey_recycle;
-import poc.servicedesigntoolkit.getpost.journey.view.Journey_recycle_adapter;
 import user.dto.FieldResearcherDTO;
 import user.dto.SdtUserDTO;
 
@@ -79,21 +71,14 @@ public class JourneyListActivity extends AppCompatActivity implements LocationLi
         setContentView(R.layout.journey_recycle);
 
         Bundle extras = getIntent().getExtras();
-        Username = ((JourneyFieldResearcherDTO) extras.get(ConstantValues.BUNDLE_KEY_JOURNEY_FIELD_RESEARCHER_DTO)).getFieldResearcherDTO().getSdtUserDTO().getUsername();
+        new APIGetJourneyListForRegister(((JourneyFieldResearcherDTO) extras.get(ConstantValues.BUNDLE_KEY_JOURNEY_FIELD_RESEARCHER_DTO)).getFieldResearcherDTO().getSdtUserDTO(), new JourneyListView(this)).execute();
 
-        signUp = (Button) findViewById(R.id.signup);
-
-        recyclerView = (RecyclerView) findViewById(R.id.journeyrecycle);
-        recyclerView.setHasFixedSize(true);
 
         touchpointData = new ArrayList<Journey_model>();
         format = new SimpleDateFormat("dd MMM yyyy");
         Criteria criteria = new Criteria();
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         provider = locationManager.getBestProvider(criteria, false);
-        new HttpRequestTask().execute();
-        recyclerView.setAdapter(recyclerViewadapter);
-
     }
 
     public void ButtonAction(String button,String Journey,Date startDate,Date endDate){
@@ -211,59 +196,6 @@ public class JourneyListActivity extends AppCompatActivity implements LocationLi
         };
         AppController.getInstance().addToRequestQueue(registerJourney);
     }
-
-    private class HttpRequestTask extends AsyncTask<Void, Void, JourneyListDTO> {
-        @Override
-        protected JourneyListDTO doInBackground(Void... params) {
-            try {
-                RestTemplate restTemplate = new RestTemplate();
-                restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
-
-                SdtUserDTO sdtUserDTO = new SdtUserDTO();
-                sdtUserDTO.setUsername(Username);
-
-                JourneyListDTO journeyListDTO = restTemplate.postForObject(JOURNEYLIST_URL, sdtUserDTO,JourneyListDTO.class);
-                for (JourneyDTO journeyDTO : journeyListDTO.getJourneyDTOList()) {
-                    Journey_model journey_model = new Journey_model(journeyDTO.getJourneyName(),journeyDTO.getStartDate(),journeyDTO.getEndDate());
-                    journey_model.setJourneyName(journeyDTO.getJourneyName());
-                    journey_model.setStartDate(journeyDTO.getStartDate());
-                    journey_model.setEndDate(journeyDTO.getEndDate());
-                    if(journeyDTO.getJourneyFieldResearcherListDTO()!= null){
-                        List<JourneyFieldResearcherDTO> frList= journeyDTO.getJourneyFieldResearcherListDTO().getJourneyFieldResearcherDTOList();
-
-                        for (JourneyFieldResearcherDTO t:frList)
-                        {
-                                journey_model.setCompleted(t.getStatus());
-                        }
-                   }
-                    touchpointData.add(journey_model);
-                }
-                return journeyListDTO;
-            } catch (Exception e) {
-                Log.e("MainActivity", e.getMessage(), e);
-            }
-
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(JourneyListDTO journeyListDTO) {
-            LinearLayoutManager llm = new LinearLayoutManager(JourneyListActivity.this);
-            llm.setOrientation(LinearLayoutManager.VERTICAL);
-            recyclerViewadapter = new Journey_recycle_adapter(touchpointData, JourneyListActivity.this);
-            recyclerView.setLayoutManager(llm);
-            recyclerView.setAdapter(recyclerViewadapter);
-            recyclerViewadapter.notifyDataSetChanged();
-
-
-
-           /* journeyAdapter = new ArrayAdapter(JourneyListActivity.this, android.R.layout.simple_list_item_1, journeyList);
-            listView.setAdapter(journeyAdapter);
-            journeyAdapter.notifyDataSetChanged();*/
-        }
-
-    }
-
 
     @Override
     public void onStatusChanged(String provider, int status, Bundle extras) {

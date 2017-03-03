@@ -22,7 +22,6 @@ public class JourneyListView extends AbstractView {
 
     @Override
     protected void init() {
-        componentMap.put(ConstantValues.COMPONENT_JOURNEY_LIST_VIEW_BUTTON_SIGN_UP, getContext().findViewById(R.id.signup));
         componentMap.put(ConstantValues.COMPONENT_JOURNEY_LIST_VIEW_RECYCLE_VIEW, getContext().findViewById(R.id.journeyrecycle));
     }
 }

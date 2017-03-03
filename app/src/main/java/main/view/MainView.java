@@ -1,8 +1,10 @@
 package main.view;
 
 import android.app.Activity;
+import android.view.View;
 import android.widget.Button;
 
+import common.action.ActionFactoryProducer;
 import common.constants.ConstantValues;
 import common.view.AbstractView;
 import poc.servicedesigntoolkit.getpost.R;
@@ -18,7 +20,8 @@ public class MainView extends AbstractView {
 
     @Override
     protected void setUpListener() {
-        ((Button) componentMap.get(ConstantValues.COMPONENT_MAIN_VIEW_BUTTON_RESEARCH_LIST)).setOnClickListener(this);
+        Button button = (Button) componentMap.get(ConstantValues.COMPONENT_MAIN_VIEW_BUTTON_RESEARCH_LIST);
+        button.setOnClickListener(ActionFactoryProducer.getFactory(View.OnClickListener.class.toString()).initOnClickAction(button, this));
     }
 
     @Override

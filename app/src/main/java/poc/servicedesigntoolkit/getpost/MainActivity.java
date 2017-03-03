@@ -3,6 +3,8 @@ package poc.servicedesigntoolkit.getpost;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
+import common.action.ActionFactoryProducer;
+import common.action.ActionOnBackClick;
 import main.view.MainView;
 
 
@@ -17,6 +19,6 @@ public class MainActivity extends AppCompatActivity {
     }
     @Override
     public void onBackPressed() {
-        mainView.handleBackButton();
+        ActionFactoryProducer.getFactory(ActionOnBackClick.class.toString()).initOnBackClickAction(mainView).onBackClick();
     }
 }
