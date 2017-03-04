@@ -55,7 +55,7 @@
             android:label="@string/title_journey_list"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".TouchpointDetails"
+            android:name="touchpoint.activity.TouchPointDetailsActivity"
             android:label="@string/title_touchpoint_details"
             android:screenOrientation="portrait"/>
         <activity

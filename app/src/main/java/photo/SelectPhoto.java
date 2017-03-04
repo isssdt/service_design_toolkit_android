@@ -24,14 +24,11 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.channels.FileChannel;
-import java.nio.channels.SelectableChannel;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import poc.servicedesigntoolkit.getpost.R;
-import poc.servicedesigntoolkit.getpost.TouchpointDetails;
-
-import static android.R.attr.id;
+import touchpoint.activity.TouchPointDetailsActivity;
 
 public class SelectPhoto extends AppCompatActivity implements View.OnClickListener {
 
@@ -104,7 +101,7 @@ public class SelectPhoto extends AppCompatActivity implements View.OnClickListen
         Log.d("filePath",filePath.toString());
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             selectedImagePath = ImageFilePath.getPath(getApplicationContext(), filePath);
-            Intent i = new Intent(SelectPhoto.this, TouchpointDetails.class);
+            Intent i = new Intent(SelectPhoto.this, TouchPointDetailsActivity.class);
             i.putExtra("Touchpoint",Touchpoint_name);
             i.putExtra("Username",Username);
             i.putExtra("JourneyName",JourneyName);

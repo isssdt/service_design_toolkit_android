@@ -6,6 +6,7 @@ import android.widget.AdapterView;
 import common.view.AbstractView;
 import main.action.ACTION_BUTTON_MAIN_RESEARCH_LIST;
 import poc.servicedesigntoolkit.getpost.R;
+import touchpoint.action.ACTION_BUTTON_TOUCH_POINT_DETAILS_SUBMIT;
 import touchpoint.action.ACTION_BUTTON_TOUCH_POINT_LIST_SUBMIT_JOURNEY;
 
 /**
@@ -19,6 +20,8 @@ public class ActionOnClickFactory extends ActionAbstractFactory {
             return new ACTION_BUTTON_MAIN_RESEARCH_LIST(abstractView);
         } else if (R.id.submitJourney1 == view.getId()) {
             return new ACTION_BUTTON_TOUCH_POINT_LIST_SUBMIT_JOURNEY(abstractView);
+        } else if (R.id.submit == view.getId()) {
+            return new ACTION_BUTTON_TOUCH_POINT_DETAILS_SUBMIT(abstractView);
         }
         return null;
     }
