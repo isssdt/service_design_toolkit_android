@@ -4,14 +4,14 @@ import android.view.View;
 import android.widget.AdapterView;
 
 import common.view.AbstractView;
-import journey.action.ACTION_BUTTON_RECYCLE_JOURNEY_LIST_VIEW_SIGN_UP;
 import poc.servicedesigntoolkit.getpost.R;
+import touchpoint.action.ACTION_LIST_VIEW_TOUCH_POINT_LIST;
 
 /**
- * Created by longnguyen on 3/3/17.
+ * Created by longnguyen on 3/4/17.
  */
 
-public class ActionRecycleViewOnItemClickFactory extends ActionAbstractFactory {
+public class ActionOnItemClickFactory extends ActionAbstractFactory {
     @Override
     public View.OnClickListener initOnClickAction(View view, AbstractView abstractView) {
         return null;
@@ -24,14 +24,14 @@ public class ActionRecycleViewOnItemClickFactory extends ActionAbstractFactory {
 
     @Override
     public RecycleViewOnItemClick initRecycleViewOnItemClick(View view, AbstractView abstractView, int position) {
-        if (R.id.signup == view.getId()) {
-            return new ACTION_BUTTON_RECYCLE_JOURNEY_LIST_VIEW_SIGN_UP(abstractView, position);
-        }
         return null;
     }
 
     @Override
     public AdapterView.OnItemClickListener initOnItemClickAction(View view, AbstractView abstractView) {
+        if (R.id.list == view.getId()) {
+            return new ACTION_LIST_VIEW_TOUCH_POINT_LIST(abstractView);
+        }
         return null;
     }
 }

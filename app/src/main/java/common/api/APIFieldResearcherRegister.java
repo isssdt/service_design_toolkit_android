@@ -9,8 +9,8 @@ import common.utils.Utils;
 import common.view.AbstractView;
 import journey.activity.JourneyListActivity;
 import journey.dto.JourneyFieldResearcherDTO;
-import journeyVisualization.Journey_Visualization;
 import main.view.MainView;
+import touchpoint.activity.TouchPointListActivity;
 import user.dto.FieldResearcherDTO;
 import user.dto.SdtUserDTO;
 
@@ -37,7 +37,7 @@ public class APIFieldResearcherRegister extends APIFacade<RESTResponse, SdtUserD
         if (ConstantValues.REST_MESSAGE_FIELD_RESEARCHER_NOT_REGISTERED.equals(data.getMessage())) {
             Utils.forwardToScreen(mainView.getContext(), JourneyListActivity.class, ConstantValues.BUNDLE_KEY_JOURNEY_FIELD_RESEARCHER_DTO, journeyFieldResearcherDTO);
         } else {
-            Utils.forwardToScreen(mainView.getContext(), Journey_Visualization.class, ConstantValues.BUNDLE_KEY_JOURNEY_FIELD_RESEARCHER_DTO, journeyFieldResearcherDTO);
+            Utils.forwardToScreen(mainView.getContext(), TouchPointListActivity.class, ConstantValues.BUNDLE_KEY_JOURNEY_FIELD_RESEARCHER_DTO, journeyFieldResearcherDTO);
         }
     }
 }

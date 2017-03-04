@@ -1,6 +1,7 @@
 package common.action;
 
 import android.view.View;
+import android.widget.AdapterView;
 
 /**
  * Created by longnguyen on 3/3/17.
@@ -14,6 +15,8 @@ public class ActionFactoryProducer {
             return new ActionOnBackClickFactory();
         } else if (RecycleViewOnItemClick.class.toString().equals(actionType)) {
             return new ActionRecycleViewOnItemClickFactory();
+        } else if (AdapterView.OnItemClickListener.class.toString().equals(actionType)) {
+            return new ActionOnItemClickFactory();
         }
         return null;
     }

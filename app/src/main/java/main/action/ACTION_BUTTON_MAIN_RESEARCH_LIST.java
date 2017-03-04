@@ -22,6 +22,9 @@ public class ACTION_BUTTON_MAIN_RESEARCH_LIST extends BaseAction implements View
 
     @Override
     public void onClick(View view) {
+        if (!validation(view)) {
+            return;
+        }
         MainView mainView = (MainView) abstractView;
         SdtUserDTO sdtUserDTO = new SdtUserDTO();
         sdtUserDTO.setUsername(((EditText) mainView.getComponent(ConstantValues.COMPONENT_MAIN_VIEW_EDIT_TEXT_USERNAME)).getText().toString());

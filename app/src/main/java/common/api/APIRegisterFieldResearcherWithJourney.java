@@ -6,7 +6,7 @@ import common.constants.APIUrl;
 import common.constants.ConstantValues;
 import common.view.AbstractView;
 import journey.dto.JourneyFieldResearcherDTO;
-import journeyVisualization.Journey_Visualization;
+import touchpoint.activity.TouchPointListActivity;
 
 /**
  * Created by longnguyen on 3/3/17.
@@ -20,7 +20,7 @@ public class APIRegisterFieldResearcherWithJourney extends APIFacade<JourneyFiel
 
     @Override
     public void handleDataUponSuccess(JourneyFieldResearcherDTO data) {
-        Intent i = new Intent(view.getContext(), Journey_Visualization.class);
+        Intent i = new Intent(view.getContext(), TouchPointListActivity.class);
         i.putExtra(ConstantValues.BUNDLE_KEY_JOURNEY_FIELD_RESEARCHER_DTO, data);
         i.putExtra("JourneyName", data.getJourneyDTO().getJourneyName());
         i.putExtra("Username", data.getFieldResearcherDTO().getSdtUserDTO().getUsername());

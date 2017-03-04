@@ -8,12 +8,8 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.widget.Button;
 import android.widget.Toast;
-
-import java.text.SimpleDateFormat;
 
 import common.api.APIGetJourneyListForRegister;
 import common.constants.APIUrl;
@@ -29,15 +25,11 @@ public class JourneyListActivity extends AppCompatActivity implements LocationLi
     private LocationManager locationManager;
     private static final int share_location_request_code = 2;
     //ListView listView;
-    String Username;
 
 
-    RecyclerView recyclerView;
-    RecyclerView.Adapter recyclerViewadapter;
-    Button signUp;
     String seljourney,JourneyName;
     String provider;
-    SimpleDateFormat format;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,8 +39,6 @@ public class JourneyListActivity extends AppCompatActivity implements LocationLi
         Bundle extras = getIntent().getExtras();
         new APIGetJourneyListForRegister(((JourneyFieldResearcherDTO) extras.get(ConstantValues.BUNDLE_KEY_JOURNEY_FIELD_RESEARCHER_DTO)).getFieldResearcherDTO().getSdtUserDTO(), new JourneyListView(this)).execute();
 
-
-        format = new SimpleDateFormat("dd MMM yyyy");
         Criteria criteria = new Criteria();
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         provider = locationManager.getBestProvider(criteria, false);
