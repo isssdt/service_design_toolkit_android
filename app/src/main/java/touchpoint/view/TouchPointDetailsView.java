@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.RatingBar;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -32,6 +33,8 @@ public class TouchPointDetailsView extends AbstractView {
     protected void setUpListener() {
         Button submit = (Button) getComponent(ConstantValues.COMPONENT_TOUCH_POINT_DETAILS_VIEW_BUTTON_SUBMIT);
         submit.setOnClickListener(ActionFactoryProducer.getFactory(View.OnClickListener.class.toString()).initOnClickAction(submit, this));
+        ImageButton photo = (ImageButton) getComponent(ConstantValues.COMPONENT_TOUCH_POINT_DETAILS_VIEW_IMAGE_BUTTON);
+        photo.setOnClickListener(ActionFactoryProducer.getFactory(View.OnClickListener.class.toString()).initOnClickAction(photo, this));
     }
 
     @Override

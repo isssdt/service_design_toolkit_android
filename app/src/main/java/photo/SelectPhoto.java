@@ -11,6 +11,7 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -29,6 +30,7 @@ import java.util.Date;
 
 import poc.servicedesigntoolkit.getpost.R;
 import touchpoint.activity.TouchPointDetailsActivity;
+import touchpoint.dto.TouchPointFieldResearcherDTO;
 
 public class SelectPhoto extends AppCompatActivity implements View.OnClickListener {
 
@@ -62,22 +64,26 @@ public class SelectPhoto extends AppCompatActivity implements View.OnClickListen
         imageView = (ImageView) findViewById(R.id.imageView);
 
         Bundle extras = getIntent().getExtras();
-        Username = (String) extras.get("Username");
-        Touchpoint_name = (String ) extras.get("Touchpoint");
+        TouchPointFieldResearcherDTO touchPointFieldResearcherDTO = (TouchPointFieldResearcherDTO) extras.get(TouchPointFieldResearcherDTO.class.toString());
+        Username = touchPointFieldResearcherDTO.getFieldResearcherDTO().getSdtUserDTO().getUsername();
+        Touchpoint_name = touchPointFieldResearcherDTO.getTouchpointDTO().getTouchPointDesc();
 
-        JourneyName = (String) extras.get("JourneyName");
-        action = (String) extras.get("Action");
-        channel = (String) extras.get("Channel");
-        expected_time = (Integer) extras.get("Expected_time");
-        expected_unit = (String) extras.get("Expected_unit");
-        channel_desc = (String) extras.get("Channel_Desc");
-        id = (Integer) extras.get("Id");
+        JourneyName = touchPointFieldResearcherDTO.getTouchpointDTO().getJourneyDTO().getJourneyName();
+        action = touchPointFieldResearcherDTO.getTouchpointDTO().getAction();
+        channel = touchPointFieldResearcherDTO.getTouchpointDTO().getChannelDTO().getChannelName();
+        expected_time = touchPointFieldResearcherDTO.getTouchpointDTO().getDuration();
+        expected_unit = touchPointFieldResearcherDTO.getTouchpointDTO().getMasterDataDTO().getDataValue();
+        channel_desc = touchPointFieldResearcherDTO.getTouchpointDTO().getChannelDescription();
+        id = touchPointFieldResearcherDTO.getTouchpointDTO().getId();
         id_String = id.toString();
-        rating_intent = (String) extras.get("rating");
-        reaction_intent = (String) extras.get("reaction");
-        comment_intent = (String) extras.get("comment");
-        actual_time = (String) extras.get("Actual_time");
-        actual_unit = (String) extras.get("Actual_unit");
+        if (null != touchPointFieldResearcherDTO.getRatingDTO() && null != touchPointFieldResearcherDTO.getRatingDTO().getValue() &&
+                !touchPointFieldResearcherDTO.getRatingDTO().getValue().isEmpty()) {
+            rating_intent = touchPointFieldResearcherDTO.getRatingDTO().getValue();
+            reaction_intent = touchPointFieldResearcherDTO.getReaction();
+            comment_intent = touchPointFieldResearcherDTO.getComments();
+            actual_time = touchPointFieldResearcherDTO.getDuration().toString();
+            actual_unit = touchPointFieldResearcherDTO.getDurationUnitDTO().getDataValue();
+        }
 
         buttonCamera.setOnClickListener(this);
         buttonGallery.setOnClickListener(this);
@@ -250,7 +256,9 @@ public class SelectPhoto extends AppCompatActivity implements View.OnClickListen
             Log.d("Photofile", String.valueOf(photoFile));
             if (photoFile != null) {
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,
-                        Uri.fromFile(photoFile));
+//                        Uri.fromFile(photoFile)
+                        FileProvider.getUriForFile(this, getApplicationContext().getPackageName() + ".provider", photoFile)
+                );
                 startActivityForResult(takePictureIntent, TAKE_IMAGE);
             }
         }

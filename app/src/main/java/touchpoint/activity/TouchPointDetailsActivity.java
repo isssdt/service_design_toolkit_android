@@ -181,10 +181,6 @@ public class TouchPointDetailsActivity extends AppCompatActivity implements View
                 Toast.LENGTH_SHORT).show();
     }
 
-    @Override
-    public void onBackPressed() {
-    }
-
     private class LocationUpdate extends AsyncTask<Void, Void, RESTResponse> {
 
         @Override
