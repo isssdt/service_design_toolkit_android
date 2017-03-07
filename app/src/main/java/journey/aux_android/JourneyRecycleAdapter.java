@@ -1,4 +1,4 @@
-package journey.aux;
+package journey.aux_android;
 
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;

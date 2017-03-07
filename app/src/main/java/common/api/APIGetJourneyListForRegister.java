@@ -6,7 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import common.constants.APIUrl;
 import common.constants.ConstantValues;
 import common.view.AbstractView;
-import journey.aux.JourneyRecycleAdapter;
+import journey.aux_android.JourneyRecycleAdapter;
 import journey.dto.JourneyListDTO;
 import user.dto.SdtUserDTO;
 

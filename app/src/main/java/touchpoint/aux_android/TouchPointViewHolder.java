@@ -1,4 +1,4 @@
-package touchpoint.aux;
+package touchpoint.aux_android;
 
 import android.widget.TextView;
 

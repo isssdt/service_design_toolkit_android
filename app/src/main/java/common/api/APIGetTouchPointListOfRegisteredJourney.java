@@ -8,7 +8,7 @@ import android.widget.TextView;
 import common.constants.APIUrl;
 import common.constants.ConstantValues;
 import common.view.AbstractView;
-import touchpoint.aux.TouchPointFieldResearcherListAdapter;
+import touchpoint.aux_android.TouchPointFieldResearcherListAdapter;
 import touchpoint.dto.TouchPointFieldResearcherDTO;
 import touchpoint.dto.TouchPointFieldResearcherListDTO;
 import user.dto.SdtUserDTO;

@@ -15,7 +15,7 @@ import common.action.RecycleViewOnItemClick;
 import common.api.APIRegisterFieldResearcherWithJourney;
 import common.constants.ConstantValues;
 import common.view.AbstractView;
-import journey.aux.JourneyRecycleAdapter;
+import journey.aux_android.JourneyRecycleAdapter;
 import journey.dto.JourneyDTO;
 import journey.dto.JourneyFieldResearcherDTO;
 import journeyemotion.emotionMeter;
