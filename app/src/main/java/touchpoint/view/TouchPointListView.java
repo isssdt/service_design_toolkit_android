@@ -1,6 +1,7 @@
 package touchpoint.view;
 
 import android.app.Activity;
+import android.support.design.widget.FloatingActionButton;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -26,6 +27,9 @@ public class TouchPointListView extends AbstractView {
         listView.setOnItemClickListener(ActionFactoryProducer.getFactory(AdapterView.OnItemClickListener.class.toString()).initOnItemClickAction(listView, this));
         Button button = (Button) getComponent(ConstantValues.COMPONENT_TOUCH_POINT_LIST_VIEW_BUTTON_SUBMIT_JOURNEY);
         button.setOnClickListener(ActionFactoryProducer.getFactory(View.OnClickListener.class.toString()).initOnClickAction(button, this));
+        FloatingActionButton fab = (FloatingActionButton)getComponent(ConstantValues.COMPONENT_FLOAT_BUTTON);
+        fab.setOnClickListener(ActionFactoryProducer.getFactory(View.OnClickListener.class.toString()).initOnClickAction(fab,this));
+
     }
 
     @Override
@@ -33,5 +37,6 @@ public class TouchPointListView extends AbstractView {
         componentMap.put(ConstantValues.COMPONENT_TOUCH_POINT_LIST_VIEW_LIST_VIEW_TOUCH_POINT_LIST, getContext().findViewById(R.id.list));
         componentMap.put(ConstantValues.COMPONENT_TOUCH_POINT_LIST_VIEW_TEXT_VIEW_JOURNEY_NAME, getContext().findViewById(R.id.displayJourneyName));
         componentMap.put(ConstantValues.COMPONENT_TOUCH_POINT_LIST_VIEW_BUTTON_SUBMIT_JOURNEY, getContext().findViewById(R.id.submitJourney1));
+        componentMap.put(ConstantValues.COMPONENT_FLOAT_BUTTON, getContext().findViewById(R.id.fab));
     }
 }

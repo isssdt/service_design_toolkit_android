@@ -62,6 +62,8 @@ public class ConstantValues {
 
     public static final String COMPONENT_TOUCH_POINT_DETAILS_VIEW_SPINNER_ACTUAL_DURATION_UNIT = "COMPONENT_TOUCH_POINT_DETAILS_VIEW_SPINNER_ACTUAL_DURATION_UNIT";
 
+    public static final String COMPONENT_FLOAT_BUTTON = "COMPONENT_FLOAT_BUTTON";
+
     public static final String OTHERS_STATUS_DONE = "DONE";
 
     public static final String OTHERS_TIME_UNIT_DAY = "Day";

@@ -30,6 +30,8 @@ public class APIUrl {
 
     public static final String API_MARK_JOURNEY_COMPLETED = API_HOST + "journey_mark_complete";
 
+    public static final String API_ADD_TOUCHPOINT = API_HOST + "add_touch_point";
+
     public static final String METHOD_POST = "POST";
 
     public static final String METHOD_GET = "GET";

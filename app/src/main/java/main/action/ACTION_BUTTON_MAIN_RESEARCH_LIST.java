@@ -1,5 +1,7 @@
 package main.action;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -22,12 +24,21 @@ public class ACTION_BUTTON_MAIN_RESEARCH_LIST extends BaseAction implements View
 
     @Override
     public void onClick(View view) {
+        Context context = abstractView.getContext();
+        SharedPreferences sharedPref = context.getSharedPreferences(
+                "Trial", Context.MODE_PRIVATE);
+
         if (!validation(view)) {
             return;
         }
         MainView mainView = (MainView) abstractView;
         SdtUserDTO sdtUserDTO = new SdtUserDTO();
+        String Username = ((EditText) mainView.getComponent(ConstantValues.COMPONENT_MAIN_VIEW_EDIT_TEXT_USERNAME)).getText().toString();
         sdtUserDTO.setUsername(((EditText) mainView.getComponent(ConstantValues.COMPONENT_MAIN_VIEW_EDIT_TEXT_USERNAME)).getText().toString());
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString("Username",Username);
+        editor.commit();
+
         new APIFieldResearcherRegister(sdtUserDTO, abstractView).execute();
     }
 

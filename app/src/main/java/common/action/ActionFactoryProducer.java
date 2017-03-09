@@ -18,6 +18,7 @@ public class ActionFactoryProducer {
         } else if (AdapterView.OnItemClickListener.class.toString().equals(actionType)) {
             return new ActionOnItemClickFactory();
         }
+
         return null;
     }
 }
