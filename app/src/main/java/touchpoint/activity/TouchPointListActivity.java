@@ -2,6 +2,7 @@ package touchpoint.activity;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 
 import common.action.ActionFactoryProducer;
 import common.action.ActionOnBackClick;
@@ -15,7 +16,7 @@ import touchpoint.view.TouchPointListView;
  * Created by Gunjan Pathak on 11/01/2017.
  */
 
-public class TouchPointListActivity extends Activity {
+public class TouchPointListActivity extends AppCompatActivity {
     private TouchPointListView touchPointListView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {

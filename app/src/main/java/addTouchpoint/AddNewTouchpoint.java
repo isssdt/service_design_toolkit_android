@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -34,6 +35,7 @@ import common.dto.RESTResponse;
 import journey.dto.JourneyDTO;
 import photo.SelectPhoto;
 import poc.servicedesigntoolkit.getpost.R;
+import touchpoint.activity.TouchPointListActivity;
 import touchpoint.dto.ChannelDTO;
 import touchpoint.dto.RatingDTO;
 import touchpoint.dto.TouchPointDTO;
@@ -72,7 +74,7 @@ public class AddNewTouchpoint extends AppCompatActivity implements View.OnClickL
         touchpoint_name_after_edit = (EditText)findViewById(R.id.touchpoint_name_after);
         action_edit = (EditText) findViewById(R.id.action_edit);
         channelDescription_edit = (EditText) findViewById(R.id.channelDescription_edit);
-        time_taken = (EditText) findViewById(R.id.action);
+        time_taken = (EditText) findViewById(R.id.time_taken);
         reaction_edit = (EditText) findViewById(R.id.reaction_edit);
         comment_edit = (EditText) findViewById(R.id.comment_edit);
         image = (TextView) findViewById(R.id.imagelabel);
@@ -117,7 +119,12 @@ public class AddNewTouchpoint extends AppCompatActivity implements View.OnClickL
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.submit:
-                //new AddTouchPoint().execute();
+                getdetails();
+                if(validate()){
+                    new AddTouchPoint().execute();
+                    Intent newIntent = new Intent(AddNewTouchpoint.this, TouchPointListActivity.class);
+                    startActivity(newIntent);
+                }
                 break;
             case R.id.photo:
                 getdetails();
@@ -136,11 +143,35 @@ public class AddNewTouchpoint extends AppCompatActivity implements View.OnClickL
         channel_description = channelDescription_edit.getText().toString();
         actual_time = time_taken.getText().toString();
         time_unit = time.getSelectedItem().toString();
-        rating = String.valueOf(ratingBar.getRating());
+        rating = String.valueOf((int) ratingBar.getRating());
         reaction = reaction_edit.getText().toString();
         comment = comment_edit.getText().toString();
         imagepath = imagepathEdit.getText().toString();
+        Log.d("actual_time",actual_time);
 
+    }
+
+    private boolean validate(){
+        if(TextUtils.isEmpty(touchpointName_edit.getText().toString())) {
+            touchpointName_edit.setError("Please Enter the Touchpoint Name");
+            return false;
+        } else if (TextUtils.isEmpty(action_edit.getText().toString())) {
+            action_edit.setError("Please Enter the Action Performed");
+            return false;
+        }else if (TextUtils.isEmpty(channelDescription_edit.getText().toString())){
+            channelDescription_edit.setError("Please Enter the details of Channel");
+            return false;
+        }else if (TextUtils.isEmpty(time_taken.getText().toString())){
+            time_taken.setError("Please Enter the Time taken to complete");
+            return false;
+        }else if (0 == ratingBar.getRating()){
+            Toast.makeText(getApplicationContext(), "Please Enter the Rating ", Toast.LENGTH_SHORT).show();
+            return false;
+        }else if(TextUtils.isEmpty(reaction_edit.getText().toString())){
+            reaction_edit.setError("Please Enter What did you do");
+            return false;
+        }
+        return true;
     }
 
     private class AddTouchPoint extends AsyncTask<Void, Void, RESTResponse> {
@@ -151,40 +182,49 @@ public class AddNewTouchpoint extends AppCompatActivity implements View.OnClickL
                 RestTemplate restTemplate = new RestTemplate();
                 restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
 
-                FieldResearcherDTO fieldResearcherDTO = new FieldResearcherDTO();
+                TouchPointFieldResearcherDTO touchPointFieldResearcherDTO = new TouchPointFieldResearcherDTO();
 
+                FieldResearcherDTO fieldResearcherDTO = new FieldResearcherDTO();
+                Log.d("Username",Username);
                 SdtUserDTO sdtUserDTO = new SdtUserDTO();
                 sdtUserDTO.setUsername(Username);
+                Log.d("Username",sdtUserDTO.getUsername());
+
+
                 fieldResearcherDTO.setSdtUserDTO(sdtUserDTO);
+
+                touchPointFieldResearcherDTO.setFieldResearcherDTO(fieldResearcherDTO);
+
+                TouchPointDTO touchPointDTO = new TouchPointDTO();
+                touchPointDTO.setChannelDescription(channel_description);
+                touchPointDTO.setAction(action);
+                touchPointDTO.setTouchPointDesc(touchpoint_name);
+                touchPointDTO.setDuration(Integer.valueOf(actual_time));
 
                 MasterDataDTO masterDataDTO = new MasterDataDTO();
                 masterDataDTO.setDataValue(time_unit);
+                touchPointDTO.setMasterDataDTO(masterDataDTO);
 
                 ChannelDTO channelDTO = new ChannelDTO();
                 channelDTO.setChannelName(channel_name);
+                touchPointDTO.setChannelDTO(channelDTO);
 
                 JourneyDTO journeyDTO = new JourneyDTO();
                 journeyDTO.setJourneyName("Long Just Created");
-
-                TouchPointDTO touchPointDTO = new TouchPointDTO();
-                touchPointDTO.setId(Integer.parseInt("275"));
-                touchPointDTO.setAction(action);
-                touchPointDTO.setChannelDescription(channel_description);
-                touchPointDTO.setDuration(Integer.valueOf(actual_time));
-                touchPointDTO.setMasterDataDTO(masterDataDTO);
-                touchPointDTO.setChannelDTO(channelDTO);
                 touchPointDTO.setJourneyDTO(journeyDTO);
 
-                RatingDTO ratingDTO = new RatingDTO();
-                ratingDTO.setValue(rating);
-
-                TouchPointFieldResearcherDTO touchPointFieldResearcherDTO = new TouchPointFieldResearcherDTO();
-                touchPointFieldResearcherDTO.setFieldResearcherDTO(fieldResearcherDTO);
                 touchPointFieldResearcherDTO.setTouchpointDTO(touchPointDTO);
+
                 touchPointFieldResearcherDTO.setComments(comment);
                 touchPointFieldResearcherDTO.setReaction(reaction);
                 touchPointFieldResearcherDTO.setDuration(Integer.parseInt(actual_time));
                 touchPointFieldResearcherDTO.setPhotoLocation(imagepath);
+                touchPointFieldResearcherDTO.setTouchPointBeforeID(276);
+
+                RatingDTO ratingDTO = new RatingDTO();
+                ratingDTO.setValue(rating);
+                touchPointFieldResearcherDTO.setRatingDTO(ratingDTO);
+
                 touchPointFieldResearcherDTO.setDurationUnitDTO(masterDataDTO);
 
 
@@ -197,7 +237,7 @@ public class AddNewTouchpoint extends AppCompatActivity implements View.OnClickL
                         restTemplate.postForObject(url, touchPointFieldResearcherDTO, RESTResponse.class);
                 String message = response.getMessage();
                 Log.d("message",message);
-                Toast.makeText(getApplicationContext(),"Message "+ message,Toast.LENGTH_LONG).show();
+                //Toast.makeText(getApplicationContext(),"Message "+ message,Toast.LENGTH_LONG).show();
                 /*Intent i = new Intent(TouchpointDetails.this, Journey_Visualization.class);
                 JourneyFieldResearcherDTO journeyFieldResearcherDTO = new JourneyFieldResearcherDTO();
                 journeyFieldResearcherDTO.setJourneyDTO(new JourneyDTO());

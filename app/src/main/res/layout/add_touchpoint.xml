@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/scrollView2"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
@@ -167,11 +168,13 @@
                 android:stepSize="1.0" />
 
             <ImageButton
-                android:id="@+id/photo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                app:srcCompat="@android:drawable/ic_menu_camera"
+                android:id="@+id/photo"
                 android:layout_below="@+id/rating_text"
-                android:layout_alignRight="@+id/rating_text"  />
+                android:layout_alignRight="@+id/rating_text"
+                android:layout_alignEnd="@+id/rating_text" />
 
         </LinearLayout>
         <include layout="@layout/addo_touchpoint2" />

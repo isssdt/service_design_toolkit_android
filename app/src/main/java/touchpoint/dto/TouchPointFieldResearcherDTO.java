@@ -1,20 +1,27 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package touchpoint.dto;
 
-/**
- * Created by longnguyen on 11/6/16.
- */
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import touchpoint.dto.TouchPointDTO;
+
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import common.dto.MasterDataDTO;
+import user.dto.FieldResearcherDTO;
 
 import java.io.Serializable;
 import java.util.Date;
 
-import common.dto.MasterDataDTO;
-import user.dto.FieldResearcherDTO;
+/**
+ *
+ * @author samru
+ */
 
-
-@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonInclude(Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class TouchPointFieldResearcherDTO implements Serializable {
     private FieldResearcherDTO fieldResearcherDTO;
@@ -26,8 +33,43 @@ public class TouchPointFieldResearcherDTO implements Serializable {
     private Integer duration;
     private String photoLocation;
     private Date actionTime;
-
     private MasterDataDTO durationUnitDTO;
+    private Double convertedToExepectedDuration;
+    private String serverPhotoPath;
+    private String touchPointBefore;
+    private Integer touchPointBeforeID;
+
+    public Integer getTouchPointBeforeID() {
+        return touchPointBeforeID;
+    }
+
+    public void setTouchPointBeforeID(Integer touchPointBeforeID) {
+        this.touchPointBeforeID = touchPointBeforeID;
+    }
+
+    public String getTouchPointBefore() {
+        return touchPointBefore;
+    }
+
+    public void setTouchPointBefore(String touchPointBefore) {
+        this.touchPointBefore = touchPointBefore;
+    }
+
+    public String getServerPhotoPath() {
+        return serverPhotoPath;
+    }
+
+    public void setServerPhotoPath(String serverPhotoPath) {
+        this.serverPhotoPath = serverPhotoPath;
+    }
+
+    public Double getConvertedToExepectedDuration() {
+        return convertedToExepectedDuration;
+    }
+
+    public void setConvertedToExepectedDuration(Double convertedToExepectedDuration) {
+        this.convertedToExepectedDuration = convertedToExepectedDuration;
+    }
 
     public String getPhotoLocation() {
         return photoLocation;

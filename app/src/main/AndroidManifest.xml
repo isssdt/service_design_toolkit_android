@@ -64,6 +64,11 @@
             android:screenOrientation="portrait"/>
 
         <activity
+            android:name="addTouchpoint.AddNewTouchpoint"
+            android:label="Add Touchpoint"
+            android:screenOrientation="portrait"/>
+
+        <activity
             android:name="journeyemotion.emotionMeter"
             android:label="My Journey"
             android:screenOrientation="portrait"/>

@@ -2,6 +2,7 @@ package main.action;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -25,8 +26,7 @@ public class ACTION_BUTTON_MAIN_RESEARCH_LIST extends BaseAction implements View
     @Override
     public void onClick(View view) {
         Context context = abstractView.getContext();
-        SharedPreferences sharedPref = context.getSharedPreferences(
-                "Trial", Context.MODE_PRIVATE);
+        SharedPreferences sharedPref = context.getSharedPreferences("Trial", Context.MODE_PRIVATE);
 
         if (!validation(view)) {
             return;
@@ -45,9 +45,8 @@ public class ACTION_BUTTON_MAIN_RESEARCH_LIST extends BaseAction implements View
     @Override
     public boolean validation(View view) {
         MainView mainView = (MainView) abstractView;
-        if (null == ((EditText) mainView.getComponent(ConstantValues.COMPONENT_MAIN_VIEW_EDIT_TEXT_USERNAME)).getText().toString() ||
-                ((EditText) mainView.getComponent(ConstantValues.COMPONENT_MAIN_VIEW_EDIT_TEXT_USERNAME)).getText().toString().isEmpty()) {
-            Toast.makeText(mainView.getContext().getApplicationContext(), ConstantValues.ALERT_MESSAGE_NO_USERNAME_ENTERED, Toast.LENGTH_SHORT).show();
+        if (TextUtils.isEmpty(((EditText) mainView.getComponent(ConstantValues.COMPONENT_MAIN_VIEW_EDIT_TEXT_USERNAME)).getText().toString())){
+            ((EditText) mainView.getComponent(ConstantValues.COMPONENT_MAIN_VIEW_EDIT_TEXT_USERNAME)).setError(ConstantValues.ALERT_MESSAGE_NO_USERNAME_ENTERED);
             return false;
         }
         return true;
