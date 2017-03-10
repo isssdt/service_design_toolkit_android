@@ -1,5 +1,6 @@
 package common.action;
 
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import common.view.AbstractView;
@@ -8,7 +9,7 @@ import common.view.AbstractView;
  * Created by longnguyen on 3/3/17.
  */
 
-public abstract class BaseAction {
+public abstract class BaseAction extends AppCompatActivity {
     protected AbstractView abstractView;
     protected int position;
 
