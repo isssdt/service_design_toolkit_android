@@ -1,8 +1,13 @@
 package touchpoint.activity;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+
+import com.google.gson.Gson;
 
 import common.action.ActionFactoryProducer;
 import common.action.ActionOnBackClick;
@@ -23,9 +28,14 @@ public class TouchPointListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.visulaization_journey);
 
-        Bundle extras = getIntent().getExtras();
-        JourneyFieldResearcherDTO journeyFieldResearcherDTO = (JourneyFieldResearcherDTO) extras.get(ConstantValues.BUNDLE_KEY_JOURNEY_FIELD_RESEARCHER_DTO);
 
+        SharedPreferences sharedPref = getApplicationContext().getSharedPreferences("Trial", Context.MODE_PRIVATE);
+        Gson gson = new Gson();
+        String json = sharedPref.getString("JourneyFieldResearcherDTO", "");
+        Log.d("JourneyFieldResearcherDTO", " EMPTY "+json);
+
+        JourneyFieldResearcherDTO journeyFieldResearcherDTO = gson.fromJson(json, JourneyFieldResearcherDTO.class);//(JourneyFieldResearcherDTO) extras.get(ConstantValues.BUNDLE_KEY_JOURNEY_FIELD_RESEARCHER_DTO);
+        Log.d("USERNAME",journeyFieldResearcherDTO.getFieldResearcherDTO().getSdtUserDTO().getUsername());
         touchPointListView = new TouchPointListView(this);
         new APIGetTouchPointListOfRegisteredJourney(journeyFieldResearcherDTO.getFieldResearcherDTO().getSdtUserDTO(), touchPointListView).execute();
     }

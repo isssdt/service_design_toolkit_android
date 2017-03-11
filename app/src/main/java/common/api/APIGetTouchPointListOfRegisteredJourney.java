@@ -1,9 +1,13 @@
 package common.api;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import com.google.gson.Gson;
 
 import common.constants.APIUrl;
 import common.constants.ConstantValues;
@@ -25,6 +29,14 @@ public class APIGetTouchPointListOfRegisteredJourney extends APIFacade<TouchPoin
 
     @Override
     public void handleDataUponSuccess(TouchPointFieldResearcherListDTO data) {
+
+        SharedPreferences sharedPref = view.getContext().getSharedPreferences("Trial", Context.MODE_PRIVATE);
+        Gson gson = new Gson();
+        String json = gson.toJson(data);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString("TouchPointFieldResearcherListDTO",json);
+        editor.commit();
+
         ListView listView = (ListView) view.getComponent(ConstantValues.COMPONENT_TOUCH_POINT_LIST_VIEW_LIST_VIEW_TOUCH_POINT_LIST);
         listView.setAdapter(new TouchPointFieldResearcherListAdapter(view.getContext(), data.getTouchPointFieldResearcherDTOList()));
         TextView textView = (TextView) view.getComponent(ConstantValues.COMPONENT_TOUCH_POINT_LIST_VIEW_TEXT_VIEW_JOURNEY_NAME);

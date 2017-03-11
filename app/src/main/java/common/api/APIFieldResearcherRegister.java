@@ -1,6 +1,11 @@
 package common.api;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.util.Log;
 import android.widget.EditText;
+
+import com.google.gson.Gson;
 
 import common.constants.APIUrl;
 import common.constants.ConstantValues;
@@ -35,8 +40,24 @@ public class APIFieldResearcherRegister extends APIFacade<RESTResponse, SdtUserD
                 setUsername(((EditText) mainView.getComponent(ConstantValues.COMPONENT_MAIN_VIEW_EDIT_TEXT_USERNAME)).getText().toString());
 
         if (ConstantValues.REST_MESSAGE_FIELD_RESEARCHER_NOT_REGISTERED.equals(data.getMessage())) {
+
+            Context context = mainView.getContext();
+            SharedPreferences sharedPref = context.getSharedPreferences("Trial", Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPref.edit();
+            Gson gson = new Gson();
+            String json = gson.toJson(journeyFieldResearcherDTO);
+            editor.putString("JourneyFieldResearcherDTO",json);
+            editor.commit();
+
             Utils.forwardToScreen(mainView.getContext(), JourneyListActivity.class, ConstantValues.BUNDLE_KEY_JOURNEY_FIELD_RESEARCHER_DTO, journeyFieldResearcherDTO);
         } else {
+            Context context = mainView.getContext();
+            SharedPreferences sharedPref = context.getSharedPreferences("Trial", Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPref.edit();
+            Gson gson = new Gson();
+            String json = gson.toJson(journeyFieldResearcherDTO);
+            editor.putString("JourneyFieldResearcherDTO",json);
+            editor.commit();
             Utils.forwardToScreen(mainView.getContext(), TouchPointListActivity.class, ConstantValues.BUNDLE_KEY_JOURNEY_FIELD_RESEARCHER_DTO, journeyFieldResearcherDTO);
         }
     }

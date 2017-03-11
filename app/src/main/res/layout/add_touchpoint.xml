@@ -31,7 +31,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
-            android:text="Between Touchpoint *" />
+            android:text="Before Touchpoint *" />
 
         <Spinner
             android:id="@+id/touchpoint"
@@ -40,25 +40,6 @@
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:layout_below="@+id/touchpoint" />
-
-        <TextView
-            android:id="@+id/touchpoint_after"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:text="And" />
-
-        <EditText
-            android:textColor="#606060"
-            android:id="@+id/touchpoint_name_after"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:ems="10"
-            android:layout_below="@+id/touchpoint_after"
-            android:inputType="text" />
 
         <TextView
             android:id="@+id/action"
@@ -150,7 +131,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
-            android:text="Rating" />
+            android:text="Rating *" />
 
         <LinearLayout
             android:layout_width="match_parent"

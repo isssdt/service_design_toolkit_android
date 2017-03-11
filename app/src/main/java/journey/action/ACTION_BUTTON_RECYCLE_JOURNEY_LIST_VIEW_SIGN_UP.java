@@ -1,12 +1,16 @@
 package journey.action;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
+
+import com.google.gson.Gson;
 
 import java.text.SimpleDateFormat;
 
@@ -71,6 +75,16 @@ public class ACTION_BUTTON_RECYCLE_JOURNEY_LIST_VIEW_SIGN_UP extends BaseAction 
                     Bundle extras = abstractView.getContext().getIntent().getExtras();
                     JourneyFieldResearcherDTO journeyFieldResearcherDTO = (JourneyFieldResearcherDTO) extras.get(ConstantValues.BUNDLE_KEY_JOURNEY_FIELD_RESEARCHER_DTO);
                     journeyFieldResearcherDTO.setJourneyDTO(journeyDTO);
+
+
+                    Context context = abstractView.getContext();
+                    SharedPreferences sharedPref = context.getSharedPreferences("Trial", Context.MODE_PRIVATE);
+                    Gson gson = new Gson();
+                    String json = gson.toJson(journeyFieldResearcherDTO);
+                    SharedPreferences.Editor editor = sharedPref.edit();
+                    editor.putString("JourneyFieldResearcherDTO",json);
+                    editor.commit();
+
                     new APIRegisterFieldResearcherWithJourney(journeyFieldResearcherDTO, abstractView).execute();
 
                 }
