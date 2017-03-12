@@ -23,6 +23,11 @@ public class APIUpdateResearchWork extends APIFacade<RESTResponse, TouchPointFie
 
     @Override
     public void handleDataUponSuccess(RESTResponse data) {
+        if (null != this.input.getPhotoLocation() && !this.input.getPhotoLocation().isEmpty()) {
+            Utils.uploadImageThread(this.input.getPhotoLocation(),
+                    this.input.getTouchpointDTO().getJourneyDTO().getJourneyName() + "_" + this.input.getTouchpointDTO().getTouchPointDesc() + "_" +
+                            this.input.getFieldResearcherDTO().getSdtUserDTO().getUsername() + ".jpg");
+        }
         Bundle bundle = view.getContext().getIntent().getExtras();
         TouchPointFieldResearcherDTO touchPointFieldResearcherDTO = (TouchPointFieldResearcherDTO) bundle.get(TouchPointFieldResearcherDTO.class.toString());
         JourneyFieldResearcherDTO journeyFieldResearcherDTO = new JourneyFieldResearcherDTO();

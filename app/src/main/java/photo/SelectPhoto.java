@@ -28,6 +28,7 @@ import java.nio.channels.FileChannel;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import common.utils.Utils;
 import poc.servicedesigntoolkit.getpost.R;
 import touchpoint.activity.TouchPointDetailsActivity;
 import touchpoint.dto.TouchPointFieldResearcherDTO;
@@ -91,14 +92,6 @@ public class SelectPhoto extends AppCompatActivity implements View.OnClickListen
 
     }
 
-    /*public String getStringImage(Bitmap bmp) {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bmp.compress(Bitmap.CompressFormat.JPEG, 20, baos);
-        byte[] imageBytes = baos.toByteArray();
-        String encodedImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
-        return encodedImage;
-    }*/
-
     private void uploadImage(){
         //String image = getStringImage(bitmap);
 
@@ -107,26 +100,10 @@ public class SelectPhoto extends AppCompatActivity implements View.OnClickListen
         Log.d("filePath",filePath.toString());
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             selectedImagePath = ImageFilePath.getPath(getApplicationContext(), filePath);
-            Intent i = new Intent(SelectPhoto.this, TouchPointDetailsActivity.class);
-            i.putExtra("Touchpoint",Touchpoint_name);
-            i.putExtra("Username",Username);
-            i.putExtra("JourneyName",JourneyName);
-            i.putExtra("Action",action);
-            i.putExtra("Channel",channel);
-            i.putExtra("Expected_time",expected_time);
-            i.putExtra("Expected_unit",expected_unit);
-            i.putExtra("Channel_Desc",channel_desc);
-            i.putExtra("Id",id);
-            i.putExtra("rating",rating_intent);
-            i.putExtra("reaction",reaction_intent);
-            i.putExtra("comment",comment_intent);
-            i.putExtra("Actual_time",actual_time);
-            i.putExtra("Actual_unit",actual_unit);
-
-            i.putExtra("image",selectedImagePath);
-            startActivity(i);
+            TouchPointFieldResearcherDTO touchPointFieldResearcherDTO = (TouchPointFieldResearcherDTO) getIntent().getExtras().get(TouchPointFieldResearcherDTO.class.toString());
+            touchPointFieldResearcherDTO.setPhotoLocation(selectedImagePath);
+            Utils.forwardToScreen(this, TouchPointDetailsActivity.class, TouchPointFieldResearcherDTO.class.toString(), touchPointFieldResearcherDTO);
         }
-        //String image = getStringImage(bitmap);
     }
 
     private void showFileChooser() {

@@ -15,7 +15,7 @@ import common.view.AbstractView;
 public class APIFacade<T, X> extends AsyncTask<Void, Void, T> {
     private String url;
     private Class<T> outputClass;
-    private X input;
+    protected X input;
     private String method;
     private APIExecutor<T> apiExecutor;
     protected AbstractView view;
