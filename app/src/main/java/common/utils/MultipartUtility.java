@@ -1,4 +1,4 @@
-package poc.servicedesigntoolkit.getpost;
+package common.utils;
 
 import java.io.BufferedReader;
 import java.io.File;

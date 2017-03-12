@@ -32,6 +32,8 @@ public class APIUrl {
 
     public static final String API_ADD_TOUCHPOINT = API_HOST + "add_touch_point";
 
+    public static final String API_PHOTO_UPLOAD = API_HOST + "photo_upload";
+
     public static final String METHOD_POST = "POST";
 
     public static final String METHOD_GET = "GET";

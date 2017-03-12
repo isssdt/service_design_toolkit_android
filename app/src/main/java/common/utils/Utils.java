@@ -7,7 +7,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 
-import poc.servicedesigntoolkit.getpost.MultipartUtility;
+import common.constants.APIUrl;
 
 /**
  * Created by longnguyen on 3/2/17.
@@ -23,12 +23,9 @@ public class Utils {
     public static void uploadImageThread(final String photoPath, final String photoName) {
         Thread myUploadTask = new Thread(new Runnable() {
             public void run() {
-                String charset = "UTF-8";
-                String requestURL = "http://54.169.243.190:8080/service_design_toolkit-web/api/photo_upload";
-
                 MultipartUtility multipart = null;
                 try {
-                    multipart = new MultipartUtility(requestURL, charset);
+                    multipart = new MultipartUtility(APIUrl.API_PHOTO_UPLOAD, "UTF-8");
                     multipart.addFilePart("uploadedFile", new File(photoPath), photoName);
                     String response = multipart.finish(); // response from server.
                 } catch (IOException e) {
