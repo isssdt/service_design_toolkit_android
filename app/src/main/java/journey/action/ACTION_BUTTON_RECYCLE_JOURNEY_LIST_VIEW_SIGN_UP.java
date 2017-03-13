@@ -5,8 +5,10 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
@@ -19,6 +21,7 @@ import common.action.RecycleViewOnItemClick;
 import common.api.APIRegisterFieldResearcherWithJourney;
 import common.constants.ConstantValues;
 import common.view.AbstractView;
+import connectionStatus.AppStatus;
 import journey.aux_android.JourneyRecycleAdapter;
 import journey.dto.JourneyDTO;
 import journey.dto.JourneyFieldResearcherDTO;
@@ -40,6 +43,10 @@ public class ACTION_BUTTON_RECYCLE_JOURNEY_LIST_VIEW_SIGN_UP extends BaseAction 
 
     @Override
     public void onItemClick(View view) {
+        if (AppStatus.getInstance(view.getContext()).isOnline()) {
+
+            Snackbar.make(view, "You are online!!!!", Snackbar.LENGTH_LONG).show();
+
         JourneyRecycleAdapter journeyRecycleAdapter = (JourneyRecycleAdapter) ((RecyclerView) abstractView.getComponent(ConstantValues.COMPONENT_JOURNEY_LIST_VIEW_RECYCLE_VIEW))
                 .getAdapter();
         final JourneyDTO journeyDTO = journeyRecycleAdapter.getJourneyDTOList().get(position);
@@ -82,7 +89,7 @@ public class ACTION_BUTTON_RECYCLE_JOURNEY_LIST_VIEW_SIGN_UP extends BaseAction 
                     Gson gson = new Gson();
                     String json = gson.toJson(journeyFieldResearcherDTO);
                     SharedPreferences.Editor editor = sharedPref.edit();
-                    editor.putString("JourneyFieldResearcherDTO",json);
+                    editor.putString("JourneyFieldResearcherDTO", json);
                     editor.commit();
 
                     new APIRegisterFieldResearcherWithJourney(journeyFieldResearcherDTO, abstractView).execute();
@@ -92,5 +99,9 @@ public class ACTION_BUTTON_RECYCLE_JOURNEY_LIST_VIEW_SIGN_UP extends BaseAction 
             adb.setNegativeButton("Cancel", null);
             adb.show();
         }
+    }else{
+            Snackbar.make(view, "You are not online!!!!", Snackbar.LENGTH_LONG).show();
+            Log.v("Home", "############################You are not online!!!!");
     }
+}
 }

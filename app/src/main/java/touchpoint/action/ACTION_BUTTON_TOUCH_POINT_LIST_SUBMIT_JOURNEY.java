@@ -2,13 +2,16 @@ package touchpoint.action;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.View;
 
 import common.action.BaseAction;
 import common.api.APIMarkJourneyCompleted;
 import common.constants.ConstantValues;
 import common.view.AbstractView;
+import connectionStatus.AppStatus;
 import journey.dto.JourneyFieldResearcherDTO;
 
 /**
@@ -22,19 +25,26 @@ public class ACTION_BUTTON_TOUCH_POINT_LIST_SUBMIT_JOURNEY extends BaseAction im
 
     @Override
     public void onClick(View view) {
-        AlertDialog.Builder adb = new AlertDialog.Builder(abstractView.getContext());
-        adb.setTitle("Submit Journey");
-        adb.setMessage(" Thank you for your response.Please proceed for new journey registeration");
-        adb.setPositiveButton("Submit", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                Bundle extras = abstractView.getContext().getIntent().getExtras();
-                JourneyFieldResearcherDTO journeyFieldResearcherDTO = (JourneyFieldResearcherDTO) extras.get(ConstantValues.BUNDLE_KEY_JOURNEY_FIELD_RESEARCHER_DTO);
-                new APIMarkJourneyCompleted(journeyFieldResearcherDTO.getFieldResearcherDTO().getSdtUserDTO(), abstractView).execute();
-            }
-        });
-        adb.setNegativeButton("Cancel", null);
-        adb.show();
+        if (AppStatus.getInstance(view.getContext()).isOnline()) {
+            Snackbar.make(view, "You are online!!!!", Snackbar.LENGTH_LONG).show();
+            AlertDialog.Builder adb = new AlertDialog.Builder(abstractView.getContext());
+            adb.setTitle("Submit Journey");
+            adb.setMessage(" Thank you for your response.Please proceed for new journey registeration");
+            adb.setPositiveButton("Submit", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    Bundle extras = abstractView.getContext().getIntent().getExtras();
+                    JourneyFieldResearcherDTO journeyFieldResearcherDTO = (JourneyFieldResearcherDTO) extras.get(ConstantValues.BUNDLE_KEY_JOURNEY_FIELD_RESEARCHER_DTO);
+                    new APIMarkJourneyCompleted(journeyFieldResearcherDTO.getFieldResearcherDTO().getSdtUserDTO(), abstractView).execute();
+                }
+            });
+            adb.setNegativeButton("Cancel", null);
+            adb.show();
+        } else {
+
+        Snackbar.make(view,"You are not online!!!!",Snackbar.LENGTH_LONG).show();
+        Log.v("Home", "############################You are not online!!!!");
+    }
     }
 
     @Override

@@ -11,6 +11,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.ImageView;
@@ -27,6 +28,8 @@ import com.jjoe64.graphview.series.Series;
 
 import java.io.File;
 import java.util.ArrayList;
+
+import connectionStatus.AppStatus;
 import poc.servicedesigntoolkit.getpost.R;
 import poc.servicedesigntoolkit.getpost.Touchpoint.Touchpoint_model;
 import journey.dto.JourneyDTO;
@@ -49,27 +52,35 @@ public class emotionMeter extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.visualization_emotion);
 
 
-        touchpointData = new ArrayList<Touchpoint_model>();
 
-        graph = (GraphView) findViewById(R.id.graph);
-        touchpointname = (TextView) findViewById(R.id.touchpointname);
-        action = (TextView) findViewById(R.id.action);
-        reaction = (TextView) findViewById(R.id.reaction);
-        imageView = (ImageView) findViewById(R.id.imageView);
+            setContentView(R.layout.visualization_emotion);
 
-        Bundle extras = getIntent().getExtras();
-        Username = (String) extras.get("Username");
-        JourneyName = (String) extras.get("JourneyName");
-        new HttpRequestTask().execute();
-        //updateGraph(graph);
+
+            touchpointData = new ArrayList<Touchpoint_model>();
+
+            graph = (GraphView) findViewById(R.id.graph);
+            touchpointname = (TextView) findViewById(R.id.touchpointname);
+            action = (TextView) findViewById(R.id.action);
+            reaction = (TextView) findViewById(R.id.reaction);
+            imageView = (ImageView) findViewById(R.id.imageView);
+
+            Bundle extras = getIntent().getExtras();
+            Username = (String) extras.get("Username");
+            JourneyName = (String) extras.get("JourneyName");
+            new HttpRequestTask().execute();
+            //updateGraph(graph);
+
+
     }
 
     public void updateGraph(GraphView graph) {
         series = new LineGraphSeries<>(generateData(graph));
 
+//        // enable scaling and scrolling
+//        graph.getViewport().setScalable(true);
+//        graph.getViewport().setScalableY(true);
         graph.addSeries(series);
 
         Log.d("scale",""+graph.getViewport().getMaxYAxisSize());
@@ -92,14 +103,14 @@ public class emotionMeter extends AppCompatActivity {
                     Log.d("ontapdata",""+touchpointData.get(i).getName()+touchpointData.get(i).getRating()+"datapoint"+dataPoint.getX());
                     touchpointname.setText(touchpointData.get(i).getName());
                     action.setText(touchpointData.get(i).getAction());
-                    reaction.setText(touchpointData.get(i).getReaction());
-                    File imgFile = new File(touchpointData.get(i).getPhotoLocation());
-                    if(imgFile.exists()){
+//                    if(imgFile.exists()){
+//
+//                        Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+//                        imageView.setImageBitmap(myBitmap);
+//
+//                    }             reaction.setText(touchpointData.get(i).getReaction());
+                   // File imgFile = new File(touchpointData.get(i).getPhotoLocation());
 
-                        Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
-                        imageView.setImageBitmap(myBitmap);
-
-                    }
                 }
             }
             }

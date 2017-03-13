@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.text.TextUtils;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -21,6 +23,7 @@ import common.action.BaseAction;
 import common.api.APIFieldResearcherRegister;
 import common.constants.ConstantValues;
 import common.view.AbstractView;
+import connectionStatus.AppStatus;
 import main.view.MainView;
 import poc.servicedesigntoolkit.getpost.MainActivity;
 import user.dto.SdtUserDTO;
@@ -47,25 +50,36 @@ public class ACTION_BUTTON_MAIN_RESEARCH_LIST extends BaseAction implements View
         viewCheck=view;
         Context context = abstractView.getContext();
         SharedPreferences sharedPref = context.getSharedPreferences("Trial", Context.MODE_PRIVATE);
+        boolean connected = false;
 
-        if (!validation(view)) {
-            return;
-        }
-        MainView mainView = (MainView) abstractView;
-        sdtUserDTO = new SdtUserDTO();
-        String Username = ((EditText) mainView.getComponent(ConstantValues.COMPONENT_MAIN_VIEW_EDIT_TEXT_USERNAME)).getText().toString();
-        sdtUserDTO.setUsername(((EditText) mainView.getComponent(ConstantValues.COMPONENT_MAIN_VIEW_EDIT_TEXT_USERNAME)).getText().toString());
-        SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putString("Username",Username);
-        editor.commit();
-        if (!checkPermission()) {
+        if (AppStatus.getInstance(viewCheck.getContext()).isOnline()) {
 
-            requestPermission();
+            Snackbar.make(view, "You are online!!!!", Snackbar.LENGTH_LONG).show();
 
-        } else {
-            //Snackbar.make(view, "Permission already granted.", Snackbar.LENGTH_LONG).show();
-            new APIFieldResearcherRegister(sdtUserDTO, abstractView).execute();
-        }
+
+            if (!validation(view)) {
+                return;
+            }
+            MainView mainView = (MainView) abstractView;
+            sdtUserDTO = new SdtUserDTO();
+            String Username = ((EditText) mainView.getComponent(ConstantValues.COMPONENT_MAIN_VIEW_EDIT_TEXT_USERNAME)).getText().toString();
+            sdtUserDTO.setUsername(((EditText) mainView.getComponent(ConstantValues.COMPONENT_MAIN_VIEW_EDIT_TEXT_USERNAME)).getText().toString());
+            SharedPreferences.Editor editor = sharedPref.edit();
+            editor.putString("Username", Username);
+            editor.commit();
+            if (!checkPermission()) {
+
+                requestPermission();
+
+            } else {
+                //Snackbar.make(view, "Permission already granted.", Snackbar.LENGTH_LONG).show();
+                new APIFieldResearcherRegister(sdtUserDTO, abstractView).execute();
+            }
+        }else {
+
+                Snackbar.make(view,"You are not online!!!!",Snackbar.LENGTH_LONG).show();
+                Log.v("Home", "############################You are not online!!!!");
+            }
 
 
         //new APIFieldResearcherRegister(sdtUserDTO, abstractView).execute();

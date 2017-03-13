@@ -1,6 +1,8 @@
 package touchpoint.action;
 
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.RatingBar;
@@ -12,6 +14,7 @@ import common.api.APIUpdateResearchWork;
 import common.constants.ConstantValues;
 import common.dto.MasterDataDTO;
 import common.view.AbstractView;
+import connectionStatus.AppStatus;
 import touchpoint.dto.RatingDTO;
 import touchpoint.dto.TouchPointFieldResearcherDTO;
 
@@ -26,7 +29,11 @@ public class ACTION_BUTTON_TOUCH_POINT_DETAILS_SUBMIT extends BaseAction impleme
 
     @Override
     public void onClick(View view) {
-        Bundle bundle = abstractView.getContext().getIntent().getExtras();
+        if (AppStatus.getInstance(view.getContext()).isOnline()) {
+
+            Snackbar.make(view, "You are online!!!!", Snackbar.LENGTH_LONG).show();
+
+            Bundle bundle = abstractView.getContext().getIntent().getExtras();
         TouchPointFieldResearcherDTO touchPointFieldResearcherDTO = (TouchPointFieldResearcherDTO) bundle.get(TouchPointFieldResearcherDTO.class.toString());
         if (!validation(view)) {
             return;
@@ -42,6 +49,12 @@ public class ACTION_BUTTON_TOUCH_POINT_DETAILS_SUBMIT extends BaseAction impleme
         touchPointFieldResearcherDTO.getDurationUnitDTO().setDataValue(
                 ((Spinner) abstractView.getComponent(ConstantValues.COMPONENT_TOUCH_POINT_DETAILS_VIEW_SPINNER_ACTUAL_DURATION_UNIT)).getSelectedItem().toString());
         new APIUpdateResearchWork(touchPointFieldResearcherDTO, abstractView).execute();
+    } else {
+
+            Snackbar.make(view,"You are not online!!!!",Snackbar.LENGTH_LONG).show();
+            Log.v("Home", "############################You are not online!!!!");
+        }
+
     }
 
     @Override
