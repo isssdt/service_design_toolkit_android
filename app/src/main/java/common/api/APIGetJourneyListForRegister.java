@@ -2,11 +2,13 @@ package common.api;
 
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 
 import common.constants.APIUrl;
 import common.constants.ConstantValues;
 import common.view.AbstractView;
 import journey.aux_android.JourneyRecycleAdapter;
+import journey.dto.JourneyDTO;
 import journey.dto.JourneyListDTO;
 import user.dto.SdtUserDTO;
 
@@ -22,6 +24,11 @@ public class APIGetJourneyListForRegister extends APIFacade<JourneyListDTO, SdtU
 
     @Override
     public void handleDataUponSuccess(JourneyListDTO data) {
+
+        for(JourneyDTO journeyDTO : data.getJourneyDTOList()){
+            Log.d("JOURNEY NAME :",journeyDTO.getJourneyName());
+        }
+
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(view.getContext());
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         JourneyRecycleAdapter journeyRecycleAdapter = new JourneyRecycleAdapter(data.getJourneyDTOList(), view);

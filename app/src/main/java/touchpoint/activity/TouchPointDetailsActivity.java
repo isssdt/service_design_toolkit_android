@@ -78,10 +78,9 @@ public class TouchPointDetailsActivity extends AppCompatActivity implements View
                 ActivityCompat.requestPermissions(TouchPointDetailsActivity.this, new String[]{Manifest.permission.CAMERA}, take_photo_request_code);
             } else {
                 Intent i = new Intent(TouchPointDetailsActivity.this, SelectPhoto.class);
-                i.putExtra("Touchpoint", touchpoint);
+               /* i.putExtra("Touchpoint", touchpoint);
                 i.putExtra("Username", username);
                 i.putExtra("JourneyName", JourneyName);
-
                 i.putExtra("Action", action);
                 i.putExtra("Channel", channel);
                 i.putExtra("Channel_Desc", channel_desc);
@@ -96,7 +95,7 @@ public class TouchPointDetailsActivity extends AppCompatActivity implements View
                     i.putExtra("Actual_time", actual_string);
                     i.putExtra("Actual_unit", actual_time_unit);
                 }
-
+*/
                 startActivity(i);
             }
         }
@@ -109,7 +108,7 @@ public class TouchPointDetailsActivity extends AppCompatActivity implements View
             case take_photo_request_code: {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     Intent i = new Intent(TouchPointDetailsActivity.this, SelectPhoto.class);
-                    i.putExtra("Touchpoint", touchpoint);
+                    /*i.putExtra("Touchpoint", touchpoint);
                     i.putExtra("Username", username);
                     i.putExtra("JourneyName", JourneyName);
 
@@ -127,7 +126,7 @@ public class TouchPointDetailsActivity extends AppCompatActivity implements View
                         i.putExtra("Actual_time", actual_string);
                         i.putExtra("Actual_unit", actual_time_unit);
                     }
-
+*/
                     startActivity(i);
                 } else {
                     Toast.makeText(TouchPointDetailsActivity.this, "Permission denied to read your CAMERA", Toast.LENGTH_SHORT).show();

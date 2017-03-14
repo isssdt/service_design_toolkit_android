@@ -7,7 +7,7 @@
         android:id="@+id/reaction_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="What did I do"
+        android:text="What did I do *"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
@@ -62,7 +62,7 @@
         android:layout_alignRight="@+id/reaction"
         android:layout_alignStart="@+id/reaction_text"
         android:layout_below="@+id/comment"
-        android:text="Time taken to complete"  />
+        android:text="Time taken to complete *"  />
 
     <LinearLayout
         android:layout_width="match_parent"

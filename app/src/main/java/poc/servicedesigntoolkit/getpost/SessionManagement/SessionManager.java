@@ -1,3 +1,4 @@
+/*
 package poc.servicedesigntoolkit.getpost.SessionManagement;
 
 import android.annotation.SuppressLint;
@@ -36,9 +37,11 @@ public class SessionManager {
         editor = pref.edit();
     }
 
-    /**
+    */
+/**
      * Create login session
-     */
+     *//*
+
     public void loginSession(String name) {
         // Storing login value as TRUE
         editor.putBoolean(IS_LOGIN, true);
@@ -49,11 +52,13 @@ public class SessionManager {
         editor.commit();
     }
 
-    /**
+    */
+/**
      * Check login method wil check user login status
      * If false it will redirect user to login page
      * Else won't do anything
-     */
+     *//*
+
     public void checkLogin() {
         // Check login status
         if (!this.isLoggedIn()) {
@@ -69,9 +74,11 @@ public class SessionManager {
 
     }
 
-    /**
+    */
+/**
      * Get stored session data
-     */
+     *//*
+
     public HashMap<String, String> getUserDetails() {
         HashMap<String, String> user = new HashMap<String, String>();
         // user name
@@ -108,3 +115,4 @@ public class SessionManager {
         KEY_NAME = name;
     }
 }
+*/

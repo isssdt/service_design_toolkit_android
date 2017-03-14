@@ -52,13 +52,10 @@ public class emotionMeter extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.visualization_emotion);
 
 
-
-            setContentView(R.layout.visualization_emotion);
-
-
-            touchpointData = new ArrayList<Touchpoint_model>();
+        touchpointData = new ArrayList<Touchpoint_model>();
 
             graph = (GraphView) findViewById(R.id.graph);
             touchpointname = (TextView) findViewById(R.id.touchpointname);
@@ -66,13 +63,11 @@ public class emotionMeter extends AppCompatActivity {
             reaction = (TextView) findViewById(R.id.reaction);
             imageView = (ImageView) findViewById(R.id.imageView);
 
-            Bundle extras = getIntent().getExtras();
-            Username = (String) extras.get("Username");
-            JourneyName = (String) extras.get("JourneyName");
-            new HttpRequestTask().execute();
-            //updateGraph(graph);
-
-
+        Bundle extras = getIntent().getExtras();
+        Username = (String) extras.get("Username");
+        JourneyName = (String) extras.get("JourneyName");
+        new HttpRequestTask().execute();
+        //updateGraph(graph);
     }
 
     public void updateGraph(GraphView graph) {
@@ -80,7 +75,7 @@ public class emotionMeter extends AppCompatActivity {
 
 //        // enable scaling and scrolling
 //        graph.getViewport().setScalable(true);
-//        graph.getViewport().setScalableY(true);
+//        graph.getViewport().setScrollable(true);
         graph.addSeries(series);
 
         Log.d("scale",""+graph.getViewport().getMaxYAxisSize());
@@ -103,14 +98,16 @@ public class emotionMeter extends AppCompatActivity {
                     Log.d("ontapdata",""+touchpointData.get(i).getName()+touchpointData.get(i).getRating()+"datapoint"+dataPoint.getX());
                     touchpointname.setText(touchpointData.get(i).getName());
                     action.setText(touchpointData.get(i).getAction());
-//                    if(imgFile.exists()){
-//
-//                        Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
-//                        imageView.setImageBitmap(myBitmap);
-//
-//                    }             reaction.setText(touchpointData.get(i).getReaction());
-                   // File imgFile = new File(touchpointData.get(i).getPhotoLocation());
-
+                    reaction.setText(touchpointData.get(i).getReaction());
+                    if (touchpointData.get(i).getPhotoLocation()!= null){
+                        File imgFile = new File(touchpointData.get(i).getPhotoLocation());
+                        if(imgFile.exists()){
+                            Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+                            imageView.setImageBitmap(myBitmap);
+                        }
+                    }
+                    else
+                    imageView.setImageBitmap(null);
                 }
             }
             }

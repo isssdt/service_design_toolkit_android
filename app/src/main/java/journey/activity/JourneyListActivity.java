@@ -1,6 +1,7 @@
 package journey.activity;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Criteria;
 import android.location.Location;
@@ -10,6 +11,8 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Toast;
+
+import com.google.gson.Gson;
 
 import common.api.APIGetJourneyListForRegister;
 import common.constants.APIUrl;
@@ -36,8 +39,14 @@ public class JourneyListActivity extends AppCompatActivity implements LocationLi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.journey_recycle);
 
-        Bundle extras = getIntent().getExtras();
-        new APIGetJourneyListForRegister(((JourneyFieldResearcherDTO) extras.get(ConstantValues.BUNDLE_KEY_JOURNEY_FIELD_RESEARCHER_DTO)).getFieldResearcherDTO().getSdtUserDTO(), new JourneyListView(this)).execute();
+        SharedPreferences sharedPref = getApplicationContext().getSharedPreferences("Trial", Context.MODE_PRIVATE);
+        Gson gson = new Gson();
+        String json = sharedPref.getString("JourneyFieldResearcherDTO", "");
+        JourneyFieldResearcherDTO journeyFieldResearcherDTO = gson.fromJson(json, JourneyFieldResearcherDTO.class);
+
+        Log.d("USERNAME : ",journeyFieldResearcherDTO.getFieldResearcherDTO().getSdtUserDTO().getUsername() );
+
+        new APIGetJourneyListForRegister(journeyFieldResearcherDTO.getFieldResearcherDTO().getSdtUserDTO(), new JourneyListView(this)).execute();
 
         Criteria criteria = new Criteria();
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);

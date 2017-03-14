@@ -30,11 +30,11 @@ public class TouchPointListActivity extends AppCompatActivity {
         SharedPreferences sharedPref = getApplicationContext().getSharedPreferences("Trial", Context.MODE_PRIVATE);
         Gson gson = new Gson();
         String json = sharedPref.getString("JourneyFieldResearcherDTO", "");
-        Log.d("JourneyFieldResearcherDTO", " EMPTY "+json);
-
-        JourneyFieldResearcherDTO journeyFieldResearcherDTO = gson.fromJson(json, JourneyFieldResearcherDTO.class);//(JourneyFieldResearcherDTO) extras.get(ConstantValues.BUNDLE_KEY_JOURNEY_FIELD_RESEARCHER_DTO);
+        Log.d("TouchPointListActivity", " EMPTY "+json);
+        JourneyFieldResearcherDTO journeyFieldResearcherDTO = gson.fromJson(json, JourneyFieldResearcherDTO.class);
         touchPointListView = new TouchPointListView(this);
         new APIGetTouchPointListOfRegisteredJourney(journeyFieldResearcherDTO.getFieldResearcherDTO().getSdtUserDTO(), touchPointListView).execute();
+
     }
 
     @Override

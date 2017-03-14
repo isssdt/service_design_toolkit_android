@@ -1,9 +1,13 @@
 package photo;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -20,18 +24,23 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.URI;
 import java.nio.channels.FileChannel;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import common.utils.Utils;
+import journey.dto.JourneyFieldResearcherDTO;
 import poc.servicedesigntoolkit.getpost.R;
 import touchpoint.activity.TouchPointDetailsActivity;
 import touchpoint.dto.TouchPointFieldResearcherDTO;
+import touchpoint.dto.TouchPointFieldResearcherListDTO;
 
 public class SelectPhoto extends AppCompatActivity implements View.OnClickListener {
 
@@ -53,6 +62,8 @@ public class SelectPhoto extends AppCompatActivity implements View.OnClickListen
     String rating_intent,reaction_intent,comment_intent;
     String expected_unit,channel_desc, actual_time,actual_unit, JourneyName,id_String;
     Integer id,expected_time;
+    private String mCurrentPhotoPath;
+    private static final int ACTION_TAKE_PHOTO_B = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,13 +108,39 @@ public class SelectPhoto extends AppCompatActivity implements View.OnClickListen
 
         String selectedImagePath;
         Log.d("VERSION", String.valueOf(Build.VERSION.SDK_INT));
-        Log.d("filePath",filePath.toString());
+        Log.d("---------------------------------------------------------------->filePath",filePath.toString());
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             selectedImagePath = ImageFilePath.getPath(getApplicationContext(), filePath);
+            //selectedImagePath = getPath(filePath);
             TouchPointFieldResearcherDTO touchPointFieldResearcherDTO = (TouchPointFieldResearcherDTO) getIntent().getExtras().get(TouchPointFieldResearcherDTO.class.toString());
             touchPointFieldResearcherDTO.setPhotoLocation(selectedImagePath);
+
+
+            SharedPreferences sharedPref = getApplicationContext().getSharedPreferences("Trial", Context.MODE_PRIVATE);
+            Gson gson = new Gson();
+            String list = sharedPref.getString("TouchPointFieldResearcherDTO", "");
+            //touchPointFieldResearcherListDTO = gson.fromJson(list, TouchPointFieldResearcherListDTO.class);
+            Log.d("TouchPointFieldResearcherDTO",list);
+
+
+            SharedPreferences.Editor editor = sharedPref.edit();
+            String json = gson.toJson(touchPointFieldResearcherDTO);
+            editor.putString("TouchPointFieldResearcherDTO",Username);
+            Log.d("JourneyFieldResearcherDTO", " EMPTY "+json);
+
             Utils.forwardToScreen(this, TouchPointDetailsActivity.class, TouchPointFieldResearcherDTO.class.toString(), touchPointFieldResearcherDTO);
         }
+    }
+
+    private String getPath(Uri uri) {
+
+        String[] projection = { MediaStore.Images.Media.DATA };
+        Cursor cursor = getContentResolver().query(uri, projection, null, null,null);
+
+        int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+        cursor.moveToFirst();
+
+        return cursor.getString(column_index);
     }
 
     private void showFileChooser() {
@@ -214,38 +251,102 @@ public class SelectPhoto extends AppCompatActivity implements View.OnClickListen
     }
 
     private void takePhoto() {
-        dispatchTakePictureIntent();
+        handleBigCameraPhoto();
+        dispatchTakePictureIntent(ACTION_TAKE_PHOTO_B);
+    }
+    private void handleBigCameraPhoto() {
+
+        if (mCurrentPhotoPath != null) {
+            setPic();
+            galleryAddPic();
+            mCurrentPhotoPath = null;
+        }
+
     }
 
-    private void dispatchTakePictureIntent() {
-        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        // Ensure that there's a camera activity to handle the intent
-        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-            // Create the File where the photo should go
-            File photoFile = null;
-            try {
-                photoFile = createImageFile();
-            } catch (IOException ex) {
-                // Error occurred while creating the File
+    private void setPic() {
 
-            }
-            // Continue only if the File was successfully created
-            Log.d("Photofile", String.valueOf(photoFile));
-            if (photoFile != null) {
-                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,
-//                        Uri.fromFile(photoFile)
-                        FileProvider.getUriForFile(this, getApplicationContext().getPackageName() + ".provider", photoFile)
-                );
-                startActivityForResult(takePictureIntent, TAKE_IMAGE);
-            }
+		/* There isn't enough memory to open up more than a couple camera photos */
+		/* So pre-scale the target bitmap into which the file is decoded */
+
+		/* Get the size of the ImageView */
+        int targetW = imageView.getWidth();
+        int targetH = imageView.getHeight();
+
+		/* Get the size of the image */
+        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+        bmOptions.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
+        int photoW = bmOptions.outWidth;
+        int photoH = bmOptions.outHeight;
+
+		/* Figure out which way needs to be reduced less */
+        int scaleFactor = 1;
+        if ((targetW > 0) || (targetH > 0)) {
+            scaleFactor = Math.min(photoW/targetW, photoH/targetH);
         }
+
+		/* Set bitmap options to scale the image decode target */
+        bmOptions.inJustDecodeBounds = false;
+        bmOptions.inSampleSize = scaleFactor;
+        bmOptions.inPurgeable = true;
+
+		/* Decode the JPEG file into a Bitmap */
+        Bitmap bitmap = BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
+
+		/* Associate the Bitmap to the ImageView */
+        imageView.setImageBitmap(bitmap);
+    }
+
+    private File setUpPhotoFile() throws IOException {
+
+        File f = createImageFile();
+        mCurrentPhotoPath = f.getAbsolutePath();
+
+        return f;
+    }
+
+    private void dispatchTakePictureIntent(int actionCode) {
+
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+        switch(actionCode) {
+            case ACTION_TAKE_PHOTO_B:
+                File f = null;
+
+                try {
+                    f = setUpPhotoFile();
+                    mCurrentPhotoPath = f.getAbsolutePath();
+                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    f = null;
+                    mCurrentPhotoPath = null;
+                }
+                break;
+
+            default:
+                break;
+        } // switch
+
+        startActivityForResult(takePictureIntent, actionCode);
+    }
+
+
+    private void galleryAddPic() {
+        Intent mediaScanIntent = new Intent("android.intent.action.MEDIA_SCANNER_SCAN_FILE");
+        File f = new File(mCurrentPhotoPath);
+        Uri contentUri = Uri.fromFile(f);
+        mediaScanIntent.setData(contentUri);
+        this.sendBroadcast(mediaScanIntent);
     }
 
     private File createImageFile() throws IOException {
         // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String imageFileName = Username +"_"+timeStamp;
-        String storageDir = Environment.getExternalStorageDirectory() + "/ServiceDesignToolkit";
+        //String storageDir = Environment.getExternalStorageDirectory() + "/ServiceDesignToolkit";
+        String storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES) + "/ServiceDesignToolkit";
         File dir = new File(storageDir);
         if (!dir.exists())
             dir.mkdir();

@@ -1,6 +1,10 @@
 package common.api;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+
+import com.google.gson.Gson;
 
 import common.constants.APIUrl;
 import common.constants.ConstantValues;
@@ -20,6 +24,14 @@ public class APIRegisterFieldResearcherWithJourney extends APIFacade<JourneyFiel
 
     @Override
     public void handleDataUponSuccess(JourneyFieldResearcherDTO data) {
+
+        SharedPreferences sharedPref = view.getContext().getSharedPreferences("Trial", Context.MODE_PRIVATE);
+        Gson gson = new Gson();
+        String json = gson.toJson(data);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString("TouchPointFieldResearcherListDTO",json);
+        editor.commit();
+
         Intent i = new Intent(view.getContext(), TouchPointListActivity.class);
         i.putExtra(ConstantValues.BUNDLE_KEY_JOURNEY_FIELD_RESEARCHER_DTO, data);
         i.putExtra("JourneyName", data.getJourneyDTO().getJourneyName());

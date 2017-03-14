@@ -187,10 +187,6 @@ public class AddNewTouchpoint extends AppCompatActivity implements View.OnClickL
                 id =touchPointFieldResearcherDTO.getTouchpointDTO().getId();
             }
         }
-
-
-        //id = 276;//touchpoint.getSelectedItem().toString();
-
     }
 
     private boolean validate(){
@@ -262,6 +258,7 @@ public class AddNewTouchpoint extends AppCompatActivity implements View.OnClickL
                 touchPointFieldResearcherDTO.setDuration(Integer.parseInt(actual_time));
                 touchPointFieldResearcherDTO.setPhotoLocation(imagepath);
                 touchPointFieldResearcherDTO.setTouchPointBeforeID(id);
+                Log.d("ID", String.valueOf(id));
 
                 RatingDTO ratingDTO = new RatingDTO();
                 ratingDTO.setValue(rating);
