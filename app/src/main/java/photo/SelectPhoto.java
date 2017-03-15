@@ -8,6 +8,7 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -28,20 +29,25 @@ import com.google.gson.Gson;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URI;
 import java.nio.channels.FileChannel;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import common.utils.Utils;
+import journey.dto.JourneyFieldResearcherDTO;
 import poc.servicedesigntoolkit.getpost.R;
 import touchpoint.activity.TouchPointDetailsActivity;
 import touchpoint.dto.TouchPointFieldResearcherDTO;
+import touchpoint.dto.TouchPointFieldResearcherListDTO;
 
 public class SelectPhoto extends AppCompatActivity implements View.OnClickListener {
 
-    static final int REQUEST_TAKE_PHOTO = 1;
+    private static final int REQUEST_TAKE_PHOTO = 1;
     private static final int take_photo_request_code =1;
     private static final String TAG = "selectphoto";
     String newPath,sourcepath;
@@ -52,7 +58,7 @@ public class SelectPhoto extends AppCompatActivity implements View.OnClickListen
     private ImageView imageView;
     private EditText editTextName;
     private Bitmap bitmap;
-    private static final int SELECT_IMAGE = 1;
+    private static final int SELECT_IMAGE = 2;
     private static final int TAKE_IMAGE = 2;
     private String Username,Touchpoint_name;
     String action,channel,imagefinalPath;
@@ -60,7 +66,15 @@ public class SelectPhoto extends AppCompatActivity implements View.OnClickListen
     String expected_unit,channel_desc, actual_time,actual_unit, JourneyName,id_String;
     Integer id,expected_time;
     private String mCurrentPhotoPath;
+    private Bitmap mImageBitmap;
     private static final int ACTION_TAKE_PHOTO_B = 1;
+    private static final int ACTION_TAKE_PHOTO_S = 3;
+
+
+    private static final String JPEG_FILE_PREFIX = "IMG_";
+    private static final String JPEG_FILE_SUFFIX = ".jpg";
+    private AlbumStorageDirFactory mAlbumStorageDirFactory = null;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,13 +112,18 @@ public class SelectPhoto extends AppCompatActivity implements View.OnClickListen
         buttonGallery.setOnClickListener(this);
         buttonUpload.setOnClickListener(this);
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.FROYO) {
+            mAlbumStorageDirFactory = new FroyoAlbumDirFactory();
+        } else {
+            mAlbumStorageDirFactory = new BaseAlbumDirFactory();
+        }
+
     }
 
     private void uploadImage(){
         //String image = getStringImage(bitmap);
 
         String selectedImagePath;
-        Log.d("VERSION", String.valueOf(Build.VERSION.SDK_INT));
         Log.d("---------------------------------------------------------------->filePath",filePath.toString());
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             selectedImagePath = ImageFilePath.getPath(getApplicationContext(), filePath);
@@ -129,16 +148,6 @@ public class SelectPhoto extends AppCompatActivity implements View.OnClickListen
         }
     }
 
-    private String getPath(Uri uri) {
-
-        String[] projection = { MediaStore.Images.Media.DATA };
-        Cursor cursor = getContentResolver().query(uri, projection, null, null,null);
-
-        int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-        cursor.moveToFirst();
-
-        return cursor.getString(column_index);
-    }
 
     private void showFileChooser() {
         Intent intent = new Intent();
@@ -168,17 +177,33 @@ public class SelectPhoto extends AppCompatActivity implements View.OnClickListen
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        }else if (requestCode == TAKE_IMAGE && resultCode == RESULT_OK && data != null && data.getData() != null) {
-
+        }else if (requestCode == REQUEST_TAKE_PHOTO && resultCode == RESULT_OK) {
+            // Show the thumbnail on ImageView
+            Log.d("TRACE","4");
             filePath = data.getData();
-            Log.d("filePath_REQUEST_TAKE_PHOTO",filePath.toString());
-            try {
-                bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
-                imageView.setImageBitmap(bitmap);
-            } catch (IOException e) {
-                e.printStackTrace();
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                sourcepath = ImageFilePath.getPath(getApplicationContext(), filePath);
+                Log.d("sourcepath_SELECT_IMAGE",sourcepath);
+                Log.d("filePath_SELECT_IMAGE",filePath.toString());
             }
+            Uri imageUri = Uri.parse(mCurrentPhotoPath);
+            File file = new File(imageUri.getPath());
+            try {
+                InputStream ims = new FileInputStream(file);
+                imageView.setImageBitmap(BitmapFactory.decodeStream(ims));
+            } catch (FileNotFoundException e) {
+                return;
+            }
+
+            // ScanFile so it will be appeared on Gallery
+            MediaScannerConnection.scanFile(SelectPhoto.this,
+                    new String[]{imageUri.getPath()}, null,
+                    new MediaScannerConnection.OnScanCompletedListener() {
+                        public void onScanCompleted(String path, Uri uri) {
+                        }
+                    });
         }
+
     }
 
     @Override
@@ -199,6 +224,7 @@ public class SelectPhoto extends AppCompatActivity implements View.OnClickListen
                         != PackageManager.PERMISSION_GRANTED) {
                     ActivityCompat.requestPermissions(SelectPhoto.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, TAKE_IMAGE);
                 } else {
+                    Log.d("TRACE","1");
                     takePhoto();
                 }
                 break;
@@ -213,7 +239,7 @@ public class SelectPhoto extends AppCompatActivity implements View.OnClickListen
     public void onRequestPermissionsResult(int requestCode,
                                            String permissions[], int[] grantResults) {
         switch (requestCode) {
-            case TAKE_IMAGE: {
+            case ACTION_TAKE_PHOTO_S: {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     takePhoto();
                 }else {
@@ -248,87 +274,15 @@ public class SelectPhoto extends AppCompatActivity implements View.OnClickListen
     }
 
     private void takePhoto() {
-        handleBigCameraPhoto();
-        dispatchTakePictureIntent(ACTION_TAKE_PHOTO_B);
-    }
-    private void handleBigCameraPhoto() {
-
-        if (mCurrentPhotoPath != null) {
-            setPic();
-            galleryAddPic();
-            mCurrentPhotoPath = null;
+        try {
+            dispatchTakePictureIntent();
+        } catch (IOException e) {
         }
+        Log.d("TRACE","2");
 
+        //handleBigCameraPhoto();
     }
 
-    private void setPic() {
-
-		/* There isn't enough memory to open up more than a couple camera photos */
-		/* So pre-scale the target bitmap into which the file is decoded */
-
-		/* Get the size of the ImageView */
-        int targetW = imageView.getWidth();
-        int targetH = imageView.getHeight();
-
-		/* Get the size of the image */
-        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
-        bmOptions.inJustDecodeBounds = true;
-        BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
-        int photoW = bmOptions.outWidth;
-        int photoH = bmOptions.outHeight;
-
-		/* Figure out which way needs to be reduced less */
-        int scaleFactor = 1;
-        if ((targetW > 0) || (targetH > 0)) {
-            scaleFactor = Math.min(photoW/targetW, photoH/targetH);
-        }
-
-		/* Set bitmap options to scale the image decode target */
-        bmOptions.inJustDecodeBounds = false;
-        bmOptions.inSampleSize = scaleFactor;
-        bmOptions.inPurgeable = true;
-
-		/* Decode the JPEG file into a Bitmap */
-        Bitmap bitmap = BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
-
-		/* Associate the Bitmap to the ImageView */
-        imageView.setImageBitmap(bitmap);
-    }
-
-    private File setUpPhotoFile() throws IOException {
-
-        File f = createImageFile();
-        mCurrentPhotoPath = f.getAbsolutePath();
-
-        return f;
-    }
-
-    private void dispatchTakePictureIntent(int actionCode) {
-
-        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-
-        switch(actionCode) {
-            case ACTION_TAKE_PHOTO_B:
-                File f = null;
-
-                try {
-                    f = setUpPhotoFile();
-                    mCurrentPhotoPath = f.getAbsolutePath();
-                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,
-                            FileProvider.getUriForFile(this, getApplicationContext().getPackageName() + ".provider", f));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    f = null;
-                    mCurrentPhotoPath = null;
-                }
-                break;
-
-            default:
-                break;
-        } // switch
-
-        startActivityForResult(takePictureIntent, actionCode);
-    }
 
 
     private void galleryAddPic() {
@@ -342,19 +296,40 @@ public class SelectPhoto extends AppCompatActivity implements View.OnClickListen
     private File createImageFile() throws IOException {
         // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String imageFileName = Username +"_"+timeStamp;
-        //String storageDir = Environment.getExternalStorageDirectory() + "/ServiceDesignToolkit";
-        String storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES) + "/ServiceDesignToolkit";
-        File dir = new File(storageDir);
-        if (!dir.exists())
-            dir.mkdir();
-
-        File image = new File(storageDir + "/" + imageFileName + ".jpg");
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir = new File(Environment.getExternalStoragePublicDirectory(
+                Environment.DIRECTORY_DCIM), "Camera");
+        File image = File.createTempFile(
+                imageFileName,  /* prefix */
+                ".jpg",         /* suffix */
+                storageDir      /* directory */
+        );
 
         // Save a file: path for use with ACTION_VIEW intents
-        newPath = image.getAbsolutePath();
-        Log.i(TAG, "photo path = " + newPath);
+        mCurrentPhotoPath = "file:" + image.getAbsolutePath();
         return image;
+    }
+
+    private void dispatchTakePictureIntent() throws IOException {
+        Log.d("TRACE","3");
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        // Ensure that there's a camera activity to handle the intent
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            // Create the File where the photo should go
+            File photoFile = null;
+            try {
+                photoFile = createImageFile();
+            } catch (IOException ex) {
+                // Error occurred while creating the File
+                return;
+            }
+            // Continue only if the File was successfully created
+            if (photoFile != null) {
+                Uri photoURI = Uri.fromFile(createImageFile());
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
+            }
+        }
     }
     @Override
     public void onBackPressed() {
