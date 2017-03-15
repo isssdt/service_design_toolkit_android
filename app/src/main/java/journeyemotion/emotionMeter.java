@@ -80,10 +80,14 @@ public class emotionMeter extends AppCompatActivity {
 
         Log.d("scale",""+graph.getViewport().getMaxYAxisSize());
 
+        StaticLabelsFormatter staticLabelsFormatter = new StaticLabelsFormatter(graph);
+        staticLabelsFormatter.setVerticalLabels(new String[] {"1", "2", "3","4","5"});
+
         graph.getViewport().setYAxisBoundsManual(true);
         graph.getViewport().setMinY(0);
         graph.getViewport().setMaxY(5);
-        graph.getViewport().setMaxXAxisSize(1);
+        graph.getViewport().setMaxYAxisSize(1);
+        graph.getGridLabelRenderer().setLabelFormatter(staticLabelsFormatter);
         series.setDrawDataPoints(true);
 
         series.setOnDataPointTapListener(new OnDataPointTapListener() {

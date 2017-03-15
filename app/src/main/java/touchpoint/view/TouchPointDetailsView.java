@@ -54,8 +54,13 @@ public class TouchPointDetailsView extends AbstractView {
         timeUnit.add(ConstantValues.OTHERS_TIME_UNIT_HOUR);
         timeUnit.add(ConstantValues.OTHERS_TIME_UNIT_DAY);
         Spinner spinner = (Spinner) getContext().findViewById(R.id.time_unit);
-        spinner.setAdapter(new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, timeUnit));
+        ArrayAdapter<String> data =new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, timeUnit);
+        spinner.setAdapter(data);
         ((ArrayAdapter) spinner.getAdapter()).setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        if (!touchPointFieldResearcherDTO.getTouchpointDTO().getMasterDataDTO().getDataValue().equals(null)) {
+            int spinnerPosition = data.getPosition(touchPointFieldResearcherDTO.getTouchpointDTO().getMasterDataDTO().getDataValue());
+            spinner.setSelection(spinnerPosition);
+        }
 
         componentMap.put(ConstantValues.COMPONENT_TOUCH_POINT_DETAILS_VIEW_EDIT_TEXT_REACTION, getContext().findViewById(R.id.reaction));
         componentMap.put(ConstantValues.COMPONENT_TOUCH_POINT_DETAILS_VIEW_EDIT_TEXT_COMMENT, getContext().findViewById(R.id.comment));
