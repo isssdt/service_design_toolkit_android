@@ -30,17 +30,14 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.net.URI;
 import java.nio.channels.FileChannel;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import common.utils.Utils;
-import journey.dto.JourneyFieldResearcherDTO;
 import poc.servicedesigntoolkit.getpost.R;
 import touchpoint.activity.TouchPointDetailsActivity;
 import touchpoint.dto.TouchPointFieldResearcherDTO;
-import touchpoint.dto.TouchPointFieldResearcherListDTO;
 
 public class SelectPhoto extends AppCompatActivity implements View.OnClickListener {
 
@@ -317,7 +314,8 @@ public class SelectPhoto extends AppCompatActivity implements View.OnClickListen
                 try {
                     f = setUpPhotoFile();
                     mCurrentPhotoPath = f.getAbsolutePath();
-                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
+                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,
+                            FileProvider.getUriForFile(this, getApplicationContext().getPackageName() + ".provider", f));
                 } catch (IOException e) {
                     e.printStackTrace();
                     f = null;
