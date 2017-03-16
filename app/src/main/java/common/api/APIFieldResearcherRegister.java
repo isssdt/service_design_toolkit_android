@@ -2,7 +2,6 @@ package common.api;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.util.Log;
 import android.widget.EditText;
 
 import com.google.gson.Gson;
@@ -49,7 +48,7 @@ public class APIFieldResearcherRegister extends APIFacade<RESTResponse, SdtUserD
             editor.putString("JourneyFieldResearcherDTO",json);
             editor.commit();
 
-            Utils.forwardToScreen(mainView.getContext(), JourneyListActivity.class, ConstantValues.BUNDLE_KEY_JOURNEY_FIELD_RESEARCHER_DTO, journeyFieldResearcherDTO);
+            Utils.forwardToScreen(mainView.getContext(), JourneyListActivity.class, JourneyFieldResearcherDTO.class.toString(), journeyFieldResearcherDTO);
         } else {
             Context context = mainView.getContext();
             SharedPreferences sharedPref = context.getSharedPreferences("Trial", Context.MODE_PRIVATE);
@@ -58,7 +57,7 @@ public class APIFieldResearcherRegister extends APIFacade<RESTResponse, SdtUserD
             String json = gson.toJson(journeyFieldResearcherDTO);
             editor.putString("JourneyFieldResearcherDTO",json);
             editor.commit();
-            Utils.forwardToScreen(mainView.getContext(), TouchPointListActivity.class, ConstantValues.BUNDLE_KEY_JOURNEY_FIELD_RESEARCHER_DTO, journeyFieldResearcherDTO);
+            Utils.forwardToScreen(mainView.getContext(), TouchPointListActivity.class, JourneyFieldResearcherDTO.class.toString(), journeyFieldResearcherDTO);
         }
     }
 }

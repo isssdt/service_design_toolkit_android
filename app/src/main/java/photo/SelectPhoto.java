@@ -3,9 +3,7 @@ package photo;
 import android.Manifest;
 import android.app.Activity;
 import android.content.ContentValues;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -16,17 +14,14 @@ import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
-
 import java.io.IOException;
 
+import addTouchpoint.AddNewTouchpoint;
 import common.utils.Utils;
 import poc.servicedesigntoolkit.getpost.R;
 import touchpoint.activity.TouchPointDetailsActivity;
@@ -35,32 +30,18 @@ import touchpoint.dto.TouchPointFieldResearcherDTO;
 public class SelectPhoto extends AppCompatActivity implements View.OnClickListener {
 
     private static final int REQUEST_TAKE_PHOTO = 1;
-    private static final int take_photo_request_code =1;
-    private static final String TAG = "selectphoto";
-    String newPath,sourcepath;
     Uri filePath, picUri;
     Bitmap myBitmap;
     private Button buttonCamera;
     private Button buttonGallery;
     private Button buttonUpload;
     private ImageView imageView;
-    private EditText editTextName;
-    private Bitmap bitmap;
     private static final int SELECT_IMAGE = 2;
     private static final int TAKE_IMAGE = 2;
-    private String Username,Touchpoint_name;
-    String action,channel,imagefinalPath;
-    String rating_intent,reaction_intent,comment_intent;
-    String expected_unit,channel_desc, actual_time,actual_unit, JourneyName,id_String;
-    Integer id,expected_time;
-    private String mCurrentPhotoPath;
-    private Bitmap mImageBitmap;
-    private static final int ACTION_TAKE_PHOTO_B = 1;
     private static final int ACTION_TAKE_PHOTO_S = 3;
 
 
-    private static final String JPEG_FILE_PREFIX = "IMG_";
-    private static final String JPEG_FILE_SUFFIX = ".jpg";
+
     private AlbumStorageDirFactory mAlbumStorageDirFactory = null;
 
 
@@ -74,27 +55,6 @@ public class SelectPhoto extends AppCompatActivity implements View.OnClickListen
         buttonUpload = (Button) findViewById(R.id.buttonUpload);
         imageView = (ImageView) findViewById(R.id.imageView);
 
-        Bundle extras = getIntent().getExtras();
-        TouchPointFieldResearcherDTO touchPointFieldResearcherDTO = (TouchPointFieldResearcherDTO) extras.get(TouchPointFieldResearcherDTO.class.toString());
-        Username = touchPointFieldResearcherDTO.getFieldResearcherDTO().getSdtUserDTO().getUsername();
-        Touchpoint_name = touchPointFieldResearcherDTO.getTouchpointDTO().getTouchPointDesc();
-
-        JourneyName = touchPointFieldResearcherDTO.getTouchpointDTO().getJourneyDTO().getJourneyName();
-        action = touchPointFieldResearcherDTO.getTouchpointDTO().getAction();
-        channel = touchPointFieldResearcherDTO.getTouchpointDTO().getChannelDTO().getChannelName();
-        expected_time = touchPointFieldResearcherDTO.getTouchpointDTO().getDuration();
-        expected_unit = touchPointFieldResearcherDTO.getTouchpointDTO().getMasterDataDTO().getDataValue();
-        channel_desc = touchPointFieldResearcherDTO.getTouchpointDTO().getChannelDescription();
-        id = touchPointFieldResearcherDTO.getTouchpointDTO().getId();
-        id_String = id.toString();
-        if (null != touchPointFieldResearcherDTO.getRatingDTO() && null != touchPointFieldResearcherDTO.getRatingDTO().getValue() &&
-                !touchPointFieldResearcherDTO.getRatingDTO().getValue().isEmpty()) {
-            rating_intent = touchPointFieldResearcherDTO.getRatingDTO().getValue();
-            reaction_intent = touchPointFieldResearcherDTO.getReaction();
-            comment_intent = touchPointFieldResearcherDTO.getComments();
-            actual_time = touchPointFieldResearcherDTO.getDuration().toString();
-            actual_unit = touchPointFieldResearcherDTO.getDurationUnitDTO().getDataValue();
-        }
 
         buttonCamera.setOnClickListener(this);
         buttonGallery.setOnClickListener(this);
@@ -108,30 +68,20 @@ public class SelectPhoto extends AppCompatActivity implements View.OnClickListen
 
     }
 
-    private void uploadImage(){
-        //String image = getStringImage(bitmap);
-
-        String selectedImagePath;
+    private void uploadImage() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            selectedImagePath = ImageFilePath.getPath(getApplicationContext(), picUri);
-            //selectedImagePath = getPath(filePath);
             TouchPointFieldResearcherDTO touchPointFieldResearcherDTO = (TouchPointFieldResearcherDTO) getIntent().getExtras().get(TouchPointFieldResearcherDTO.class.toString());
-            touchPointFieldResearcherDTO.setPhotoLocation(selectedImagePath);
+            if (null != picUri) {
+                touchPointFieldResearcherDTO.setPhotoLocation(ImageFilePath.getPath(getApplicationContext(), picUri));
+            }
 
-
-            SharedPreferences sharedPref = getApplicationContext().getSharedPreferences("Trial", Context.MODE_PRIVATE);
-            Gson gson = new Gson();
-            String list = sharedPref.getString("TouchPointFieldResearcherDTO", "");
-            //touchPointFieldResearcherListDTO = gson.fromJson(list, TouchPointFieldResearcherListDTO.class);
-            Log.d("TouchPointFieldResearcherDTO",list);
-
-
-            SharedPreferences.Editor editor = sharedPref.edit();
-            String json = gson.toJson(touchPointFieldResearcherDTO);
-            editor.putString("TouchPointFieldResearcherDTO",Username);
-            Log.d("JourneyFieldResearcherDTO", " EMPTY "+json);
-
-            Utils.forwardToScreen(this, TouchPointDetailsActivity.class, TouchPointFieldResearcherDTO.class.toString(), touchPointFieldResearcherDTO);
+            String activity = getIntent().getExtras().getString(Activity.class.toString());
+            if (TouchPointDetailsActivity.class.toString().equals(activity)) {
+                Utils.forwardToScreen(this, TouchPointDetailsActivity.class, TouchPointFieldResearcherDTO.class.toString(), touchPointFieldResearcherDTO);
+            }
+            if (AddNewTouchpoint.class.toString().equals(activity)) {
+                Utils.forwardToScreen(this, AddNewTouchpoint.class, TouchPointFieldResearcherDTO.class.toString(), touchPointFieldResearcherDTO);
+            }
         }
     }
 

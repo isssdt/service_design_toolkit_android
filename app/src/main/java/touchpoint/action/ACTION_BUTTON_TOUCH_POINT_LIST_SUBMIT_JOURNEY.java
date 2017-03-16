@@ -9,7 +9,6 @@ import android.view.View;
 
 import common.action.BaseAction;
 import common.api.APIMarkJourneyCompleted;
-import common.constants.ConstantValues;
 import common.view.AbstractView;
 import connectionStatus.AppStatus;
 import journey.dto.JourneyFieldResearcherDTO;
@@ -34,7 +33,7 @@ public class ACTION_BUTTON_TOUCH_POINT_LIST_SUBMIT_JOURNEY extends BaseAction im
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     Bundle extras = abstractView.getContext().getIntent().getExtras();
-                    JourneyFieldResearcherDTO journeyFieldResearcherDTO = (JourneyFieldResearcherDTO) extras.get(ConstantValues.BUNDLE_KEY_JOURNEY_FIELD_RESEARCHER_DTO);
+                    JourneyFieldResearcherDTO journeyFieldResearcherDTO = (JourneyFieldResearcherDTO) extras.get(JourneyFieldResearcherDTO.class.toString());
                     new APIMarkJourneyCompleted(journeyFieldResearcherDTO.getFieldResearcherDTO().getSdtUserDTO(), abstractView).execute();
                 }
             });

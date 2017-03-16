@@ -7,7 +7,6 @@ import android.content.SharedPreferences;
 import com.google.gson.Gson;
 
 import common.constants.APIUrl;
-import common.constants.ConstantValues;
 import common.view.AbstractView;
 import journey.dto.JourneyFieldResearcherDTO;
 import touchpoint.activity.TouchPointListActivity;
@@ -33,7 +32,7 @@ public class APIRegisterFieldResearcherWithJourney extends APIFacade<JourneyFiel
         editor.commit();
 
         Intent i = new Intent(view.getContext(), TouchPointListActivity.class);
-        i.putExtra(ConstantValues.BUNDLE_KEY_JOURNEY_FIELD_RESEARCHER_DTO, data);
+        i.putExtra(JourneyFieldResearcherDTO.class.toString(), data);
         i.putExtra("JourneyName", data.getJourneyDTO().getJourneyName());
         i.putExtra("Username", data.getFieldResearcherDTO().getSdtUserDTO().getUsername());
         view.getContext().startActivity(i);

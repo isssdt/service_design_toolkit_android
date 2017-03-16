@@ -19,7 +19,6 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.GeofencingRequest;
 import com.google.android.gms.location.LocationListener;
@@ -106,7 +105,8 @@ public class APIGetTouchPointListOfRegisteredJourney extends APIFacade<TouchPoin
             TouchPointFieldResearcherListDTO touchPointFieldResearcherListDTO = gson.fromJson(geo, TouchPointFieldResearcherListDTO.class);
 
             for (TouchPointFieldResearcherDTO touchPointDTO : touchPointFieldResearcherListDTO.getTouchPointFieldResearcherDTOList()) {
-                if (touchPointDTO.getTouchpointDTO().getLatitude() != "NONE") {
+                if (!"NONE".equals(touchPointDTO.getTouchpointDTO().getLatitude()) && !"NONE".equals(touchPointDTO.getTouchpointDTO().getLongitude()) &&
+                        !"NONE".equals(touchPointDTO.getTouchpointDTO().getRadius())) {
                     Log.d("geoFence", touchPointDTO.getTouchpointDTO().getLatitude());
                     createGeofences(Double.parseDouble(touchPointDTO.getTouchpointDTO().getLatitude()), Double.parseDouble(touchPointDTO.getTouchpointDTO().getLongitude()));
                 }

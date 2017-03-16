@@ -80,7 +80,7 @@ public class ACTION_BUTTON_RECYCLE_JOURNEY_LIST_VIEW_SIGN_UP extends BaseAction 
 //                        registeruser(JourneyName);
 //                    }
                     Bundle extras = abstractView.getContext().getIntent().getExtras();
-                    JourneyFieldResearcherDTO journeyFieldResearcherDTO = (JourneyFieldResearcherDTO) extras.get(ConstantValues.BUNDLE_KEY_JOURNEY_FIELD_RESEARCHER_DTO);
+                    JourneyFieldResearcherDTO journeyFieldResearcherDTO = (JourneyFieldResearcherDTO) extras.get(JourneyFieldResearcherDTO.class.toString());
                     journeyFieldResearcherDTO.setJourneyDTO(journeyDTO);
 
 

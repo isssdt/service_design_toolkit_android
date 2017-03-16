@@ -33,6 +33,10 @@ public abstract class AbstractView {
         return componentMap.get(component);
     }
 
+    public void putComponent(View view) {
+        componentMap.put(String.valueOf(view.getId()), view);
+    }
+
     protected abstract void setUpListener();
 
     protected abstract void init();

@@ -42,7 +42,7 @@ public class JourneyRecycleAdapter extends RecyclerView.Adapter<JourneyViewHolde
                 ConstantValues.OTHERS_STATUS_DONE.equals(journeyDTO.getJourneyFieldResearcherListDTO().getJourneyFieldResearcherDTOList().get(0).getStatus())) {
             holder.getJourneyButton().setText(ConstantValues.COMPONENT_JOURNEY_LIST_VIEW_BUTTON_LABEL_VIEW);
             Bundle extras = abstractView.getContext().getIntent().getExtras();
-            JourneyFieldResearcherDTO journeyFieldResearcherDTO = (JourneyFieldResearcherDTO) extras.get(ConstantValues.BUNDLE_KEY_JOURNEY_FIELD_RESEARCHER_DTO);
+            JourneyFieldResearcherDTO journeyFieldResearcherDTO = (JourneyFieldResearcherDTO) extras.get(JourneyFieldResearcherDTO.class.toString());
             journeyDTO.getJourneyFieldResearcherListDTO().getJourneyFieldResearcherDTOList().get(0).setFieldResearcherDTO(journeyFieldResearcherDTO.getFieldResearcherDTO());
         }
         holder.getJourneyButton().setOnClickListener(new View.OnClickListener() {

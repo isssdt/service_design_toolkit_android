@@ -3,7 +3,6 @@ package common.api;
 import android.os.Bundle;
 
 import common.constants.APIUrl;
-import common.constants.ConstantValues;
 import common.dto.RESTResponse;
 import common.utils.Utils;
 import common.view.AbstractView;
@@ -33,6 +32,6 @@ public class APIUpdateResearchWork extends APIFacade<RESTResponse, TouchPointFie
         JourneyFieldResearcherDTO journeyFieldResearcherDTO = new JourneyFieldResearcherDTO();
         journeyFieldResearcherDTO.setFieldResearcherDTO(touchPointFieldResearcherDTO.getFieldResearcherDTO());
         journeyFieldResearcherDTO.setJourneyDTO(touchPointFieldResearcherDTO.getTouchpointDTO().getJourneyDTO());
-        Utils.forwardToScreen(view.getContext(), TouchPointListActivity.class, ConstantValues.BUNDLE_KEY_JOURNEY_FIELD_RESEARCHER_DTO, journeyFieldResearcherDTO);
+        Utils.forwardToScreen(view.getContext(), TouchPointListActivity.class, JourneyFieldResearcherDTO.class.toString(), journeyFieldResearcherDTO);
     }
 }

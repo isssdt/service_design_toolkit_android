@@ -1,6 +1,8 @@
 package touchpoint.action;
 
 import android.Manifest;
+import android.app.Activity;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
@@ -9,7 +11,6 @@ import android.util.Log;
 import android.view.View;
 
 import common.action.BaseAction;
-import common.utils.Utils;
 import common.view.AbstractView;
 import connectionStatus.AppStatus;
 import photo.SelectPhoto;
@@ -34,7 +35,10 @@ public class ACTION_BUTTON_TOUCH_POINT_DETAILS_PHOTO extends BaseAction implemen
             } else {
                 TouchPointFieldResearcherDTO touchPointFieldResearcherDTO =
                         (TouchPointFieldResearcherDTO) abstractView.getContext().getIntent().getExtras().get(TouchPointFieldResearcherDTO.class.toString());
-                Utils.forwardToScreen(abstractView.getContext(), SelectPhoto.class, touchPointFieldResearcherDTO.getClass().toString(), touchPointFieldResearcherDTO);
+                Intent intent = new Intent(abstractView.getContext(), SelectPhoto.class);
+                intent.putExtra(TouchPointFieldResearcherDTO.class.toString(), touchPointFieldResearcherDTO);
+                intent.putExtra(Activity.class.toString(), abstractView.getContext().getClass().toString());
+                abstractView.getContext().startActivity(intent);
             }
         }
         else {

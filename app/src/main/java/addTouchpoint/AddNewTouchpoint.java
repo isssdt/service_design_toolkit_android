@@ -4,18 +4,11 @@ package addTouchpoint;
  * Created by Gunjan on 01-Mar-17.
  */
 
-import android.Manifest;
-import android.content.Context;
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
@@ -40,11 +33,11 @@ import java.util.List;
 import common.constants.APIUrl;
 import common.dto.MasterDataDTO;
 import common.dto.RESTResponse;
+import common.utils.Utils;
 import journey.dto.JourneyDTO;
 import journey.dto.JourneyFieldResearcherDTO;
 import photo.SelectPhoto;
 import poc.servicedesigntoolkit.getpost.R;
-import touchpoint.activity.TouchPointDetailsActivity;
 import touchpoint.activity.TouchPointListActivity;
 import touchpoint.dto.ChannelDTO;
 import touchpoint.dto.RatingDTO;
@@ -121,6 +114,11 @@ public class AddNewTouchpoint extends AppCompatActivity implements View.OnClickL
         submit.setOnClickListener(this);
         photo.setOnClickListener(this);
 
+        TouchPointFieldResearcherDTO touchPointFieldResearcherDTO = (TouchPointFieldResearcherDTO) getIntent().getExtras().get(TouchPointFieldResearcherDTO.class.toString());
+        if (null != touchPointFieldResearcherDTO) {
+            imagepathEdit.setText(touchPointFieldResearcherDTO.getPhotoLocation());
+        }
+
     }
 
     private void spinnerData() {
@@ -165,6 +163,9 @@ public class AddNewTouchpoint extends AppCompatActivity implements View.OnClickL
             case R.id.photo:
                 getdetails();
                 Intent i = new Intent(AddNewTouchpoint.this, SelectPhoto.class);
+                TouchPointFieldResearcherDTO touchPointFieldResearcherDTO = new TouchPointFieldResearcherDTO();
+                i.putExtra(TouchPointFieldResearcherDTO.class.toString(), touchPointFieldResearcherDTO);
+                i.putExtra(Activity.class.toString(), getClass().toString());
                 startActivity(i);
                 break;
         }
@@ -276,6 +277,12 @@ public class AddNewTouchpoint extends AppCompatActivity implements View.OnClickL
                         restTemplate.postForObject(url, touchPointFieldResearcherDTO, RESTResponse.class);
                 String message = response.getMessage();
                 Log.d("message",message);
+
+                if (null != imagepath && !imagepath.isEmpty()) {
+                    Utils.uploadImageThread(imagepath,
+                            JourneyName + "_" + touchpoint_name + "_" +
+                                    Username + ".jpg");
+                }
                 return response;
             } catch (Exception e) {
                 Log.e("MainActivity", e.getMessage(), e);
