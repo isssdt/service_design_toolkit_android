@@ -1,22 +1,20 @@
 package photo;
 
 import android.Manifest;
+import android.app.Activity;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -27,23 +25,12 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.URI;
-import java.nio.channels.FileChannel;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import common.utils.Utils;
-import journey.dto.JourneyFieldResearcherDTO;
 import poc.servicedesigntoolkit.getpost.R;
 import touchpoint.activity.TouchPointDetailsActivity;
 import touchpoint.dto.TouchPointFieldResearcherDTO;
-import touchpoint.dto.TouchPointFieldResearcherListDTO;
 
 public class SelectPhoto extends AppCompatActivity implements View.OnClickListener {
 
@@ -51,7 +38,8 @@ public class SelectPhoto extends AppCompatActivity implements View.OnClickListen
     private static final int take_photo_request_code =1;
     private static final String TAG = "selectphoto";
     String newPath,sourcepath;
-    Uri filePath;
+    Uri filePath, picUri;
+    Bitmap myBitmap;
     private Button buttonCamera;
     private Button buttonGallery;
     private Button buttonUpload;
@@ -124,9 +112,8 @@ public class SelectPhoto extends AppCompatActivity implements View.OnClickListen
         //String image = getStringImage(bitmap);
 
         String selectedImagePath;
-        Log.d("---------------------------------------------------------------->filePath",filePath.toString());
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            selectedImagePath = ImageFilePath.getPath(getApplicationContext(), filePath);
+            selectedImagePath = ImageFilePath.getPath(getApplicationContext(), picUri);
             //selectedImagePath = getPath(filePath);
             TouchPointFieldResearcherDTO touchPointFieldResearcherDTO = (TouchPointFieldResearcherDTO) getIntent().getExtras().get(TouchPointFieldResearcherDTO.class.toString());
             touchPointFieldResearcherDTO.setPhotoLocation(selectedImagePath);
@@ -157,51 +144,22 @@ public class SelectPhoto extends AppCompatActivity implements View.OnClickListen
     }
 
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK) {
 
-        if (requestCode == SELECT_IMAGE && resultCode == RESULT_OK && data != null && data.getData() != null) {
-            filePath = data.getData();
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                sourcepath = ImageFilePath.getPath(getApplicationContext(), filePath);
-                Log.d("sourcepath_SELECT_IMAGE",sourcepath);
-                Log.d("filePath_SELECT_IMAGE",filePath.toString());
-            }
+            picUri = getPickImageResultUri(data);
+
             try {
-                bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
-                imageView.setImageBitmap(bitmap);
-                createImageFile();
-                copyfile();
+                myBitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), picUri);
+                myBitmap = getResizedBitmap(myBitmap, 500);
+
+                imageView.setImageBitmap(myBitmap);
 
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        }else if (requestCode == REQUEST_TAKE_PHOTO && resultCode == RESULT_OK) {
-            // Show the thumbnail on ImageView
-            Log.d("TRACE","4");
-            filePath = data.getData();
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                sourcepath = ImageFilePath.getPath(getApplicationContext(), filePath);
-                Log.d("sourcepath_SELECT_IMAGE",sourcepath);
-                Log.d("filePath_SELECT_IMAGE",filePath.toString());
-            }
-            Uri imageUri = Uri.parse(mCurrentPhotoPath);
-            File file = new File(imageUri.getPath());
-            try {
-                InputStream ims = new FileInputStream(file);
-                imageView.setImageBitmap(BitmapFactory.decodeStream(ims));
-            } catch (FileNotFoundException e) {
-                return;
-            }
-
-            // ScanFile so it will be appeared on Gallery
-            MediaScannerConnection.scanFile(SelectPhoto.this,
-                    new String[]{imageUri.getPath()}, null,
-                    new MediaScannerConnection.OnScanCompletedListener() {
-                        public void onScanCompleted(String path, Uri uri) {
-                        }
-                    });
         }
 
     }
@@ -224,7 +182,6 @@ public class SelectPhoto extends AppCompatActivity implements View.OnClickListen
                         != PackageManager.PERMISSION_GRANTED) {
                     ActivityCompat.requestPermissions(SelectPhoto.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, TAKE_IMAGE);
                 } else {
-                    Log.d("TRACE","1");
                     takePhoto();
                 }
                 break;
@@ -257,82 +214,64 @@ public class SelectPhoto extends AppCompatActivity implements View.OnClickListen
             }
         }
     }
-    private void copyfile(){
-        try {
-                File source= new File(sourcepath);
-                File destination= new File(newPath);
-                if (source.exists()) {
-                    FileChannel src = new FileInputStream(source).getChannel();
-                    FileChannel dst = new FileOutputStream(destination).getChannel();
-                    dst.transferFrom(src, 0, src.size());
-                    src.close();
-                    dst.close();
-                }
-            imagefinalPath = newPath;
-
-        } catch (Exception e) {}
-    }
 
     private void takePhoto() {
         try {
             dispatchTakePictureIntent();
         } catch (IOException e) {
         }
-        Log.d("TRACE","2");
-
-        //handleBigCameraPhoto();
     }
 
 
 
-    private void galleryAddPic() {
-        Intent mediaScanIntent = new Intent("android.intent.action.MEDIA_SCANNER_SCAN_FILE");
-        File f = new File(mCurrentPhotoPath);
-        Uri contentUri = Uri.fromFile(f);
-        mediaScanIntent.setData(contentUri);
-        this.sendBroadcast(mediaScanIntent);
-    }
-
-    private File createImageFile() throws IOException {
-        // Create an image file name
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String imageFileName = "JPEG_" + timeStamp + "_";
-        File storageDir = new File(Environment.getExternalStoragePublicDirectory(
-                Environment.DIRECTORY_DCIM), "Camera");
-        File image = File.createTempFile(
-                imageFileName,  /* prefix */
-                ".jpg",         /* suffix */
-                storageDir      /* directory */
-        );
-
-        // Save a file: path for use with ACTION_VIEW intents
-        mCurrentPhotoPath = "file:" + image.getAbsolutePath();
-        return image;
-    }
 
     private void dispatchTakePictureIntent() throws IOException {
-        Log.d("TRACE","3");
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        // Ensure that there's a camera activity to handle the intent
-        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-            // Create the File where the photo should go
-            File photoFile = null;
-            try {
-                photoFile = createImageFile();
-            } catch (IOException ex) {
-                // Error occurred while creating the File
-                return;
-            }
-            // Continue only if the File was successfully created
-            if (photoFile != null) {
-                Uri photoURI = Uri.fromFile(createImageFile());
-                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-                startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
-            }
-        }
+        String fileName = "temp.jpg";
+        ContentValues values = new ContentValues();
+        values.put(MediaStore.Images.Media.TITLE, fileName);
+        filePath = getContentResolver()
+                .insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                        values);
+        takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, filePath);
+        startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
     }
     @Override
     public void onBackPressed() {
 
+    }
+
+    public Bitmap getResizedBitmap(Bitmap image, int maxSize) {
+        int width = image.getWidth();
+        int height = image.getHeight();
+
+        float bitmapRatio = (float) width / (float) height;
+        if (bitmapRatio > 0) {
+            width = maxSize;
+            height = (int) (width / bitmapRatio);
+        } else {
+            height = maxSize;
+            width = (int) (height * bitmapRatio);
+        }
+        return Bitmap.createScaledBitmap(image, width, height, true);
+    }
+
+
+    /**
+     * Get the URI of the selected image from
+     * <p>
+     * Will return the correct URI for camera and gallery image.
+     *
+     * @param data the returned data of the activity result
+     */
+    public Uri getPickImageResultUri(Intent data) {
+        boolean isCamera = true;
+        if (data != null) {
+            String action = data.getAction();
+            isCamera = action != null && action.equals(MediaStore.ACTION_IMAGE_CAPTURE);
+        }
+
+//        return isCamera ? getCaptureImageOutputUri() : data.getData();
+        return isCamera ? filePath : data.getData();
     }
 }
