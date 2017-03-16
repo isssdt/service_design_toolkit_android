@@ -5,8 +5,8 @@ import android.content.Intent;
 import common.constants.APIUrl;
 import common.dto.RESTResponse;
 import common.view.AbstractView;
+import journey.dto.JourneyFieldResearcherDTO;
 import journeyemotion.emotionMeter;
-import poc.servicedesigntoolkit.getpost.MainActivity;
 import user.dto.SdtUserDTO;
 
 /**
@@ -22,6 +22,9 @@ public class APIMarkJourneyCompleted extends APIFacade<RESTResponse, SdtUserDTO>
     @Override
     public void handleDataUponSuccess(RESTResponse data) {
         Intent i = new Intent(view.getContext(), emotionMeter.class);
+        JourneyFieldResearcherDTO journeyFieldResearcherDTO = (JourneyFieldResearcherDTO) view.getContext().getIntent().getExtras().get(JourneyFieldResearcherDTO.class.toString());
+        i.putExtra("Username", journeyFieldResearcherDTO.getFieldResearcherDTO().getSdtUserDTO().getUsername());
+        i.putExtra("JourneyName", journeyFieldResearcherDTO.getJourneyDTO().getJourneyName());
         i.putExtra("Message", data.getMessage());
         view.getContext().startActivity(i);
     }

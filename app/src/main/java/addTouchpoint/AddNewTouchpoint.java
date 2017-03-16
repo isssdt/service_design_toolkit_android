@@ -157,6 +157,13 @@ public class AddNewTouchpoint extends AppCompatActivity implements View.OnClickL
                 if(validate()){
                     new AddTouchPoint().execute();
                     Intent newIntent = new Intent(AddNewTouchpoint.this, TouchPointListActivity.class);
+                    JourneyFieldResearcherDTO journeyFieldResearcherDTO = new JourneyFieldResearcherDTO();
+                    journeyFieldResearcherDTO.setFieldResearcherDTO(new FieldResearcherDTO());
+                    journeyFieldResearcherDTO.getFieldResearcherDTO().setSdtUserDTO(new SdtUserDTO());
+                    journeyFieldResearcherDTO.getFieldResearcherDTO().getSdtUserDTO().setUsername(Username);
+                    journeyFieldResearcherDTO.setJourneyDTO(new JourneyDTO());
+                    journeyFieldResearcherDTO.getJourneyDTO().setJourneyName(JourneyName);
+                    newIntent.putExtra(JourneyFieldResearcherDTO.class.toString(), journeyFieldResearcherDTO);
                     startActivity(newIntent);
                 }
                 break;
