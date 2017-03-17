@@ -28,7 +28,7 @@
         android:layout_marginBottom="138dp"
         android:background="@drawable/buttonshape"
         android:shadowColor="@color/colorPrimary"
-        android:text="  Show Research List  "
+        android:text="  Show Open Projects  "
         android:textColor="@color/colorPrimary" />
 
     <EditText
