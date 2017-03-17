@@ -94,7 +94,7 @@ public class APIGetTouchPointListOfRegisteredJourney extends APIFacade<TouchPoin
 
         //if (savedInstanceState == null) {
 
-        mGeofenceList = new ArrayList<Geofence>();
+        /*mGeofenceList = new ArrayList<Geofence>();
 
         int resp = GooglePlayServicesUtil.isGooglePlayServicesAvailable(view.getContext());
         if (resp == ConnectionResult.SUCCESS) {
@@ -121,7 +121,7 @@ public class APIGetTouchPointListOfRegisteredJourney extends APIFacade<TouchPoin
                 .setInterval(1 * 1000)        // 10 seconds, in milliseconds
                 .setFastestInterval(1 * 1000); // 1 second, in milliseconds
 
-        //}
+        //}*/
     }
 
     public void initGoogleAPIClient() {
