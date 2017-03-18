@@ -15,6 +15,8 @@ import common.constants.ConstantValues;
 import common.dto.MasterDataDTO;
 import common.view.AbstractView;
 import connectionStatus.AppStatus;
+import touchpoint.activity.TouchPointDetailsActivity;
+import touchpoint.activity.TouchPointListActivity;
 import touchpoint.dto.RatingDTO;
 import touchpoint.dto.TouchPointFieldResearcherDTO;
 
@@ -23,6 +25,7 @@ import touchpoint.dto.TouchPointFieldResearcherDTO;
  */
 
 public class ACTION_BUTTON_TOUCH_POINT_DETAILS_SUBMIT extends BaseAction implements View.OnClickListener {
+   // TouchPointListActivity touch = new TouchPointListActivity();
     public ACTION_BUTTON_TOUCH_POINT_DETAILS_SUBMIT(AbstractView abstractView) {
         super(abstractView);
     }
@@ -49,7 +52,8 @@ public class ACTION_BUTTON_TOUCH_POINT_DETAILS_SUBMIT extends BaseAction impleme
         touchPointFieldResearcherDTO.getDurationUnitDTO().setDataValue(
                 ((Spinner) abstractView.getComponent(ConstantValues.COMPONENT_TOUCH_POINT_DETAILS_VIEW_SPINNER_ACTUAL_DURATION_UNIT)).getSelectedItem().toString());
         new APIUpdateResearchWork(touchPointFieldResearcherDTO, abstractView).execute();
-    } else {
+           // touch.removeGeofencesButtonHandler();
+        } else {
 
             Snackbar.make(view,"You are not online!!!!",Snackbar.LENGTH_LONG).show();
             Log.v("Home", "############################You are not online!!!!");

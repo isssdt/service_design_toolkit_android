@@ -35,6 +35,10 @@
             android:name="location.LocationService"
             android:exported="false"/>
 
+        <service
+            android:name="geofence.GeofenceTransitionsIntentService"
+            android:exported="false"/>
+
         <activity android:name=".MainActivity"
             android:screenOrientation="portrait"
             android:label="Service Design Toolkit">

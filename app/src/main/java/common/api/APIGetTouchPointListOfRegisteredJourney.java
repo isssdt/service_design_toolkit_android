@@ -1,14 +1,11 @@
 package common.api;
 
-import android.Manifest;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
-import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -19,11 +16,13 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.GeofencingRequest;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
@@ -33,7 +32,10 @@ import java.util.UUID;
 import common.constants.APIUrl;
 import common.constants.ConstantValues;
 import common.view.AbstractView;
+
+import geofence.Constants;
 import geofence.GeofenceTransitionsIntentService;
+import touchpoint.activity.TouchPointListActivity;
 import touchpoint.aux_android.TouchPointFieldResearcherListAdapter;
 import touchpoint.dto.TouchPointFieldResearcherDTO;
 import touchpoint.dto.TouchPointFieldResearcherListDTO;
@@ -43,33 +45,29 @@ import user.dto.SdtUserDTO;
  * Created by longnguyen on 3/4/17.
  */
 
-public class APIGetTouchPointListOfRegisteredJourney extends APIFacade<TouchPointFieldResearcherListDTO, SdtUserDTO> implements APIExecutor<TouchPointFieldResearcherListDTO>, LocationListener {
+public class APIGetTouchPointListOfRegisteredJourney extends APIFacade<TouchPointFieldResearcherListDTO, SdtUserDTO> implements APIExecutor<TouchPointFieldResearcherListDTO>{//,LocationListener {
 
 
     PendingIntent mGeofencePendingIntent;
     public static final int CONNECTION_FAILURE_RESOLUTION_REQUEST = 100;
     private List<Geofence> mGeofenceList;
     private GoogleApiClient mGoogleApiClient;
-    public static final String TAG = "Activity";
+    public static final String TAG = "TESTING";
     LocationRequest mLocationRequest;
-    double[] currentLatitudeGeo = {1.3051568, 1.3495207, 1.2922, 1.2951};
-    double[] currentLongitudeGeo = {103.7739404, 103.7505944, 103.7766, 103.7738};
 
     double currentLatitude, currentLongitude;
     Boolean locationFound;
     // protected LocationManager locationManager;
     protected LocationListener locationListener;
-    AbstractView v;
-
     public APIGetTouchPointListOfRegisteredJourney(SdtUserDTO input, AbstractView view) {
         super(APIUrl.API_GET_TOUCH_POINT_LIST_OF_REGISTERED_JOURNEY, TouchPointFieldResearcherListDTO.class, input, APIUrl.METHOD_POST, view);
-        v = view;
+        Log.d("TouchPointFieldResearcherListDTO : API", "TRY");
         setApiExecutor(this);
     }
 
     @Override
     public void handleDataUponSuccess(TouchPointFieldResearcherListDTO data) {
-
+        Log.d("TouchPointFieldResearcherListDTO : API", "Success");
         SharedPreferences sharedPref = view.getContext().getSharedPreferences("Trial", Context.MODE_PRIVATE);
         Gson gson = new Gson();
         String json = gson.toJson(data);
@@ -91,10 +89,23 @@ public class APIGetTouchPointListOfRegisteredJourney extends APIFacade<TouchPoin
                 break;
             }
         }
+//        String geo = sharedPref.getString("TouchPointFieldResearcherListDTO", "");
+//        Log.d("TouchPointFieldResearcherListDTO", " EMPTY " + geo);
+//        TouchPointFieldResearcherListDTO touchPointFieldResearcherListDTO = gson.fromJson(geo, TouchPointFieldResearcherListDTO.class);
+//
+//        for (TouchPointFieldResearcherDTO touchPointDTO:touchPointFieldResearcherListDTO.getTouchPointFieldResearcherDTOList()) {
+//            if(!touchPointDTO.getTouchpointDTO().getLatitude().toString().equals("NONE" )) {
+//                Log.d(TAG, touchPointDTO.getTouchpointDTO().getLatitude() +":"+touchPointDTO.getTouchpointDTO().getLongitude());
+//                Log.d(TAG, touchPointDTO.getTouchpointDTO().getRadius());
+//
+//                Constants.BAY_AREA_LANDMARKS.put(touchPointDTO,new LatLng(Double.parseDouble(touchPointDTO.getTouchpointDTO().getLatitude()), Double.parseDouble(touchPointDTO.getTouchpointDTO().getLongitude())));
+//            }
+//        }
+
 
         //if (savedInstanceState == null) {
 
-        /*mGeofenceList = new ArrayList<Geofence>();
+    /*    mGeofenceList = new ArrayList<Geofence>();
 
         int resp = GooglePlayServicesUtil.isGooglePlayServicesAvailable(view.getContext());
         if (resp == ConnectionResult.SUCCESS) {
@@ -104,11 +115,10 @@ public class APIGetTouchPointListOfRegisteredJourney extends APIFacade<TouchPoin
             Log.d("TouchPointFieldResearcherListDTO", " EMPTY " + geo);
             TouchPointFieldResearcherListDTO touchPointFieldResearcherListDTO = gson.fromJson(geo, TouchPointFieldResearcherListDTO.class);
 
-            for (TouchPointFieldResearcherDTO touchPointDTO : touchPointFieldResearcherListDTO.getTouchPointFieldResearcherDTOList()) {
-                if (!"NONE".equals(touchPointDTO.getTouchpointDTO().getLatitude()) && !"NONE".equals(touchPointDTO.getTouchpointDTO().getLongitude()) &&
-                        !"NONE".equals(touchPointDTO.getTouchpointDTO().getRadius())) {
-                    Log.d("geoFence", touchPointDTO.getTouchpointDTO().getLatitude());
-                    createGeofences(Double.parseDouble(touchPointDTO.getTouchpointDTO().getLatitude()), Double.parseDouble(touchPointDTO.getTouchpointDTO().getLongitude()));
+            for (TouchPointFieldResearcherDTO touchPointDTO:touchPointFieldResearcherListDTO.getTouchPointFieldResearcherDTOList()) {
+                if(touchPointDTO.getTouchpointDTO().getLatitude() != "NONE" ) {
+                    Log.d(TAG, touchPointDTO.getTouchpointDTO().getLatitude());
+                    createGeofences(Double.parseDouble(touchPointDTO.getTouchpointDTO().getLatitude()), Double.parseDouble(touchPointDTO.getTouchpointDTO().getLongitude()), Double.parseDouble(touchPointDTO.getTouchpointDTO().getRadius()),touchPointDTO.getTouchpointDTO().getTouchPointDesc());
                 }
             }
         } else {
@@ -121,7 +131,7 @@ public class APIGetTouchPointListOfRegisteredJourney extends APIFacade<TouchPoin
                 .setInterval(1 * 1000)        // 10 seconds, in milliseconds
                 .setFastestInterval(1 * 1000); // 1 second, in milliseconds
 
-        //}*/
+        //}
     }
 
     public void initGoogleAPIClient() {
@@ -142,8 +152,7 @@ public class APIGetTouchPointListOfRegisteredJourney extends APIFacade<TouchPoin
 
                     //   if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
-                    {
-                        Log.i("geofence", "debu");
+                    {  //Log.i("geofence","debu");
                         // TODO: Consider calling
                         //    ActivityCompat#requestPermissions
                         // here to request the missing permissions, and then overriding
@@ -152,12 +161,10 @@ public class APIGetTouchPointListOfRegisteredJourney extends APIFacade<TouchPoin
                         // to handle the case where the user grants the permission. See the documentation
 
                         // for ActivityCompat#requestPermissions for more details.
-                        if (ActivityCompat.checkSelfPermission(v.getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(v.getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-
                         Location location = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
 
                         if (location == null) {
-                            LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest,APIGetTouchPointListOfRegisteredJourney.this);
+                            LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, APIGetTouchPointListOfRegisteredJourney.this);
 
                         } else {
                             //If everything went fine lets get latitude and longitude
@@ -168,7 +175,6 @@ public class APIGetTouchPointListOfRegisteredJourney extends APIFacade<TouchPoin
 
                             //createGeofences(currentLatitude, currentLongitude);
                             //registerGeofences(mGeofenceList);
-                        }
                         }
 
                         try{
@@ -215,24 +221,25 @@ public class APIGetTouchPointListOfRegisteredJourney extends APIFacade<TouchPoin
                 }
             };
 
-    /**
-     * Create a Geofence list
-     */
-    public void createGeofences(double latitude, double longitude) {
+    //*
+         * Create a Geofence list
+         //
+    public void createGeofences(double latitude, double longitude, double radius, String touchPointDesc) {
+        Log.d(TAG,"Radiuss:"+radius);
+
         String id = UUID.randomUUID().toString();
         Geofence fence = new Geofence.Builder()
                 .setRequestId(id)
                 .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER | Geofence.GEOFENCE_TRANSITION_EXIT)
-                .setCircularRegion(latitude, longitude, 100)
+                .setCircularRegion(latitude, longitude, (float) radius)
                 .setExpirationDuration(Geofence.NEVER_EXPIRE)
-
                 .build();
         mGeofenceList.add(fence);
     }
 
     private GeofencingRequest getGeofencingRequest() {
         GeofencingRequest.Builder builder = new GeofencingRequest.Builder();
-        builder.setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_ENTER);
+        builder.setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_ENTER|GeofencingRequest.INITIAL_TRIGGER_EXIT);
         builder.addGeofences(mGeofenceList);
         return builder.build();
     }
@@ -240,11 +247,14 @@ public class APIGetTouchPointListOfRegisteredJourney extends APIFacade<TouchPoin
     private PendingIntent getGeofencePendingIntent() {
         // Reuse the PendingIntent if we already have it.
         if (mGeofencePendingIntent != null) {
+            Log.d(TAG,"notnull");
             return mGeofencePendingIntent;
         }
         Intent intent = new Intent(view.getContext(), GeofenceTransitionsIntentService.class);
+        intent.putExtra("Id",);
         // We use FLAG_UPDATE_CURRENT so that we get the same pending intent back when
         // calling addGeofences() and removeGeofences().
+        Log.d(TAG,"null");
         return PendingIntent.getService(view.getContext(), 0, intent, PendingIntent.
                 FLAG_UPDATE_CURRENT);
     }
@@ -254,6 +264,12 @@ public class APIGetTouchPointListOfRegisteredJourney extends APIFacade<TouchPoin
         currentLatitude = location.getLatitude();
         currentLongitude = location.getLongitude();
         Log.i(TAG, "onLocationChanged");
+    }*/
     }
 
+    @Override
+    protected void onCancelled() {
+        super.onCancelled();
+        Log.d("ON CANCELLED: ","CANCEL");
+    }
 }

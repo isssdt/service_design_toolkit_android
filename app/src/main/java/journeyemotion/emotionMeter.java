@@ -9,6 +9,7 @@ import org.springframework.web.client.RestTemplate;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -19,6 +20,7 @@ import android.widget.TextView;
 import common.constants.APIUrl;
 
 import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.GridLabelRenderer;
 import com.jjoe64.graphview.helper.StaticLabelsFormatter;
 import com.jjoe64.graphview.series.DataPointInterface;
 import com.jjoe64.graphview.series.LineGraphSeries;
@@ -46,9 +48,10 @@ public class emotionMeter extends AppCompatActivity {
     String TOUCHPOINTLIST_URL = APIUrl.API_GET_RESEARCH_WORK_LIST_BY_JOURNEY_NAME_AND_USERNAME;
     ArrayList<Touchpoint_model> touchpointData;
     GraphView graph;
-    LineGraphSeries<DataPoint> series;
+    LineGraphSeries<DataPoint> series,seriesRef,seriesSample;
     TextView touchpointname, action, reaction;
     ImageView imageView;
+    String TAG="emotion";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,22 +75,51 @@ public class emotionMeter extends AppCompatActivity {
 
     public void updateGraph(GraphView graph) {
         series = new LineGraphSeries<>(generateData(graph));
-
-//        // enable scaling and scrolling
-//        graph.getViewport().setScalable(true);
-//        graph.getViewport().setScrollable(true);
         graph.addSeries(series);
+//        // enable scaling and scrolling
+        //graph.getViewport().setScalable(true);
+        //graph.getViewport().setScrollable(true);
+
+        int count1 = touchpointData.size();
+        Log.d("TAG","count updategraph"+count1);
+       DataPoint[] valueRef=new DataPoint[count1+1];
+
+        for (int ref=0;ref<count1+1;ref++){
+            Log.d("TAG","inside if"+ref);
+            valueRef[ref]=new DataPoint(ref,3);
+            Log.d("TAG","valueRef"+valueRef[ref]);
+
+        }
+
+        seriesRef= new LineGraphSeries<>(valueRef);
+        graph.addSeries(seriesRef);
+        seriesRef.setTitle("Random Curve 1");
+        seriesRef.setColor(Color.GREEN);
+
+//        seriesSample= new LineGraphSeries<>(new DataPoint[]{new DataPoint(0,4),new DataPoint(1,4),new DataPoint(2,4),new DataPoint(3,4)});
+//        graph.addSeries(seriesSample);
 
         Log.d("scale",""+graph.getViewport().getMaxYAxisSize());
 
-        StaticLabelsFormatter staticLabelsFormatter = new StaticLabelsFormatter(graph);
-        staticLabelsFormatter.setVerticalLabels(new String[] {"1", "2", "3","4","5"});
+//        StaticLabelsFormatter staticLabelsFormatter = new StaticLabelsFormatter(graph);
+//        staticLabelsFormatter.setVerticalLabels(new String[] {"0","1", "2", "3","4","5"});
+        // set manual X bounds
+//        graph.getViewport().setYAxisBoundsManual(true);
+//        graph.getViewport().setMinY(0);
+//        graph.getViewport().setMaxY(5);
+//
+//        graph.getViewport().setXAxisBoundsManual(true);
+//        graph.getViewport().setMinX(0);
+//        graph.getViewport().setMaxX(10);
+//
+//        // enable scaling and scrolling
+//        graph.getViewport().setScalable(true);
+//        graph.getViewport().setScalableY(true);
 
-        graph.getViewport().setYAxisBoundsManual(true);
-        graph.getViewport().setMinY(0);
-        graph.getViewport().setMaxY(5);
-        graph.getViewport().setMaxYAxisSize(1);
-        graph.getGridLabelRenderer().setLabelFormatter(staticLabelsFormatter);
+        graph.addSeries(series);
+
+        // graph.getGridLabelRenderer().setLabelFormatter(staticLabelsFormatter);
+        graph.getGridLabelRenderer().setGridStyle(GridLabelRenderer.GridStyle.NONE);
         series.setDrawDataPoints(true);
 
         series.setOnDataPointTapListener(new OnDataPointTapListener() {
@@ -156,6 +188,7 @@ public class emotionMeter extends AppCompatActivity {
             Log.d("xxx",""+s);
         }
         staticLabelsFormatter.setHorizontalLabels(xAxis);
+        staticLabelsFormatter.setVerticalLabels(new String[] {"0","1", "2", "3","4","5"});
         graph.getGridLabelRenderer().setLabelFormatter(staticLabelsFormatter);
 
         return values;
