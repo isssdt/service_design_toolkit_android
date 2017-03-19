@@ -1,7 +1,9 @@
 package touchpoint.activity;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
@@ -21,6 +23,13 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
+import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
+import com.google.android.gms.location.LocationServices;
+import com.google.gson.Gson;
+
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 
@@ -28,6 +37,7 @@ import java.util.List;
 
 import common.constants.APIUrl;
 import common.dto.RESTResponse;
+import journey.dto.JourneyFieldResearcherDTO;
 import photo.SelectPhoto;
 import poc.servicedesigntoolkit.getpost.R;
 import touchpoint.view.TouchPointDetailsView;
@@ -38,7 +48,7 @@ import user.dto.SdtUserDTO;
  * Created by Gunjan Pathak on 06-Oct-16.
  */
 
-public class TouchPointDetailsActivity extends AppCompatActivity implements View.OnClickListener, LocationListener {
+public class TouchPointDetailsActivity extends AppCompatActivity implements View.OnClickListener, ConnectionCallbacks, OnConnectionFailedListener {
 
     private static final String completed_confirmation = "Journey has been marked as Completed";
     private static final int take_photo_request_code = 1;
@@ -59,13 +69,25 @@ public class TouchPointDetailsActivity extends AppCompatActivity implements View
     String rating_intent, reaction_intent, comment_intent, actual_string, actual_time_unit, imagepath;
     int rating;
     private LocationManager locationManager;
+    private GoogleApiClient mGoogleApiClient;
     String message = "", provider;
+    double currentLatitude, currentLongitude;
+    protected Location mLastLocation;
+    private final String TAG = "TouchPointDetailsActivity";
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.touchpoint_details_1);
-
         new TouchPointDetailsView(this);
+        buildGoogleApiClient();
+
+        SharedPreferences sharedPref = getApplicationContext().getSharedPreferences("Trial", Context.MODE_PRIVATE);
+        Gson gson = new Gson();
+        username = sharedPref.getString("Username", "");
+        Log.d("Username",username);
+        //JourneyFieldResearcherDTO journeyFieldResearcherDTO = gson.fromJson(journey, JourneyFieldResearcherDTO.class);
+        //username =journeyFieldResearcherDTO.getFieldResearcherDTO().getSdtUserDTO().getUsername();
+
 
     }
 
@@ -100,6 +122,7 @@ public class TouchPointDetailsActivity extends AppCompatActivity implements View
             }
         }
     }
+
 
     @Override
     public void onRequestPermissionsResult(int requestCode,
@@ -143,41 +166,69 @@ public class TouchPointDetailsActivity extends AppCompatActivity implements View
         }
     }
 
-    private void locationUpdate() {
-        if (ContextCompat.checkSelfPermission(TouchPointDetailsActivity.this, Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(TouchPointDetailsActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, share_location_request_code);
-        } else {
-            Location location = locationManager.getLastKnownLocation(provider);
-            if (location != null) {
-                onLocationChanged(location);
+
+    protected synchronized void buildGoogleApiClient() {
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(LocationServices.API)
+                .build();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mGoogleApiClient.connect();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (mGoogleApiClient.isConnected()) {
+            mGoogleApiClient.disconnect();
+        }
+    }
+
+    /**
+     * Runs when a GoogleApiClient object successfully connects.
+     */
+    @Override
+    public void onConnected(Bundle connectionHint) {
+        // Provides a simple way of getting a device's location and is well suited for
+        // applications that do not require a fine-grained location and that do not need location
+        // updates. Gets the best and most recent location currently available, which may be null
+        // in rare cases when a location is not available.
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+        }else{
+            mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+            if (mLastLocation != null) {
+                currentLatitude = mLastLocation.getLatitude();
+                currentLongitude = mLastLocation.getLongitude();
+                Log.i(TAG, "Location "+"Lat : "+ mLastLocation.getLatitude()+" Lon "+ mLastLocation.getLongitude());
+                new LocationUpdate().execute();
+
             } else {
-                Toast.makeText(getApplicationContext(), "Location not available", Toast.LENGTH_SHORT);
+                Log.i(TAG, "Location NULL");
+                Toast.makeText(this, "Location NULL", Toast.LENGTH_LONG).show();
             }
         }
     }
 
     @Override
-    public void onLocationChanged(Location location) {
-        lat = location.getLatitude();
-        lng = location.getLongitude();
-        new LocationUpdate().execute();
+    public void onConnectionFailed(ConnectionResult result) {
+        // Refer to the javadoc for ConnectionResult to see what error codes might be returned in
+        // onConnectionFailed.
+        Log.i(TAG, "Connection failed: ConnectionResult.getErrorCode() = " + result.getErrorCode());
     }
 
-    @Override
-    public void onStatusChanged(String provider, int status, Bundle extras) {
-    }
 
     @Override
-    public void onProviderEnabled(String provider) {
-        Toast.makeText(this, "Enabled new provider " + provider,
-                Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void onProviderDisabled(String provider) {
-        Toast.makeText(this, "Disabled provider " + provider,
-                Toast.LENGTH_SHORT).show();
+    public void onConnectionSuspended(int cause) {
+        // The connection to Google Play services was lost for some reason. We call connect() to
+        // attempt to re-establish the connection.
+        Log.i(TAG, "Connection suspended");
+        mGoogleApiClient.connect();
     }
 
     private class LocationUpdate extends AsyncTask<Void, Void, RESTResponse> {
@@ -185,6 +236,7 @@ public class TouchPointDetailsActivity extends AppCompatActivity implements View
         @Override
         protected RESTResponse doInBackground(Void... params) {
             try {
+                Log.d(TAG,"Location update");
                 final String url = APIUrl.API_UDPDATE_FIELD_RESEARCHER_CURRENT_LOCATION;
                 RestTemplate restTemplate = new RestTemplate();
                 restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
@@ -194,9 +246,12 @@ public class TouchPointDetailsActivity extends AppCompatActivity implements View
 
                 FieldResearcherDTO fieldResearcherDTO = new FieldResearcherDTO();
                 fieldResearcherDTO.setSdtUserDTO(sdtUserDTO);
-                fieldResearcherDTO.setCurrentLatitude(String.valueOf(lat));
-                fieldResearcherDTO.setCurrentLongitude(String.valueOf(lng));
-
+                fieldResearcherDTO.setCurrentLatitude(String.valueOf(currentLatitude));
+                fieldResearcherDTO.setCurrentLongitude(String.valueOf(currentLongitude));
+                Gson gson = new Gson();
+                String json = gson.toJson(fieldResearcherDTO);
+                Log.d(TAG,"DATa"+ fieldResearcherDTO.getSdtUserDTO().getUsername());
+                Log.d(TAG,"DATa"+ json);
                 RESTResponse response =
                         restTemplate.postForObject(url, fieldResearcherDTO, RESTResponse.class);
                 String locationmessage = response.getMessage();

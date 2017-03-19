@@ -43,9 +43,9 @@ import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListe
  * Created by Gunjan Pathak on 11/01/2017.
  */
 
-public class TouchPointListActivity extends AppCompatActivity  implements
+public class TouchPointListActivity extends AppCompatActivity  {/*implements
         ConnectionCallbacks, OnConnectionFailedListener, ResultCallback<Status>{
-
+*/
     protected static final String TAG = "TESTING";
 
     /**
@@ -92,6 +92,7 @@ public class TouchPointListActivity extends AppCompatActivity  implements
         new APIGetTouchPointListOfRegisteredJourney(journeyFieldResearcherDTO.getFieldResearcherDTO().getSdtUserDTO(), touchPointListView).execute();
 
 
+/*
         // Empty list for storing geofences.
         mGeofenceList = new ArrayList<Geofence>();
 
@@ -129,6 +130,7 @@ public class TouchPointListActivity extends AppCompatActivity  implements
         buildGoogleApiClient();
 
         mGoogleApiClient.connect();
+*/
 
 
 
@@ -138,7 +140,7 @@ public class TouchPointListActivity extends AppCompatActivity  implements
     public void onBackPressed() {
         ActionFactoryProducer.getFactory(ActionOnBackClick.class.toString()).initOnBackClickAction(touchPointListView).onBackClick();
     }
-    protected synchronized void buildGoogleApiClient() {
+/*    protected synchronized void buildGoogleApiClient() {
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
@@ -158,9 +160,9 @@ public class TouchPointListActivity extends AppCompatActivity  implements
         mGoogleApiClient.disconnect();
     }
 
-    /**
+    *//**
      * Runs when a GoogleApiClient object successfully connects.
-     */
+     *//*
     @Override
     public void onConnected(Bundle connectionHint) {
         Log.i(TAG, "Connected to GoogleApiClient");
@@ -180,13 +182,13 @@ public class TouchPointListActivity extends AppCompatActivity  implements
         Log.i(TAG, "Connection suspended");
 
         // onConnected() will be called again automatically when the service reconnects
-    }
+    }*/
 
     /**
      * Builds and returns a GeofencingRequest. Specifies the list of geofences to be monitored.
      * Also specifies how the geofence notifications are initially triggered.
      */
-    private GeofencingRequest getGeofencingRequest() {
+    /*private GeofencingRequest getGeofencingRequest() {
         GeofencingRequest.Builder builder = new GeofencingRequest.Builder();
         Log.d("TAG","getGeofencingRequest");
 
@@ -202,10 +204,10 @@ public class TouchPointListActivity extends AppCompatActivity  implements
         return builder.build();
     }
 
-    /**
+    *//**
      * Adds geofences, which sets alerts to be notified when the device enters or exits one of the
      * specified geofences. Handles the success or failure results returned by addGeofences().
-     */
+     *//*
     public void addGeofencesButtonHandler() {
         Log.d(TAG,"addGeofencesButtonHandler");
         if (!mGoogleApiClient.isConnected()) {
@@ -230,10 +232,10 @@ public class TouchPointListActivity extends AppCompatActivity  implements
         }
     }
 
-    /**
+    *//**
      * Removes geofences, which stops further notifications when the device enters or exits
      * previously registered geofences.
-     */
+     *//*
     public void removeGeofencesButtonHandler() {
         if (!mGoogleApiClient.isConnected()) {
             Toast.makeText(this, getString(R.string.not_connected), Toast.LENGTH_SHORT).show();
@@ -257,7 +259,7 @@ public class TouchPointListActivity extends AppCompatActivity  implements
                 "You need to use ACCESS_FINE_LOCATION with geofences", securityException);
     }
 
-    /**
+    *//**
      * Runs when the result of calling addGeofences() and removeGeofences() becomes available.
      * Either method can complete successfully or with an error.
      *
@@ -266,7 +268,7 @@ public class TouchPointListActivity extends AppCompatActivity  implements
      *
      * @param status The Status returned through a PendingIntent when addGeofences() or
      *               removeGeofences() get called.
-     */
+     *//*
     public void onResult(Status status) {
         if (status.isSuccess()) {
 Log.d(TAG,"onResult"+status);
@@ -295,13 +297,13 @@ Log.d(TAG,"onResult"+status);
         }
     }
 
-    /**
+    *//**
      * Gets a PendingIntent to send with the request to add or remove Geofences. Location Services
      * issues the Intent inside this PendingIntent whenever a geofence transition occurs for the
      * current list of geofences.
      *
      * @return A PendingIntent for the IntentService that handles geofence transitions.
-     */
+     *//*
     private PendingIntent getGeofencePendingIntent() {
         // Reuse the PendingIntent if we already have it.
         if (mGeofencePendingIntent != null) {
@@ -315,10 +317,10 @@ Log.d(TAG,"onResult"+status);
         return PendingIntent.getService(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
-    /**
+    *//**
      * This sample hard codes geofence data. A real app might dynamically create geofences based on
      * the user's location.
-     */
+     *//*
     public void populateGeofenceList() {
         Log.d(TAG,"populateGeofenceList");
         for (Map.Entry<TouchPointFieldResearcherDTO, LatLng> entry : Constants.BAY_AREA_LANDMARKS1.entrySet()) {
@@ -383,7 +385,7 @@ Log.d(TAG,"onResult"+status);
 
     }
 
-    /**
+    *//**
      * Ensures that only one button is enabled at any time. The Add Geofences button is enabled
      * if the user hasn't yet added geofences. The Remove Geofences button is enabled if the
      * user has added geofences.
