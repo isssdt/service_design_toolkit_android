@@ -10,6 +10,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import common.action.BaseAction;
+import common.api.APIGetTouchPointListOfRegisteredJourney;
 import common.api.APIUpdateResearchWork;
 import common.constants.ConstantValues;
 import common.dto.MasterDataDTO;
@@ -25,7 +26,7 @@ import touchpoint.dto.TouchPointFieldResearcherDTO;
  */
 
 public class ACTION_BUTTON_TOUCH_POINT_DETAILS_SUBMIT extends BaseAction implements View.OnClickListener {
-   // TouchPointListActivity touch = new TouchPointListActivity();
+
     public ACTION_BUTTON_TOUCH_POINT_DETAILS_SUBMIT(AbstractView abstractView) {
         super(abstractView);
     }
@@ -34,7 +35,7 @@ public class ACTION_BUTTON_TOUCH_POINT_DETAILS_SUBMIT extends BaseAction impleme
     public void onClick(View view) {
         if (AppStatus.getInstance(view.getContext()).isOnline()) {
 
-            Snackbar.make(view, "You are online!!!!", Snackbar.LENGTH_LONG).show();
+            //Snackbar.make(view, "You are online!!!!", Snackbar.LENGTH_LONG).show();
 
             Bundle bundle = abstractView.getContext().getIntent().getExtras();
         TouchPointFieldResearcherDTO touchPointFieldResearcherDTO = (TouchPointFieldResearcherDTO) bundle.get(TouchPointFieldResearcherDTO.class.toString());
@@ -52,10 +53,9 @@ public class ACTION_BUTTON_TOUCH_POINT_DETAILS_SUBMIT extends BaseAction impleme
         touchPointFieldResearcherDTO.getDurationUnitDTO().setDataValue(
                 ((Spinner) abstractView.getComponent(ConstantValues.COMPONENT_TOUCH_POINT_DETAILS_VIEW_SPINNER_ACTUAL_DURATION_UNIT)).getSelectedItem().toString());
         new APIUpdateResearchWork(touchPointFieldResearcherDTO, abstractView).execute();
-           // touch.removeGeofencesButtonHandler();
         } else {
 
-            Snackbar.make(view,"You are not online!!!!",Snackbar.LENGTH_LONG).show();
+            Snackbar.make(view,"Please check Your Internet Connection!!!!",Snackbar.LENGTH_LONG).show();
             Log.v("Home", "############################You are not online!!!!");
         }
 

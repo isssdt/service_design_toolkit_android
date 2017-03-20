@@ -72,6 +72,7 @@
             android:id="@+id/submitJourney1"
             android:layout_gravity="bottom|center"
             android:layout_weight="1"
+            android:visibility="gone"
             android:background="@drawable/buttonshape"
             android:shadowColor="@color/colorPrimary"
             android:textColor="@color/colorPrimary"/>

@@ -54,7 +54,7 @@ public class ACTION_BUTTON_MAIN_RESEARCH_LIST extends BaseAction implements View
 
         if (AppStatus.getInstance(viewCheck.getContext()).isOnline()) {
 
-            Snackbar.make(view, "You are online!!!!", Snackbar.LENGTH_LONG).show();
+            //Snackbar.make(view, "You are online!!!!", Snackbar.LENGTH_LONG).show();
 
 
             if (!validation(view)) {
@@ -77,7 +77,7 @@ public class ACTION_BUTTON_MAIN_RESEARCH_LIST extends BaseAction implements View
             }
         }else {
 
-                Snackbar.make(view,"You are not online!!!!",Snackbar.LENGTH_LONG).show();
+                Snackbar.make(view,"Please check Your Internet Connection!!!!",Snackbar.LENGTH_LONG).show();
                 Log.v("Home", "############################You are not online!!!!");
             }
 

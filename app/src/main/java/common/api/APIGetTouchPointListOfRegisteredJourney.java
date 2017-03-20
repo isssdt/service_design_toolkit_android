@@ -357,7 +357,7 @@ public class APIGetTouchPointListOfRegisteredJourney extends APIFacade<TouchPoin
                     // Set the circular region of this geofence.
                     .setCircularRegion(
                             entry.getValue().latitude,
-                            entry.getValue().longitude,1000)
+                            entry.getValue().longitude, Float.parseFloat(entry.getKey().getTouchpointDTO().getRadius()))
                     // Float.parseFloat(entry.getKey().getTouchpointDTO().getRadius())
 
                     // Set the expiration duration of the geofence. This geofence gets automatically

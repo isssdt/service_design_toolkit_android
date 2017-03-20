@@ -43,7 +43,7 @@ public class ACTION_BUTTON_TOUCH_POINT_DETAILS_PHOTO extends BaseAction implemen
         }
         else {
 
-                Snackbar.make(view,"You are not online!!!!",Snackbar.LENGTH_LONG).show();
+                Snackbar.make(view,"Please check Your Internet Connection!!!!",Snackbar.LENGTH_LONG).show();
                 Log.v("Home", "############################You are not online!!!!");
             }
 

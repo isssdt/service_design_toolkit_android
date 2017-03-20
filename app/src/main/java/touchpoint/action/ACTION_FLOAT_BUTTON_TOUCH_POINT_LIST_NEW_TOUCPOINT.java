@@ -30,7 +30,7 @@ public class ACTION_FLOAT_BUTTON_TOUCH_POINT_LIST_NEW_TOUCPOINT  extends BaseAct
         Utils.forwardToScreen(abstractView.getContext(), AddNewTouchpoint.class,"username",sdtUserDTO);
     }else {
 
-        Snackbar.make(view,"You are not online!!!!",Snackbar.LENGTH_LONG).show();
+        Snackbar.make(view,"Please check Your Internet Connection!!!!",Snackbar.LENGTH_LONG).show();
         Log.v("Home", "############################You are not online!!!!");
     }
     }

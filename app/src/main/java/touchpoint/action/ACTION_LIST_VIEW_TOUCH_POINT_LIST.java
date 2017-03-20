@@ -47,7 +47,7 @@ public class ACTION_LIST_VIEW_TOUCH_POINT_LIST extends BaseAction implements Ada
 
         } else {
 
-            Snackbar.make(view, "You are not online!!!!", Snackbar.LENGTH_LONG).show();
+            Snackbar.make(view, "Please check Your Internet Connection!!!!", Snackbar.LENGTH_LONG).show();
             Log.v("Home", "############################You are not online!!!!");
         }
     }

@@ -7,6 +7,7 @@ package journeyemotion;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -17,6 +18,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import common.action.ActionFactoryProducer;
+import common.action.ActionOnBackClick;
 import common.constants.APIUrl;
 
 import com.jjoe64.graphview.GraphView;
@@ -32,6 +37,8 @@ import java.io.File;
 import java.util.ArrayList;
 
 import connectionStatus.AppStatus;
+import journey.activity.JourneyListActivity;
+import poc.servicedesigntoolkit.getpost.MainActivity;
 import poc.servicedesigntoolkit.getpost.R;
 import poc.servicedesigntoolkit.getpost.Touchpoint.Touchpoint_model;
 import journey.dto.JourneyDTO;
@@ -260,5 +267,12 @@ public class emotionMeter extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onBackPressed(){
+        Toast.makeText(getApplicationContext(),"Thank you for the participation for the journey",Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(emotionMeter.this, MainActivity.class);
+        startActivity(intent);
+        finish();
+    }
 
 }

@@ -25,7 +25,7 @@ public class ACTION_BUTTON_TOUCH_POINT_LIST_SUBMIT_JOURNEY extends BaseAction im
     @Override
     public void onClick(View view) {
         if (AppStatus.getInstance(view.getContext()).isOnline()) {
-            Snackbar.make(view, "You are online!!!!", Snackbar.LENGTH_LONG).show();
+            //Snackbar.make(view, "You are online!!!!", Snackbar.LENGTH_LONG).show();
             AlertDialog.Builder adb = new AlertDialog.Builder(abstractView.getContext());
             adb.setTitle("Submit Journey");
             adb.setMessage(" Thank you for your response.Please proceed for new journey registeration");
@@ -41,7 +41,7 @@ public class ACTION_BUTTON_TOUCH_POINT_LIST_SUBMIT_JOURNEY extends BaseAction im
             adb.show();
         } else {
 
-        Snackbar.make(view,"You are not online!!!!",Snackbar.LENGTH_LONG).show();
+        Snackbar.make(view,"Please check Your Internet Connection!!!!",Snackbar.LENGTH_LONG).show();
         Log.v("Home", "############################You are not online!!!!");
     }
     }

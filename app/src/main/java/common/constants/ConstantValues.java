@@ -21,7 +21,7 @@ public class ConstantValues {
 
     public static final String COMPONENT_JOURNEY_LIST_VIEW_RECYCLE_VIEW = "COMPONENT_JOURNEY_LIST_VIEW_RECYCLE_VIEW";
 
-    public static final String COMPONENT_JOURNEY_LIST_VIEW_BUTTON_LABEL_VIEW = "View Journey";
+    public static final String COMPONENT_JOURNEY_LIST_VIEW_BUTTON_LABEL_VIEW = " View Journey ";
 
     public static final String COMPONENT_TOUCH_POINT_LIST_VIEW_LIST_VIEW_TOUCH_POINT_LIST = "COMPONENT_TOUCH_POINT_LIST_VIEW_LIST_VIEW_TOUCH_POINT_LIST";
 

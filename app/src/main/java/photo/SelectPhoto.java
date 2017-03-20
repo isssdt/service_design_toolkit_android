@@ -188,7 +188,7 @@ public class SelectPhoto extends AppCompatActivity implements View.OnClickListen
     }
     @Override
     public void onBackPressed() {
-
+        finish();
     }
 
     public Bitmap getResizedBitmap(Bitmap image, int maxSize) {
