@@ -7,7 +7,7 @@ package common.constants;
 public class APIUrl {
 
     /** UAT */
-//   private static final String API_HOST = "http://54.179.185.60:9090/service_design_toolkit-web/api/";
+ //  private static final String API_HOST = "http://54.179.185.60:9090/service_design_toolkit-web/api/";
 
     /**
      * DEV

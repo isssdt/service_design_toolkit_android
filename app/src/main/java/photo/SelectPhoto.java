@@ -22,9 +22,11 @@ import android.widget.Toast;
 import java.io.IOException;
 
 import addTouchpoint.AddNewTouchpoint;
+import common.dto.MasterDataDTO;
 import common.utils.Utils;
 import poc.servicedesigntoolkit.getpost.R;
 import touchpoint.activity.TouchPointDetailsActivity;
+import touchpoint.dto.RatingDTO;
 import touchpoint.dto.TouchPointFieldResearcherDTO;
 
 public class SelectPhoto extends AppCompatActivity implements View.OnClickListener {
@@ -41,7 +43,7 @@ public class SelectPhoto extends AppCompatActivity implements View.OnClickListen
     private static final int ACTION_TAKE_PHOTO_S = 3;
 
 
-
+    private String Rating,comment,Reaction,time,time_unit;
     private AlbumStorageDirFactory mAlbumStorageDirFactory = null;
 
 
@@ -60,6 +62,15 @@ public class SelectPhoto extends AppCompatActivity implements View.OnClickListen
         buttonGallery.setOnClickListener(this);
         buttonUpload.setOnClickListener(this);
 
+//        Bundle extra = getIntent().getExtras();
+//        if(!extra.getString("rating").equals("Null")){
+//            Rating = extra.getString("rating");
+//            comment = extra.getString("comment");
+//            Reaction = extra.getString("reaction");
+//            time = extra.getString("Actual_time");
+//            time_unit = extra.getString("Actual_unit");
+//        }
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.FROYO) {
             mAlbumStorageDirFactory = new FroyoAlbumDirFactory();
         } else {
@@ -73,6 +84,15 @@ public class SelectPhoto extends AppCompatActivity implements View.OnClickListen
             TouchPointFieldResearcherDTO touchPointFieldResearcherDTO = (TouchPointFieldResearcherDTO) getIntent().getExtras().get(TouchPointFieldResearcherDTO.class.toString());
             if (null != picUri) {
                 touchPointFieldResearcherDTO.setPhotoLocation(ImageFilePath.getPath(getApplicationContext(), picUri));
+                if(null != Rating){
+                   /* touchPointFieldResearcherDTO.setRatingDTO(new RatingDTO());
+                    touchPointFieldResearcherDTO.getRatingDTO().setValue(Rating);
+                    touchPointFieldResearcherDTO.setComments(comment);
+                    touchPointFieldResearcherDTO.setReaction(Reaction);
+                    touchPointFieldResearcherDTO.setDuration(Integer.valueOf(time));
+                    touchPointFieldResearcherDTO.setDurationUnitDTO(new MasterDataDTO());
+                    touchPointFieldResearcherDTO.getDurationUnitDTO().setDataValue(time_unit);*/
+                }
             }
 
             String activity = getIntent().getExtras().getString(Activity.class.toString());
@@ -137,7 +157,12 @@ public class SelectPhoto extends AppCompatActivity implements View.OnClickListen
                 break;
 
             case R.id.buttonUpload:
-                uploadImage();
+                if(null != picUri){
+                    uploadImage();
+                }else{
+                    Toast.makeText(this, "Please select Image to Upload ", Toast.LENGTH_SHORT).show();
+                }
+                
                 break;
         }
     }

@@ -2,6 +2,7 @@ package touchpoint.action;
 
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -20,6 +21,7 @@ import touchpoint.activity.TouchPointDetailsActivity;
 import touchpoint.activity.TouchPointListActivity;
 import touchpoint.dto.RatingDTO;
 import touchpoint.dto.TouchPointFieldResearcherDTO;
+import touchpoint.view.TouchPointDetailsView;
 
 /**
  * Created by longnguyen on 3/5/17.
@@ -36,7 +38,6 @@ public class ACTION_BUTTON_TOUCH_POINT_DETAILS_SUBMIT extends BaseAction impleme
         if (AppStatus.getInstance(view.getContext()).isOnline()) {
 
             //Snackbar.make(view, "You are online!!!!", Snackbar.LENGTH_LONG).show();
-
             Bundle bundle = abstractView.getContext().getIntent().getExtras();
         TouchPointFieldResearcherDTO touchPointFieldResearcherDTO = (TouchPointFieldResearcherDTO) bundle.get(TouchPointFieldResearcherDTO.class.toString());
         if (!validation(view)) {
@@ -53,6 +54,8 @@ public class ACTION_BUTTON_TOUCH_POINT_DETAILS_SUBMIT extends BaseAction impleme
         touchPointFieldResearcherDTO.getDurationUnitDTO().setDataValue(
                 ((Spinner) abstractView.getComponent(ConstantValues.COMPONENT_TOUCH_POINT_DETAILS_VIEW_SPINNER_ACTUAL_DURATION_UNIT)).getSelectedItem().toString());
         new APIUpdateResearchWork(touchPointFieldResearcherDTO, abstractView).execute();
+            APIGetTouchPointListOfRegisteredJourney remove =new APIGetTouchPointListOfRegisteredJourney(touchPointFieldResearcherDTO.getFieldResearcherDTO().getSdtUserDTO(), abstractView);
+            remove.removeGeofencesButtonHandler();
         } else {
 
             Snackbar.make(view,"Please check Your Internet Connection!!!!",Snackbar.LENGTH_LONG).show();
@@ -73,10 +76,12 @@ public class ACTION_BUTTON_TOUCH_POINT_DETAILS_SUBMIT extends BaseAction impleme
             Toast.makeText(abstractView.getContext(), "Please enter the Rating", Toast.LENGTH_SHORT).show();
             return false;
         } else if (reaction.getText().length() == 0) {
-            Toast.makeText(abstractView.getContext(), "Please enter what did you do", Toast.LENGTH_SHORT).show();
+            reaction.setError("Please Enter what did you do");
+           // Toast.makeText(abstractView.getContext(), "Please enter what did you do", Toast.LENGTH_SHORT).show();
             return false;
         } else if (actualDuration.getText().length() == 0) {
-            Toast.makeText(abstractView.getContext(), "Please enter the Time Taken", Toast.LENGTH_SHORT).show();
+            reaction.setError("Please Enter the Time Taken");
+            //Toast.makeText(abstractView.getContext(), "Please enter the Time Taken", Toast.LENGTH_SHORT).show();
             return false;
         }
 

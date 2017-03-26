@@ -251,6 +251,9 @@ public class APIGetTouchPointListOfRegisteredJourney extends APIFacade<TouchPoin
      * previously registered geofences.
      */
     public void removeGeofencesButtonHandler() {
+        buildGoogleApiClient();
+        mGoogleApiClient.connect();
+        Log.d(TAG,"REMOVED");
         if (!mGoogleApiClient.isConnected()) {
             Toast.makeText(view.getContext(),(R.string.not_connected), Toast.LENGTH_SHORT).show();
             return;

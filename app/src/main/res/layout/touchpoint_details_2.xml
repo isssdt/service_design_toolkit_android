@@ -4,11 +4,35 @@
     android:layout_height="match_parent">
 
     <TextView
+        android:text="Image added"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/imagelabel"
+        android:visibility="gone"
+        android:layout_marginLeft="24dp"
+        android:layout_marginRight="19dp"
+        android:layout_marginStart="24dp" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:ems="10"
+        android:visibility="gone"
+        android:layout_below="@+id/imagelabel"
+        android:layout_alignLeft="@+id/imagelabel"
+        android:layout_alignStart="@+id/imagelabel"
+        android:id="@+id/imagePathEdit"
+        android:layout_alignRight="@+id/actual_time_text"
+        android:layout_alignEnd="@+id/actual_time_text" />
+
+    <TextView
         android:id="@+id/reaction_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/imagePathEdit"
+        android:ems="10"
         android:text="What did I do *"
-        android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_marginLeft="24dp"
@@ -89,29 +113,6 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"/>
     </LinearLayout>
-
-    <TextView
-        android:text="Image added"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/imagelabel"
-        android:layout_alignLeft="@+id/comment_text"
-        android:layout_alignStart="@+id/comment_text"
-        android:visibility="gone"
-        android:layout_below="@id/linear" />
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="textPersonName"
-        android:visibility="gone"
-        android:ems="10"
-        android:layout_below="@+id/imagelabel"
-        android:layout_alignLeft="@+id/imagelabel"
-        android:layout_alignStart="@+id/imagelabel"
-        android:id="@+id/imagePathEdit"
-        android:layout_alignRight="@+id/actual_time_text"
-        android:layout_alignEnd="@+id/actual_time_text" />
 
 
 </RelativeLayout>

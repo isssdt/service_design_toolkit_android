@@ -109,7 +109,7 @@ public class TouchPointDetailsActivity extends AppCompatActivity implements View
                 i.putExtra("Id", id);
                 i.putExtra("Expected_time", expected_time);
                 i.putExtra("Expected_unit", expected_unit);
-
+*/
                 if (null != String.valueOf(ratingBar.getRating())) {
                     i.putExtra("rating", rating_string);
                     i.putExtra("comment", comment_string);
@@ -117,7 +117,7 @@ public class TouchPointDetailsActivity extends AppCompatActivity implements View
                     i.putExtra("Actual_time", actual_string);
                     i.putExtra("Actual_unit", actual_time_unit);
                 }
-*/
+
                 startActivity(i);
             }
         }
@@ -141,7 +141,7 @@ public class TouchPointDetailsActivity extends AppCompatActivity implements View
                     i.putExtra("Id", id);
                     i.putExtra("Expected_time", expected_time);
                     i.putExtra("Expected_unit", expected_unit);
-
+*/
                     if (null != String.valueOf(ratingBar.getRating())) {
                         i.putExtra("rating", rating_string);
                         i.putExtra("comment", comment_string);
@@ -149,7 +149,7 @@ public class TouchPointDetailsActivity extends AppCompatActivity implements View
                         i.putExtra("Actual_time", actual_string);
                         i.putExtra("Actual_unit", actual_time_unit);
                     }
-*/
+
                     startActivity(i);
                 } else {
                     Toast.makeText(TouchPointDetailsActivity.this, "Permission denied to read your CAMERA", Toast.LENGTH_SHORT).show();

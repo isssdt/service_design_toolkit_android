@@ -64,7 +64,6 @@ public class emotionMeter extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.visualization_emotion);
 
-
         touchpointData = new ArrayList<Touchpoint_model>();
 
             graph = (GraphView) findViewById(R.id.graph);
@@ -78,6 +77,8 @@ public class emotionMeter extends AppCompatActivity {
         JourneyName = (String) extras.get("JourneyName");
         new HttpRequestTask().execute();
         //updateGraph(graph);
+
+        getSupportActionBar().setTitle(JourneyName);
     }
 
     public void updateGraph(GraphView graph) {
