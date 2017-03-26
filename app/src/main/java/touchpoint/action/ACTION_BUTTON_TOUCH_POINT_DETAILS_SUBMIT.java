@@ -55,7 +55,7 @@ public class ACTION_BUTTON_TOUCH_POINT_DETAILS_SUBMIT extends BaseAction impleme
                 ((Spinner) abstractView.getComponent(ConstantValues.COMPONENT_TOUCH_POINT_DETAILS_VIEW_SPINNER_ACTUAL_DURATION_UNIT)).getSelectedItem().toString());
         new APIUpdateResearchWork(touchPointFieldResearcherDTO, abstractView).execute();
             APIGetTouchPointListOfRegisteredJourney remove =new APIGetTouchPointListOfRegisteredJourney(touchPointFieldResearcherDTO.getFieldResearcherDTO().getSdtUserDTO(), abstractView);
-            remove.removeGeofencesButtonHandler();
+            //remove.removeGeofencesButtonHandler();
         } else {
 
             Snackbar.make(view,"Please check Your Internet Connection!!!!",Snackbar.LENGTH_LONG).show();
