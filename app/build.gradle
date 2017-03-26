@@ -17,8 +17,11 @@ android {
     }
     buildTypes {
         release {
-            minifyEnabled true
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            buildConfigField "String", "SERVER_URL", '"http://54.179.185.60:9090"'
+            signingConfig signingConfigs.debug
+        }
+        debug {
+            buildConfigField "String", "SERVER_URL", '"http://54.169.243.190:8080"'
         }
     }
     compileOptions {
