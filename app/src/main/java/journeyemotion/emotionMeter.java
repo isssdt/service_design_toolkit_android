@@ -112,17 +112,19 @@ public class emotionMeter extends AppCompatActivity {
 //        StaticLabelsFormatter staticLabelsFormatter = new StaticLabelsFormatter(graph);
 //        staticLabelsFormatter.setVerticalLabels(new String[] {"0","1", "2", "3","4","5"});
         // set manual X bounds
-//        graph.getViewport().setYAxisBoundsManual(true);
-//        graph.getViewport().setMinY(0);
-//        graph.getViewport().setMaxY(5);
-//
-//        graph.getViewport().setXAxisBoundsManual(true);
-//        graph.getViewport().setMinX(0);
-//        graph.getViewport().setMaxX(10);
-//
-//        // enable scaling and scrolling
-//        graph.getViewport().setScalable(true);
-//        graph.getViewport().setScalableY(true);
+       // graph.getViewport().setYAxisBoundsManual(true);
+       // graph.getViewport().setMinY(0);
+      //  graph.getViewport().setMaxY(5);
+
+      //  graph.getViewport().setXAxisBoundsManual(true);
+       // graph.getViewport().setMinX(0);
+      //  graph.getViewport().setMaxX(5);
+
+        // enable scaling and scrolling
+        graph.getViewport().setScrollable(true);
+       // graph.getViewport().setScalable(true);
+       // graph.getViewport().setScrollableY(true);
+        //graph.getViewport().setScalableY(true);
 
         graph.addSeries(series);
 

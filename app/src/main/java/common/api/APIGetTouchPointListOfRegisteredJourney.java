@@ -4,6 +4,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.StringRes;
@@ -147,12 +148,20 @@ public class APIGetTouchPointListOfRegisteredJourney extends APIFacade<TouchPoin
             }
         }
 
+
+
         populateGeofenceList();
 
         // Kick off the request to build GoogleApiClient.
         buildGoogleApiClient();
 
         mGoogleApiClient.connect();
+
+        if(Constants.BAY_AREA_LANDMARKS1.isEmpty()){
+            Log.d(TAG,"NoGeofence");
+        }else{
+            addGeofencesButtonHandler();
+        }
 
     }
 
@@ -184,7 +193,7 @@ public class APIGetTouchPointListOfRegisteredJourney extends APIFacade<TouchPoin
     @Override
     public void onConnected(Bundle connectionHint) {
         Log.i(TAG, "Connected to GoogleApiClient");
-        addGeofencesButtonHandler();
+        //addGeofencesButtonHandler();
     }
 
     @Override
