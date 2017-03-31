@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 
 import common.action.BaseAction;
+import common.api.APIGetTouchPointListOfRegisteredJourney;
 import common.api.APIMarkJourneyCompleted;
 import common.view.AbstractView;
 import connectionStatus.AppStatus;
@@ -35,6 +36,8 @@ public class ACTION_BUTTON_TOUCH_POINT_LIST_SUBMIT_JOURNEY extends BaseAction im
                     Bundle extras = abstractView.getContext().getIntent().getExtras();
                     JourneyFieldResearcherDTO journeyFieldResearcherDTO = (JourneyFieldResearcherDTO) extras.get(JourneyFieldResearcherDTO.class.toString());
                     new APIMarkJourneyCompleted(journeyFieldResearcherDTO.getFieldResearcherDTO().getSdtUserDTO(), abstractView).execute();
+                    APIGetTouchPointListOfRegisteredJourney remove =new APIGetTouchPointListOfRegisteredJourney(journeyFieldResearcherDTO.getFieldResearcherDTO().getSdtUserDTO(), abstractView);
+                    remove.removeGeofencesButtonHandler();
                 }
             });
             adb.setNegativeButton("Cancel", null);

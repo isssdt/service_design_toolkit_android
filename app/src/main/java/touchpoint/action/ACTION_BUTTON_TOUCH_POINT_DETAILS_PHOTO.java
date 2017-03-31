@@ -93,15 +93,15 @@ public class ACTION_BUTTON_TOUCH_POINT_DETAILS_PHOTO extends BaseAction implemen
 
                         if (null != reaction.getText().toString())
                             touchPointFieldResearcherDTO.setReaction(reaction.getText().toString());
-
+                        Log.d("REACTION " ,touchPointFieldResearcherDTO.getReaction());
                         //Log.d("Duration" ,"String " +time.getText().toString()+ "INT" + time.getText());
-                        if (!time.getText().toString().isEmpty())
-                            touchPointFieldResearcherDTO.setDuration(Integer.valueOf(time.getText().toString()));
+                        //if (!time.getText().toString().isEmpty())
+                       //     touchPointFieldResearcherDTO.setDuration(Integer.valueOf(time.getText().toString()));
 
-                        if (null != time_unit.getSelectedItem().toString()) {
+                       /* if (null != time_unit.getSelectedItem().toString()) {
                             touchPointFieldResearcherDTO.setDurationUnitDTO(new MasterDataDTO());
                             touchPointFieldResearcherDTO.getDurationUnitDTO().setDataValue(time_unit.getSelectedItem().toString());
-                        }
+                        }*/
 
                         Intent intent = new Intent(abstractView.getContext(), SelectPhoto.class);
                         intent.putExtra(TouchPointFieldResearcherDTO.class.toString(), touchPointFieldResearcherDTO);

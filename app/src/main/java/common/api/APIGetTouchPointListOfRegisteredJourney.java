@@ -235,7 +235,7 @@ public class APIGetTouchPointListOfRegisteredJourney extends APIFacade<TouchPoin
         Log.d(TAG,"addGeofencesButtonHandler");
         if (!mGoogleApiClient.isConnected()) {
             Log.i(TAG, "NO client");
-            Toast.makeText(view.getContext(),(R.string.not_connected), Toast.LENGTH_SHORT).show();
+            //Toast.makeText(view.getContext(),(R.string.not_connected), Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -260,9 +260,9 @@ public class APIGetTouchPointListOfRegisteredJourney extends APIFacade<TouchPoin
      * previously registered geofences.
      */
     public void removeGeofencesButtonHandler() {
-        buildGoogleApiClient();
-        mGoogleApiClient.connect();
-        Log.d(TAG,"REMOVED");
+        //buildGoogleApiClient();
+        //mGoogleApiClient.connect();
+        //Log.d(TAG,"REMOVED");
         if (!mGoogleApiClient.isConnected()) {
             Toast.makeText(view.getContext(),(R.string.not_connected), Toast.LENGTH_SHORT).show();
             return;

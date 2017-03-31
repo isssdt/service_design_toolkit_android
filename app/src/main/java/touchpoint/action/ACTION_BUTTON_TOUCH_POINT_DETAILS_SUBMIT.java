@@ -80,11 +80,10 @@ public class ACTION_BUTTON_TOUCH_POINT_DETAILS_SUBMIT extends BaseAction impleme
            // Toast.makeText(abstractView.getContext(), "Please enter what did you do", Toast.LENGTH_SHORT).show();
             return false;
         } else if (actualDuration.getText().length() == 0) {
-            reaction.setError("Please Enter the Time Taken");
+            actualDuration.setError("Please Enter the Time Taken");
             //Toast.makeText(abstractView.getContext(), "Please enter the Time Taken", Toast.LENGTH_SHORT).show();
             return false;
         }
-
         return true;
     }
 }

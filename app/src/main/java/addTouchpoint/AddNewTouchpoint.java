@@ -200,21 +200,26 @@ public class AddNewTouchpoint extends AppCompatActivity implements View.OnClickL
     private boolean validate(){
         if(TextUtils.isEmpty(touchpointName_edit.getText().toString())) {
             touchpointName_edit.setError("Please Enter the Touchpoint Name");
+            touchpointName_edit.setFocusable(true);
             return false;
         } else if (TextUtils.isEmpty(action_edit.getText().toString())) {
             action_edit.setError("Please Enter the Action Performed");
+            action_edit.setFocusable(true);
             return false;
         }else if (TextUtils.isEmpty(channelDescription_edit.getText().toString())){
             channelDescription_edit.setError("Please Enter the details of Channel");
+            channelDescription_edit.setFocusable(true);
             return false;
         }else if (TextUtils.isEmpty(time_taken.getText().toString())){
             time_taken.setError("Please Enter the Time taken to complete");
+            time_taken.setFocusable(true);
             return false;
         }else if (0 == ratingBar.getRating()){
             Toast.makeText(getApplicationContext(), "Please Enter the Rating ", Toast.LENGTH_SHORT).show();
             return false;
         }else if(TextUtils.isEmpty(reaction_edit.getText().toString())){
             reaction_edit.setError("Please Enter What did you do");
+            reaction_edit.setFocusable(true);
             return false;
         }
         return true;
