@@ -60,9 +60,10 @@ public class AddNewTouchpoint extends AppCompatActivity implements View.OnClickL
     ImageButton photo;
     List<String> time_data,channel_data,touchpoint_data;
     String Username,JourneyName;
+    ArrayAdapter<String> channelAdapter,touchpointAdapter,dataAdapter;
     int id;
     TouchPointFieldResearcherListDTO touchPointFieldResearcherListDTO;
-
+    TouchPointFieldResearcherDTO touchPointFieldResearcherDTO;
     String touchpoint_name,action,channel_name,channel_description,actual_time,time_unit,rating,reaction,comment,imagepath;
 
     @Override
@@ -71,6 +72,7 @@ public class AddNewTouchpoint extends AppCompatActivity implements View.OnClickL
         setContentView(R.layout.add_touchpoint);
 
         SharedPreferences pref = getApplicationContext().getSharedPreferences("Trial", MODE_PRIVATE);
+
        // Username = pref.getString("Username","Username");
         //Log.d("Usershared",Username);
         Gson gson = new Gson();
@@ -91,6 +93,7 @@ public class AddNewTouchpoint extends AppCompatActivity implements View.OnClickL
             JourneyName = touchPointFieldResearcherDTO.getTouchpointDTO().getJourneyDTO().getJourneyName();
         }
 
+       // touchPointFieldResearcherDTO = new TouchPointFieldResearcherDTO();
 
         touchpointName_edit = (EditText) findViewById(R.id.touchpoint_name_edit);
         action_edit = (EditText) findViewById(R.id.action_edit);
@@ -111,30 +114,54 @@ public class AddNewTouchpoint extends AppCompatActivity implements View.OnClickL
 
         spinnerData();
 
+        Bundle extras = getIntent().getExtras();
+        TouchPointFieldResearcherDTO touchPointFieldResearcherDTO = (TouchPointFieldResearcherDTO) extras.get(TouchPointFieldResearcherDTO.class.toString());
+        if(touchPointFieldResearcherDTO != null) {
+            touchpointName_edit.setText(touchPointFieldResearcherDTO.getTouchpointDTO().getTouchPointDesc());
+            //channel.getpos().setText(touchPointFieldResearcherDTO.getTouchpointDTO().getChannelDTO().getChannelName());
+            channelDescription_edit.setText(touchPointFieldResearcherDTO.getTouchpointDTO().getChannelDescription());
+            action_edit.setText(touchPointFieldResearcherDTO.getTouchpointDTO().getAction());
+
+            int channel_name = channelAdapter .getPosition(touchPointFieldResearcherDTO.getTouchpointDTO().getChannelDTO().getChannelName());
+            channel.setSelection(channel_name);
+
+            int time_unit = dataAdapter.getPosition(touchPointFieldResearcherDTO.getDurationUnitDTO().getDataValue());
+            time.setSelection(time_unit);
+
+            Log.d("TOUCHPOINT SET ",touchPointFieldResearcherDTO.getTouchPointBefore());
+            int touch_name = touchpointAdapter .getPosition(touchPointFieldResearcherDTO.getTouchPointBefore());
+            touchpoint.setSelection(touch_name);
+
+            time_taken.setText(touchPointFieldResearcherDTO.getDuration().toString());
+            ratingBar.setRating(Float.parseFloat(touchPointFieldResearcherDTO.getRatingDTO().getValue()));
+            reaction_edit.setText(touchPointFieldResearcherDTO.getReaction());
+            comment_edit.setText(touchPointFieldResearcherDTO.getComments());
+            imagepathEdit.setText(touchPointFieldResearcherDTO.getPhotoLocation());
+            image.setVisibility(View.VISIBLE);
+            imagepathEdit.setEnabled(false);
+            imagepathEdit.setVisibility(View.VISIBLE);
+        }
         submit.setOnClickListener(this);
         photo.setOnClickListener(this);
 
-        TouchPointFieldResearcherDTO touchPointFieldResearcherDTO = (TouchPointFieldResearcherDTO) getIntent().getExtras().get(TouchPointFieldResearcherDTO.class.toString());
-        if (null != touchPointFieldResearcherDTO) {
-            imagepathEdit.setText(touchPointFieldResearcherDTO.getPhotoLocation());
-        }
-
+        /*TouchPointFieldResearcherDTO touchPointFieldResearcherDTO1 = (TouchPointFieldResearcherDTO) getIntent().getExtras().get(TouchPointFieldResearcherDTO.class.toString());
+        if (null != touchPointFieldResearcherDTO1) {
+            imagepathEdit.setText(touchPointFieldResearcherDTO1.getPhotoLocation());
+        }*/
     }
 
     private void spinnerData() {
 
-        ArrayAdapter<String> touchpointAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, touchpoint_data);
+        touchpointAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, touchpoint_data);
         touchpointAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         touchpoint.setAdapter(touchpointAdapter);
-
-
 
         time_data = new ArrayList<String>();
         time_data.add("Minute");
         time_data.add("Hour");
         time_data.add("Day");
 
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, time_data);
+        dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, time_data);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         time.setAdapter(dataAdapter);
 
@@ -143,14 +170,14 @@ public class AddNewTouchpoint extends AppCompatActivity implements View.OnClickL
         channel_data.add("kiosk");
         channel_data.add("Face to Face");
 
-        ArrayAdapter<String> channelAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, channel_data);
+        channelAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, channel_data);
         channelAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         channel.setAdapter(channelAdapter);
-
     }
 
     @Override
     public void onClick(View v) {
+
         switch (v.getId()){
             case R.id.submit:
                 getdetails();
@@ -170,9 +197,52 @@ public class AddNewTouchpoint extends AppCompatActivity implements View.OnClickL
             case R.id.photo:
                 getdetails();
                 Intent i = new Intent(AddNewTouchpoint.this, SelectPhoto.class);
-                TouchPointFieldResearcherDTO touchPointFieldResearcherDTO = new TouchPointFieldResearcherDTO();
+                touchPointFieldResearcherDTO = new TouchPointFieldResearcherDTO();
+                TouchPointDTO touchPointDTO = new TouchPointDTO();
+                if(null != touchpoint_name) {
+                    touchPointDTO.setTouchPointDesc(touchpoint_name);
+                }
+                if(!action.isEmpty())
+                    touchPointDTO.setAction(action);
+                if (!channel_name.isEmpty()) {
+                    ChannelDTO channelDTO = new ChannelDTO();
+                    channelDTO.setChannelName(channel_name);
+                    touchPointDTO.setChannelDTO(channelDTO);
+                }
+
+                if(!channel_description.isEmpty())
+                    touchPointDTO.setChannelDescription(channel_description);
+                if(!actual_time.isEmpty())
+                    touchPointFieldResearcherDTO.setDuration(Integer.valueOf(actual_time));
+                if(!time_unit.isEmpty()){
+                    MasterDataDTO masterDataDTO = new MasterDataDTO();
+                    masterDataDTO.setDataValue(time_unit);
+                    touchPointFieldResearcherDTO.setDurationUnitDTO(masterDataDTO);
+                }
+                if(!rating.isEmpty()){
+                    RatingDTO ratingDTO = new RatingDTO();
+                    ratingDTO.setValue(rating);
+                    touchPointFieldResearcherDTO.setRatingDTO(ratingDTO);
+                }
+                 if (!reaction.isEmpty())
+                    touchPointFieldResearcherDTO.setReaction(reaction);
+                if (!comment.isEmpty())
+                    touchPointFieldResearcherDTO.setComments(comment);
+
+                if(touchPointDTO !=null)
+                touchPointFieldResearcherDTO.setTouchpointDTO(touchPointDTO);
+
+                touchPointFieldResearcherDTO.setTouchPointBefore(touchpoint.getSelectedItem().toString());
+
+                Log.d("TOUCHPOINT ",touchpoint.getSelectedItem().toString());
+                Log.d("TOUCHPOINT ",touchPointFieldResearcherDTO.getTouchPointBefore());
+
                 i.putExtra(TouchPointFieldResearcherDTO.class.toString(), touchPointFieldResearcherDTO);
                 i.putExtra(Activity.class.toString(), getClass().toString());
+
+
+
+
                 startActivity(i);
                 break;
         }
