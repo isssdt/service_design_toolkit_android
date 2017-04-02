@@ -4,10 +4,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.drawable.Drawable;
-import android.location.Location;
 import android.os.Bundle;
-import android.support.annotation.StringRes;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -16,33 +13,28 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.GeofencingRequest;
-import com.google.android.gms.location.LocationListener;
-import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 import common.constants.APIUrl;
 import common.constants.ConstantValues;
 import common.view.AbstractView;
-
 import geofence.Constants;
 import geofence.GeofenceErrorMessages;
 import geofence.GeofenceTransitionsIntentService;
+import journey.dto.JourneyDTO;
+import journey.dto.JourneyFieldResearcherDTO;
 import poc.servicedesigntoolkit.getpost.R;
-import touchpoint.activity.TouchPointListActivity;
 import touchpoint.aux_android.TouchPointFieldResearcherListAdapter;
 import touchpoint.dto.TouchPointFieldResearcherDTO;
 import touchpoint.dto.TouchPointFieldResearcherListDTO;
@@ -95,6 +87,13 @@ public class APIGetTouchPointListOfRegisteredJourney extends APIFacade<TouchPoin
 
     @Override
     public void handleDataUponSuccess(TouchPointFieldResearcherListDTO data) {
+        JourneyFieldResearcherDTO journeyFieldResearcherDTO = (JourneyFieldResearcherDTO) view.getContext().getIntent().getExtras().get(JourneyFieldResearcherDTO.class.toString());
+        if (null == journeyFieldResearcherDTO.getJourneyDTO()) {
+            journeyFieldResearcherDTO.setJourneyDTO(new JourneyDTO());
+            journeyFieldResearcherDTO.getJourneyDTO().setJourneyName(data.getTouchPointFieldResearcherDTOList().get(0).getTouchpointDTO().getJourneyDTO().getJourneyName());
+            view.getContext().getIntent().putExtra(JourneyFieldResearcherDTO.class.toString(), journeyFieldResearcherDTO);
+        }
+
         Log.d("TouchPointFieldResearcherListDTO : API", "Success");
         SharedPreferences sharedPref = view.getContext().getSharedPreferences("Trial", Context.MODE_PRIVATE);
         Gson gson = new Gson();

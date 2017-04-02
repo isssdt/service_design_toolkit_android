@@ -43,10 +43,13 @@ public class TouchPointFieldResearcherListAdapter extends ArrayAdapter<TouchPoin
 
         if (0 == position) {
             touchPointViewHolder.getTimeline().setTimelineType(TimelineView.TYPE_START);
+            touchPointViewHolder.getText().setTextColor(Color.BLACK);
         } else if (getCount() - 1 == position) {
             touchPointViewHolder.getTimeline().setTimelineType(TimelineView.TYPE_END);
+            touchPointViewHolder.getText().setTextColor(Color.BLACK);
         } else {
             touchPointViewHolder.getTimeline().setTimelineType(TimelineView.TYPE_MIDDLE);
+            touchPointViewHolder.getText().setTextColor(Color.BLACK);
         }
 
         touchPointViewHolder.getTimeline().setTimelineAlignment(TimelineView.ALIGNMENT_DEFAULT);
