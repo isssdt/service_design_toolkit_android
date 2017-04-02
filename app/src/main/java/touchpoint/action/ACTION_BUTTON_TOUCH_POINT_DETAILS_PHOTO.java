@@ -5,7 +5,6 @@ import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.media.Rating;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -19,12 +18,9 @@ import android.widget.Toast;
 
 import common.action.BaseAction;
 import common.constants.ConstantValues;
-import common.dto.MasterDataDTO;
 import common.view.AbstractView;
 import connectionStatus.AppStatus;
 import photo.SelectPhoto;
-import poc.servicedesigntoolkit.getpost.MainActivity;
-import poc.servicedesigntoolkit.getpost.R;
 import touchpoint.dto.RatingDTO;
 import touchpoint.dto.TouchPointFieldResearcherDTO;
 
@@ -40,10 +36,10 @@ public class ACTION_BUTTON_TOUCH_POINT_DETAILS_PHOTO extends BaseAction implemen
     @Override
     public void onClick(View view) {
         EditText imagepath = (EditText) abstractView.getComponent(ConstantValues.COMPONENT_TOUCH_POINT_DETAILS_VIEW_EDIT_TEXT_IMAGE_PATH);
-        EditText reaction = (EditText) abstractView.getComponent(ConstantValues.COMPONENT_TOUCH_POINT_DETAILS_VIEW_EDIT_TEXT_REACTION);
-        EditText comment = (EditText) abstractView.getComponent(ConstantValues.COMPONENT_TOUCH_POINT_DETAILS_VIEW_EDIT_TEXT_COMMENT);
-        RatingBar rating = (RatingBar) abstractView.getComponent(ConstantValues.COMPONENT_TOUCH_POINT_DETAILS_VIEW_RATING_BAR);
-        EditText time = (EditText) abstractView.getComponent(ConstantValues.COMPONENT_TOUCH_POINT_DETAILS_VIEW_EDIT_TEXT_ACTUAL_DURATION);
+        final EditText reaction = (EditText) abstractView.getComponent(ConstantValues.COMPONENT_TOUCH_POINT_DETAILS_VIEW_EDIT_TEXT_REACTION);
+        final EditText comment = (EditText) abstractView.getComponent(ConstantValues.COMPONENT_TOUCH_POINT_DETAILS_VIEW_EDIT_TEXT_COMMENT);
+        final RatingBar rating = (RatingBar) abstractView.getComponent(ConstantValues.COMPONENT_TOUCH_POINT_DETAILS_VIEW_RATING_BAR);
+        final EditText time = (EditText) abstractView.getComponent(ConstantValues.COMPONENT_TOUCH_POINT_DETAILS_VIEW_EDIT_TEXT_ACTUAL_DURATION);
         Spinner time_unit = (Spinner) abstractView.getComponent(ConstantValues.COMPONENT_TOUCH_POINT_DETAILS_VIEW_SPINNER_ACTUAL_DURATION_UNIT);
 
         if (AppStatus.getInstance(view.getContext()).isOnline()) {
@@ -63,6 +59,20 @@ public class ACTION_BUTTON_TOUCH_POINT_DETAILS_PHOTO extends BaseAction implemen
                             } else {
                                 TouchPointFieldResearcherDTO touchPointFieldResearcherDTO =
                                         (TouchPointFieldResearcherDTO) abstractView.getContext().getIntent().getExtras().get(TouchPointFieldResearcherDTO.class.toString());
+
+                                if (0.0 != rating.getRating()) {
+                                    touchPointFieldResearcherDTO.setRatingDTO(new RatingDTO());
+                                    touchPointFieldResearcherDTO.getRatingDTO().setValue(String.valueOf(rating.getRating()));
+                                }
+                                if (null != comment.getText().toString() && !comment.getText().toString().isEmpty())
+                                    touchPointFieldResearcherDTO.setComments(comment.getText().toString());
+
+                                if (null != reaction.getText().toString() && !reaction.getText().toString().isEmpty())
+                                    touchPointFieldResearcherDTO.setReaction(reaction.getText().toString());
+                                if (null != time.getText().toString() && !time.getText().toString().isEmpty()) {
+                                    touchPointFieldResearcherDTO.setDuration(Integer.valueOf(time.getText().toString()));
+                                }
+
                                 Intent intent = new Intent(abstractView.getContext(), SelectPhoto.class);
                                 intent.putExtra(TouchPointFieldResearcherDTO.class.toString(), touchPointFieldResearcherDTO);
                                 intent.putExtra(Activity.class.toString(), abstractView.getContext().getClass().toString());
@@ -83,25 +93,19 @@ public class ACTION_BUTTON_TOUCH_POINT_DETAILS_PHOTO extends BaseAction implemen
                     else {
                         TouchPointFieldResearcherDTO touchPointFieldResearcherDTO =
                                 (TouchPointFieldResearcherDTO) abstractView.getContext().getIntent().getExtras().get(TouchPointFieldResearcherDTO.class.toString());
-                        Log.d("Duration", "rating" + rating.getRating());
+
                         if (0.0 != rating.getRating()) {
                             touchPointFieldResearcherDTO.setRatingDTO(new RatingDTO());
                             touchPointFieldResearcherDTO.getRatingDTO().setValue(String.valueOf(rating.getRating()));
                         }
-                        if (null != comment.getText().toString())
+                        if (null != comment.getText().toString() && !comment.getText().toString().isEmpty())
                             touchPointFieldResearcherDTO.setComments(comment.getText().toString());
 
-                        if (null != reaction.getText().toString())
+                        if (null != reaction.getText().toString() && !reaction.getText().toString().isEmpty())
                             touchPointFieldResearcherDTO.setReaction(reaction.getText().toString());
-                        Log.d("REACTION " ,touchPointFieldResearcherDTO.getReaction());
-                        //Log.d("Duration" ,"String " +time.getText().toString()+ "INT" + time.getText());
-                        //if (!time.getText().toString().isEmpty())
-                       //     touchPointFieldResearcherDTO.setDuration(Integer.valueOf(time.getText().toString()));
-
-                       /* if (null != time_unit.getSelectedItem().toString()) {
-                            touchPointFieldResearcherDTO.setDurationUnitDTO(new MasterDataDTO());
-                            touchPointFieldResearcherDTO.getDurationUnitDTO().setDataValue(time_unit.getSelectedItem().toString());
-                        }*/
+                        if (null != time.getText().toString() && !time.getText().toString().isEmpty()) {
+                            touchPointFieldResearcherDTO.setDuration(Integer.valueOf(time.getText().toString()));
+                        }
 
                         Intent intent = new Intent(abstractView.getContext(), SelectPhoto.class);
                         intent.putExtra(TouchPointFieldResearcherDTO.class.toString(), touchPointFieldResearcherDTO);

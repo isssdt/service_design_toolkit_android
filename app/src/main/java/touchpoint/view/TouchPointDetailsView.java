@@ -2,7 +2,6 @@ package touchpoint.view;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -78,14 +77,13 @@ public class TouchPointDetailsView extends AbstractView {
             RatingBar ratingBar = (RatingBar) getComponent(ConstantValues.COMPONENT_TOUCH_POINT_DETAILS_VIEW_RATING_BAR);
             ratingBar.setRating(Float.parseFloat(touchPointFieldResearcherDTO.getRatingDTO().getValue()));
             ratingBar.setIsIndicator(true);
-            Log.d("REACTIONNNNNNNNNN",touchPointFieldResearcherDTO.getReaction());
             ((EditText) getComponent(ConstantValues.COMPONENT_TOUCH_POINT_DETAILS_VIEW_EDIT_TEXT_REACTION)).setText(touchPointFieldResearcherDTO.getReaction());
             ((EditText) getComponent(ConstantValues.COMPONENT_TOUCH_POINT_DETAILS_VIEW_EDIT_TEXT_COMMENT)).setText(touchPointFieldResearcherDTO.getComments());
-//            Log.d("Duration" ,"String " +touchPointFieldResearcherDTO.getDuration().toString()+ "INT" + touchPointFieldResearcherDTO.getDuration());
-         //   if(touchPointFieldResearcherDTO.getDuration() == 0)
-           // ((EditText) getComponent(ConstantValues.COMPONENT_TOUCH_POINT_DETAILS_VIEW_EDIT_TEXT_ACTUAL_DURATION)).setText(touchPointFieldResearcherDTO.getDuration().toString());
-//            spinner.setSelection(timeUnit.indexOf(touchPointFieldResearcherDTO.getDurationUnitDTO().getDataValue()));
+            if (null != touchPointFieldResearcherDTO.getDuration()) {
+                ((EditText) getComponent(ConstantValues.COMPONENT_TOUCH_POINT_DETAILS_VIEW_EDIT_TEXT_ACTUAL_DURATION)).setText(String.valueOf(touchPointFieldResearcherDTO.getDuration()));
+            }
         }
+
 
         if (null != touchPointFieldResearcherDTO.getPhotoLocation() && !touchPointFieldResearcherDTO.getPhotoLocation().isEmpty()) {
             ((TextView) getComponent(ConstantValues.COMPONENT_TOUCH_POINT_DETAILS_VIEW_TEXT_VIEW_IMAGE)).setVisibility(View.VISIBLE);
