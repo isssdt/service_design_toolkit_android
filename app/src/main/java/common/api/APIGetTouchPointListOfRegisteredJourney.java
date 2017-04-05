@@ -149,13 +149,13 @@ public class APIGetTouchPointListOfRegisteredJourney extends APIFacade<TouchPoin
 
 
 
-        populateGeofenceList();
+       // populateGeofenceList();---sam
 
         // Kick off the request to build GoogleApiClient.
         buildGoogleApiClient();
 
         mGoogleApiClient.connect();
-
+        populateGeofenceList();
         if(Constants.BAY_AREA_LANDMARKS1.isEmpty()){
             Log.d(TAG,"NoGeofence");
         }else{
@@ -170,10 +170,10 @@ public class APIGetTouchPointListOfRegisteredJourney extends APIFacade<TouchPoin
                 .addOnConnectionFailedListener(this)
                 .addApi(LocationServices.API)
                 .build();
+        mGoogleApiClient.connect();
     }
 
-/*
-    @Override
+   /* @Override
     protected void onStart() {
         super.onStart();
         mGoogleApiClient.connect();
@@ -192,7 +192,8 @@ public class APIGetTouchPointListOfRegisteredJourney extends APIFacade<TouchPoin
     @Override
     public void onConnected(Bundle connectionHint) {
         Log.i(TAG, "Connected to GoogleApiClient");
-        //addGeofencesButtonHandler();
+
+        addGeofencesButtonHandler();
     }
 
     @Override
